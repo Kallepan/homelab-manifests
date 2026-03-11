@@ -16,7 +16,7 @@ spec:
                               operator: In
                               values:
                                   - "management"
-                                  - "service"
+                                  - "workload"
 
                 # 2. Look for overlays that match the cluster name
                 - git:
