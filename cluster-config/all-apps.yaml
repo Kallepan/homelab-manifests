@@ -1,0 +1,47 @@
+apiVersion: "argoproj.io/v1alpha1"
+kind: "ApplicationSet"
+metadata:
+    name: "homelab-apps"
+    namespace: "argocd"
+spec:
+    goTemplate: true
+    generators:
+        - matrix:
+            generators:
+                # 1. Get all clusters
+                - clusters:
+                    selector:
+                        matchExpressions:
+                            - key: "type"
+                              operator: In
+                              values:
+                                  - "management"
+                                  - "service"
+
+                # 2. Look for overlays that match the cluster name
+                - git:
+                    repoURL: "https://github.com/kallepan/homelab-manifests.git"
+                    revision: "main"
+                    directories:
+                        - path: "apps/*/overlays/{{name}}"
+
+    template:
+        metadata:
+            name: "{{index .path 1}}-{{.name}}"
+            labels:
+                app-type: "{{index .path 1}}"
+        spec:
+            project: "default"
+            source:
+                repoURL: "https://github.com/kallepan/homelab-manifests.git"
+                targetRevision: "main"
+                path: "{{.path}}"
+            destination:
+                server: "{{.server}}"
+                namespace: "{{index .path 1}}"
+            syncPolicy:
+                automated:
+                    prune: true
+                    selfHeal: true
+                syncOptions:
+                    - CreateNamespace=true
