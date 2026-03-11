@@ -1,0 +1,13 @@
+.DS_Store
+
+# Binaries
+bin
+
+# Logging
+*.log
+
+# Temporary files
+rendered.y*ml
+
+# Configuration files
+kubeconfig.y*ml
