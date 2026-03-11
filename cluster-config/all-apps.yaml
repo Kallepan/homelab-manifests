@@ -23,7 +23,7 @@ spec:
                     repoURL: "https://github.com/kallepan/homelab-manifests.git"
                     revision: "main"
                     directories:
-                        - path: "apps/*/overlays/{{name}}"
+                        - path: "apps/*/overlays/{{.name}}"
 
     template:
         metadata:
