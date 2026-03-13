@@ -1,0 +1,48 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-ingressgateway
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: gateway
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.*.*
+    helm:
+      releaseName: istio-ingressgateway
+      valuesObject:
+        labels:
+          app: istio-ingressgateway
+        service:
+          ports:
+            # Add ports here to expose them on the LoadBalancer
+            - name: status-port
+              port: 15021
+              protocol: TCP
+              targetPort: 15021
+            - name: http2
+              port: 80
+              protocol: TCP
+              targetPort: 80
+            - name: https
+              port: 443
+              protocol: TCP
+              targetPort: 443
+            - name: ssh
+              port: 2222
+              protocol: TCP
+              targetPort: 2222
+          type: LoadBalancer
+          loadBalancerIP: 10.10.20.20
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

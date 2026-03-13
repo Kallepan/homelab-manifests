@@ -1,0 +1,51 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istiod
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: istiod
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.*.*
+    helm:
+      releaseName: istio
+      valuesObject:
+        profile: ambient
+        meshID: "service-cluster-mesh"
+        meshConfig:
+          extensionProviders:
+            - name: "oauth2-proxy"
+              envoyExtAuthzHttp:
+                service: "oauth2-proxy.oauth2-proxy.svc.cluster.local"
+                port: 80
+                includeHeadersInCheck: ["cookie", "authorization"]
+                headersToDownstreamOnDeny: ["content-type", "set-cookie"]
+                headersToUpstreamOnAllow:
+                  [
+                    "x-forwarded-access-token",
+                    "authorization",
+                    "path",
+                    "x-auth-request-user",
+                    "x-auth-request-email",
+                    "x-auth-request-access-token",
+                  ]
+          enableTracing: true
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: istio-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: istio-validator-istio-system
+      jsonPointers:
+        - /webhooks/0/failurePolicy
