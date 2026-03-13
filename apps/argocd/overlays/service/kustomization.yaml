@@ -6,3 +6,6 @@ resources:
 
 patches:
   - path: patch-values.yaml
+    target:
+      kind: Application
+      name: argocd
