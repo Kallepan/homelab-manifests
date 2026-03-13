@@ -5,7 +5,11 @@ APPS_DIR ?= apps
 
 KUSTOMIZATION_DIRS := $(shell find $(APPS_DIR) -type f -name kustomization.yaml -exec dirname {} \; | sort)
 
-.PHONY: help list-kustomizations render-apps check-apps
+.PHONY: all help list-kustomizations render-apps check-apps
+
+.DEFAULT_GOAL := all
+
+all: check-apps render-apps
 
 help:
 	@echo "Targets:"
