@@ -25,6 +25,7 @@ spec:
                     revision: "main"
                     directories:
                         - path: "apps/*/overlays/{{.name}}"
+                    requeueAfterSeconds: 600  # Poll every 10 minutes (default is 180 seconds)
 
     template:
         metadata:
