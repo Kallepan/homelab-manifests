@@ -4,7 +4,7 @@ This repository contains the GitOps configuration for my homelab Kubernetes clus
 
 ## 📁 Repository Structure
 
-```
+```no-highlight
 homelab-manifests/
 ├── apps/
 │   ├── cert-manager/              # Application name
@@ -47,7 +47,7 @@ This automatically deploys the right applications to the right clusters based on
 
 Each application follows the Kustomize pattern:
 
-```bash
+```no-highlight
 apps/{app-name}/
 ├── base/                       # Common resources for all clusters
 │   ├── kustomization.yaml     # Base Kustomize config
@@ -112,12 +112,14 @@ kubectl apply -f cluster-config/all-apps.yaml
 
 To add a new application:
 
-**Step 1: Create the base structure**
+#### Step 1: Create the base structure
+
 ```bash
 mkdir -p apps/my-new-app/base/resources
 ```
 
-**Step 2: Add your Kubernetes manifests**
+#### Step 2: Add your Kubernetes manifests
+
 ```bash
 # Create namespace
 cat > apps/my-new-app/base/resources/namespace.yaml <<EOF
@@ -152,7 +154,8 @@ spec:
 EOF
 ```
 
-**Step 3: Create the base kustomization.yaml**
+#### Step 3: Create the base kustomization.yaml
+
 ```bash
 cat > apps/my-new-app/base/kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -164,7 +167,8 @@ resources:
 EOF
 ```
 
-**Step 4: Create overlay for your target cluster (must match cluster name exactly)**
+#### Step 4: Create overlay for your target cluster (must match cluster name exactly)
+
 ```bash
 mkdir -p apps/my-new-app/overlays/management
 
@@ -304,48 +308,4 @@ Control which clusters get which apps by creating overlays only for the desired 
 3. **Consistent naming** - Use lowercase with hyphens for app and cluster names
 4. **Namespace per app** - Create namespaces in your base manifests (ApplicationSet uses `CreateNamespace=true`)
 5. **Minimal overlays** - Start with empty overlays that just reference the base, add customizations only when needed
-6. **Test with kustomize build** - Before committing, test with `kustomize build apps/{app}/overlays/{cluster}/`
-
-## 🔐 Security Considerations
-
-- Keep sensitive values in Kubernetes Secrets or use [Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
-- Use different secrets per cluster by placing them in overlay directories
-- Regularly review deployed applications: `kubectl get applications -n argocd`
-- Restrict cluster access with proper RBAC on ArgoCD cluster secrets
-
-## 🆘 Troubleshooting
-
-**Applications not appearing?**
-
-- Verify overlay directory exists: `apps/{app-name}/overlays/{cluster-name}/`
-- **Check cluster name matches exactly** (case-sensitive): the overlay folder name must match your ArgoCD cluster name
-- Verify cluster has correct label: `type=management` or `type=workload`
-- Check ApplicationSet status: `kubectl describe applicationset homelab-apps -n argocd`
-
-**Application shows "Unknown" or "OutOfSync"?**
-
-- Test kustomize build: `kustomize build apps/{app-name}/overlays/{cluster-name}/`
-- Check for syntax errors in kustomization.yaml files
-- Verify all referenced resources exist in base directory
-
-**Wrong resources being deployed?**
-
-- Ensure overlay kustomization.yaml references the correct base: `../../base`
-- Check for unwanted patches or transformations in the overlay
-- Verify namespace is correctly set in base manifests
-
-**How to add a new cluster?**
-
-1. Add the cluster to ArgoCD
-2. Label it: `kubectl label secret -n argocd {cluster-secret} type=management` (or `type=workload`)
-3. For each app you want, create an overlay: `mkdir -p apps/{app-name}/overlays/{cluster-name}`
-4. Add kustomization.yaml referencing the base
-5. The ApplicationSet will auto-discover and deploy within 3 minutes
-
-**Force ApplicationSet refresh:**
-
-```bash
-kubectl patch applicationset homelab-apps -n argocd \
-  -p '{"metadata":{"annotations":{"argocd.argoproj.io/refresh":"true"}}}' \
-  --type merge
-```
+6. **Test with kustomize build** - Before committing, test with `kubectl kustomize build apps/{app}/overlays/{cluster}/`
