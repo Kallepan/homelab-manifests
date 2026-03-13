@@ -1,0 +1,6 @@
+- op: replace
+  path: /spec/source/helm/valuesObject/global/domain
+  value: "argocd.svc.home.arpa"
+- op: replace
+  path: /spec/source/helm/valuesObject/server/ingress/enabled
+  value: false

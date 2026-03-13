@@ -17,30 +17,30 @@ spec:
                               operator: In
                               values:
                                   - "management"
-                                  - "workload"
+                                  - "service"
 
-                # 2. Look for overlays that match the cluster name
+                # 2. Look for overlays that match the cluster type
                 - git:
                     repoURL: "https://github.com/kallepan/homelab-manifests.git"
                     revision: "main"
                     directories:
-                        - path: "apps/*/overlays/{{.name}}"
+                        - path: 'apps/*/overlays/{{ index .metadata.labels "type" }}'
                     requeueAfterSeconds: 600  # Poll every 10 minutes (default is 180 seconds)
 
     template:
         metadata:
-            name: "{{index .path 1}}-{{.name}}"
+            name: "{{ index .path.segments 1 }}-{{ .name }}"
             labels:
-                app-type: "{{index .path 1}}"
+                app-type: "{{ index .path.segments 1 }}"
         spec:
             project: "default"
             source:
                 repoURL: "https://github.com/kallepan/homelab-manifests.git"
                 targetRevision: "main"
-                path: "{{.path}}"
+                path: "{{ .path.path }}"
             destination:
-                server: "{{.server}}"
-                namespace: "{{index .path 1}}"
+                server: "{{ .server }}"
+                namespace: "{{ index .path.segments 1 }}"
             syncPolicy:
                 automated:
                     prune: true

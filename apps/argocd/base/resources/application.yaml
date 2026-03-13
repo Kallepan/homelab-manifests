@@ -1,0 +1,37 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: argocd
+    repoURL: oci://ghcr.io/argoproj/argo-helm/argo-cd
+    targetRevision: 9.*.*
+    helm:
+      releaseName: argocd
+      valuesObject:
+        global:
+          domain: example.com
+        configs:
+          params:
+            server.insecure: true
+            application.namespaces: "*"
+        server:
+          ingress:
+            enabled: true
+            ingressClassName: "traefik"
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
