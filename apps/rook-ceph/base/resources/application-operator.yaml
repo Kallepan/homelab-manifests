@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: rook-ceph
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: rook-ceph
+    repoURL: https://charts.rook.io/release
+    targetRevision: "1.*.*"
+    helm:
+      releaseName: rook-ceph
+      valuesObject: {}
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: rook-ceph
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

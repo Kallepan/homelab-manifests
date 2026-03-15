@@ -1,0 +1,13 @@
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: ceph-dashboard-destination-rule
+  namespace: rook-ceph
+spec:
+  host: rook-ceph-mgr-dashboard.rook-ceph.svc.cluster.local
+  trafficPolicy:
+    tls:
+      mode: SIMPLE
+      # Skip certificate verification for self-signed upstream cert
+      insecureSkipVerify: true
