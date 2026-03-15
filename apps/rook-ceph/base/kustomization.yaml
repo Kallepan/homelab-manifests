@@ -7,3 +7,4 @@ resources:
   - ./resources/deployment.yaml
   - ./resources/destination-rule.yaml
   - ./resources/http-route.yaml
+  - ./resources/namespace.yaml
