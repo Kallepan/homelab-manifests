@@ -37,6 +37,25 @@ spec:
               - name: "sdb"
             config:
               osdsPerDevice: "1"
+          resources:
+            mgr:
+              requests:
+                cpu: 500m
+                memory: 512Mi
+              limits:
+                memory: 1Gi
+            mon:
+              requests:
+                cpu: 500m
+                memory: 1Gi
+              limits:
+                memory: 2Gi
+            osd:
+              requests:
+                cpu: 500m
+                memory: 2Gi
+              limits:
+                memory: 4Gi
           monitoring:
             enabled: true
           network:
