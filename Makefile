@@ -5,7 +5,7 @@ APPS_DIR ?= apps
 
 KUSTOMIZATION_DIRS := $(shell find $(APPS_DIR) -type f -name kustomization.yaml -exec dirname {} \; | sort)
 
-.PHONY: all help list-kustomizations render-apps check-apps
+.PHONY: all help list-kustomizations render-apps check-apps template
 
 .DEFAULT_GOAL := all
 
@@ -19,6 +19,23 @@ help:
 
 list-kustomizations:
 	@printf '%s\n' $(KUSTOMIZATION_DIRS)
+
+# Generates a basic directory structure for a new kustomization under apps/
+template:
+	@read -p "Enter the name of the new kustomization (e.g., my-app): " name; \
+	if [ -z "$$name" ]; then \
+		echo "No name provided. Aborting."; \
+		exit 1; \
+	fi; \
+	dir="$(APPS_DIR)/$$name"; \
+	if [ -d "$$dir" ]; then \
+		echo "Directory $$dir already exists. Aborting."; \
+		exit 1; \
+	fi; \
+	mkdir -p "$$dir"; \
+	mkdir -p "$$dir/base"; \
+	mkdir -p "$$dir/base/resources"; \
+	mkdir -p "$$dir/overlays";
 
 render-apps:
 	@set -e; \
