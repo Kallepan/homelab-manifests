@@ -10,4 +10,4 @@ spec:
     name: cluster-issuer
     kind: ClusterIssuer
   dnsNames:
-    - argocd.infra.home.arpa
+    - argocd.svc.home.arpa
