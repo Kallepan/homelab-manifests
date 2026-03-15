@@ -9,3 +9,37 @@ patches:
     target:
       kind: Application
       name: argocd
+
+  # On the management cluster, argocd is exposed differently, thus we can patch the certificate, gateway and virtual service to be removed
+  - target:
+      group: cert-manager.io
+      kind: Certificate
+      name: argocd-tls
+    patch: |-
+      apiVersion: cert-manager.io/v1
+      kind: Certificate
+      metadata:
+        name: argocd-tls
+      $patch: delete
+
+  - target:
+      group: networking.istio.io
+      kind: Gateway
+      name: gateway-argocd
+    patch: |-
+      apiVersion: networking.istio.io/v1
+      kind: Gateway
+      metadata:
+        name: gateway-argocd
+      $patch: delete
+
+  - target:
+      group: networking.istio.io
+      kind: VirtualService
+      name: virtual-service-argocd
+    patch: |-
+      apiVersion: networking.istio.io/v1
+      kind: VirtualService
+      metadata:
+        name: virtual-service-argocd
+      $patch: delete
