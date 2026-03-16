@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: virtual-service-kiali
+  namespace: observability
+spec:
+  hosts:
+    - kiali.svc.home.arpa
+  gateways:
+    - gateway-kiali
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: kiali.observability.svc.cluster.local
+            port:
+              number: 20001

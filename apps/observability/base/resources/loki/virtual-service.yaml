@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: virtual-service-loki
+  namespace: observability
+spec:
+  hosts:
+    - loki.svc.home.arpa
+  gateways:
+    - gateway-loki
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: loki-gateway.observability.svc.cluster.local
+            port:
+              number: 80
