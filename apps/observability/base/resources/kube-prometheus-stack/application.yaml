@@ -30,7 +30,8 @@ spec:
           alertmanagerSpec:
             externalUrl: https://alert.svc.home.arpa
             secrets:
-              - alertmanager-mattermost-webhook-url
+              # TODO: Add alertmanager-mattermost-webhook-url once its ready
+              # - alertmanager-mattermost-webhook-url
               - homelab-ca
           config:
             global:
@@ -80,14 +81,15 @@ spec:
                     - severity =~ "critical|warning"
                   continue: false
             receivers:
-              - name: "mattermost-logging-receiver"
-                slack_configs:
-                  - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
-                    send_resolved: true
-              - name: "mattermost-metrics-receiver"
-                slack_configs:
-                  - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
-                    send_resolved: true
+              # TODO: Add mattermost receivers once its ready
+              # - name: "mattermost-logging-receiver"
+              #   slack_configs:
+              #     - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
+              #       send_resolved: true
+              # - name: "mattermost-metrics-receiver"
+              #   slack_configs:
+              #     - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
+              #       send_resolved: true
               - name: "null"
             templates:
               - "/etc/alertmanager/config/*.tmpl"
