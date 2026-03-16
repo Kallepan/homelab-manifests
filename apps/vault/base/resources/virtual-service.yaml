@@ -1,11 +1,11 @@
 apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
-  name: virtualservice-vault
+  name: virtual-service-vault
   namespace: vault
 spec:
   hosts:
-    - vault.infra.home.arpa
+    - vault.svc.home.arpa
   gateways:
     - gateway-vault
   http:
