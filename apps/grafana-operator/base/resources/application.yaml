@@ -16,10 +16,6 @@ spec:
     helm:
       releaseName: grafana-operator
       valuesObject:
-        serviceMonitor:
-          enabled: true
-          additionalLabels:
-            release: kube-prometheus-stack
         watchNamespaces: "observability"
   destination:
     server: 'https://kubernetes.default.svc'
