@@ -1,0 +1,37 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: virtual-service-prometheus
+spec:
+  hosts:
+    - prometheus.svc.home.arpa
+  gateways:
+    - gateway-prometheus
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: kube-prometheus-stack-prometheus.observability.svc.cluster.local
+            port:
+              number: 9090
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: virtualservice-alertmanager
+spec:
+  hosts:
+    - alert.svc.home.arpa
+  gateways:
+    - gateway-alertmanager
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: kube-prometheus-stack-alertmanager.observability.svc.cluster.local
+            port:
+              number: 9093

@@ -1,0 +1,232 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "5"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: kube-prometheus-stack
+    repoURL: https://prometheus-community.github.io/helm-charts
+    targetRevision: "82.*.*"
+    helm:
+      releaseName: kube-prometheus-stack
+      valuesObject:
+        kubeEtcd:
+          enabled: true
+          service:
+            selector:
+              k8s-app: kube-controller-manager # Fix selector for kube-etcd for Talos (set itentionally to kube-controller-manager because all master nodes has the same roles)
+        kube-state-metrics:
+          metricLabelsAllowlist:
+            - nodes=[*]
+            - namespaces=[*]
+            - configmaps=[*]
+        alertmanager:
+          alertmanagerSpec:
+            externalUrl: https://alert.svc.home.arpa
+            secrets:
+              - alertmanager-mattermost-webhook-url
+              - homelab-ca
+          config:
+            global:
+              resolve_timeout: 5m
+              http_config:
+                tls_config:
+                  ca_file: /etc/alertmanager/secrets/homelab-ca/homelab-ca.crt
+            inhibit_rules:
+              - source_matchers:
+                  - "severity = critical"
+                target_matchers:
+                  - "severity =~ warning|info"
+                equal:
+                  - "namespace"
+              - source_matchers:
+                  - "severity = warning"
+                target_matchers:
+                  - "severity = info"
+                equal:
+                  - "namespace"
+              - source_matchers:
+                  - "alertname = InfoInhibitor"
+                target_matchers:
+                  - "severity = info"
+                equal:
+                  - "namespace"
+              - target_matchers:
+                  - "alertname = InfoInhibitor"
+            route:
+              group_by: ["namespace"]
+              group_wait: 30s
+              group_interval: 5m
+              repeat_interval: 12h
+              receiver: "mattermost-metrics-receiver"
+              routes:
+                - receiver: "null"
+                  matchers:
+                    - alertname = "Watchdog"
+                  continue: false
+                - receiver: "mattermost-logging-receiver"
+                  matchers:
+                    - source = "loki"
+                  continue: false
+                - receiver: "mattermost-metrics-receiver"
+                  matchers:
+                    - source = "prometheus"
+                    - severity =~ "critical|warning"
+                  continue: false
+            receivers:
+              - name: "mattermost-logging-receiver"
+                slack_configs:
+                  - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
+                    send_resolved: true
+              - name: "mattermost-metrics-receiver"
+                slack_configs:
+                  - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
+                    send_resolved: true
+              - name: "null"
+            templates:
+              - "/etc/alertmanager/config/*.tmpl"
+          ingress:
+            enabled: false
+        additionalPrometheusRulesMap:
+          endpoint-alerts:
+            groups:
+              - name: ruleset_1
+                rules:
+                  - alert: EndpointDown
+                    expr: probe_success == 0
+                    for: 1m
+                    labels:
+                      severity: critical
+                    annotations:
+                      summary: "Endpoint {{ $labels.instance }} is down"
+                      description: "{{ $labels.instance }} of probe {{ $labels.job }} has been down for more than 1 minute."
+        crds:
+          upgradeJob:
+            enabled: false
+        defaultRules:
+          create: true
+          rules:
+            kubeProxy: false # Disabled due to cilium
+        grafana:
+          enabled: false
+        prometheus:
+          prometheusSpec:
+            additionalArgs:
+              - name: "web.enable-otlp-receiver"
+                value: ""
+              - name: "web.enable-remote-write-receiver"
+                value: ""
+            additionalScrapeConfigs:
+              - job_name: postgres
+                metrics_path: /metrics
+                scheme: http
+                static_configs:
+                  - targets:
+                      - psql.storage.home.arpa:9187
+              - job_name: gitlab
+                metrics_path: /-/metrics
+                scheme: https
+                static_configs:
+                  - targets:
+                      - gitlab.svc.home.arpa
+                tls_config:
+                  ca_file: /etc/prometheus/secrets/homelab-ca/homelab-ca.crt
+              - job_name: blackbox_http
+                metrics_path: /probe
+                params:
+                  module: [http_2xx]
+                static_configs:
+                  - targets:
+                      # Network Health
+                      - https://google.com
+                      # Core Cluster
+                      - https://gitlab.svc.home.arpa/-/liveness?token=YM79LmLGCSPTvYXofR8L
+                      - https://vault.svc.home.arpa
+                      - https://sso.svc.home.arpa
+                      - https://mattermost.svc.home.arpa
+                      # Rancher
+                      - https://rancher.infra.home.arpa
+                relabel_configs:
+                  - source_labels: [__address__]
+                    target_label: __param_target
+                  - source_labels: [__param_target]
+                    target_label: instance
+                  - target_label: __address__
+                    replacement: prometheus-blackbox-exporter.observability.svc.cluster.local:9115
+              - job_name: blackbox_http_auth
+                metrics_path: /probe
+                params:
+                  module: [http_auth]
+                static_configs:
+                  - targets:
+                      # Docker Machine
+                      - https://docs.app.home.arpa
+                relabel_configs:
+                  - source_labels: [__address__]
+                    target_label: __param_target
+                  - source_labels: [__param_target]
+                    target_label: instance
+                  - target_label: __address__
+                    replacement: prometheus-blackbox-exporter.observability.svc.cluster.local:9115
+              - job_name: istiod
+                kubernetes_sd_configs:
+                  - role: endpoints
+                    namespaces:
+                      names:
+                        - istio-system
+                relabel_configs:
+                  - source_labels:
+                      [
+                        __meta_kubernetes_service_name,
+                        __meta_kubernetes_endpoint_port_name,
+                      ]
+                    action: keep
+                    regex: istiod;http-monitoring
+              - job_name: "envoy-stats"
+                metrics_path: /stats/prometheus
+                kubernetes_sd_configs:
+                  - role: pod
+                relabel_configs:
+                  - source_labels: [__meta_kubernetes_pod_container_port_name]
+                    action: keep
+                    regex: ".*-envoy-prom"
+            scrapeClasses:
+              - default: true
+                name: cluster-label
+                relabelings:
+                  - sourceLabels: [ __name__ ]
+                    regex: (.*)
+                    targetLabel: k8s_cluster
+                    replacement: infrastructure
+                    action: replace
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  accessModes:
+                    - ReadWriteOnce
+                  resources:
+                    requests:
+                      storage: 30Gi
+                  storageClassName: ceph-block
+            secrets:
+              - homelab-ca
+            scrapeInterval: 30s
+            evaluationInterval: 30s
+            scrapeTimeout: 30s
+            retention: 15d
+            retentionSize: 20GB
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

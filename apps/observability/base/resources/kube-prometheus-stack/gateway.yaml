@@ -1,0 +1,53 @@
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: gateway-prometheus
+spec:
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      tls:
+        httpsRedirect: true
+      hosts:
+        - prometheus.svc.home.arpa
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: prometheus-tls
+      hosts:
+        - prometheus.svc.home.arpa
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: gateway-alertmanager
+spec:
+  selector:
+    app: istio-ingressgateway
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      tls:
+        httpsRedirect: true
+      hosts:
+        - alert.svc.home.arpa
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: prometheus-tls
+      hosts:
+        - alert.svc.home.arpa
