@@ -2,6 +2,7 @@ apiVersion: networking.istio.io/v1
 kind: VirtualService
 metadata:
   name: virtual-service-grafana
+  namespace: observability
 spec:
   hosts:
     - grafana.svc.home.arpa
