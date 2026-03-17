@@ -1,0 +1,25 @@
+apiVersion: k8s.keycloak.org/v2alpha1
+kind: Keycloak
+metadata:
+  name: keycloak
+  namespace: keycloak
+spec:
+  instances: 2
+  db:
+    database: keycloak_db
+    vendor: postgres
+    host: psql.storage.home.arpa
+    usernameSecret:
+      name: keycloak-postgres-credentials
+      key: postgres_username
+    passwordSecret:
+      name: keycloak-postgres-credentials
+      key: postgres_password
+  http:
+    httpEnabled: true
+  hostname:
+    hostname: sso.svc.home.arpa
+  ingress:
+    enabled: false
+  proxy:
+    headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers
