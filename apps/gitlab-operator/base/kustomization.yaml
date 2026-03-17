@@ -1,0 +1,5 @@
+namespace: keycloak
+
+resources:
+  - ./resources/namespace.yaml
+  - ./resources/application.yaml
