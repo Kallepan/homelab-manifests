@@ -3,6 +3,8 @@ kind: OpenTelemetryCollector
 metadata:
   name: otel-deployment
 spec:
+  mode: deployment
+
   env:
     - name: K8S_POD_IP
       valueFrom:
@@ -86,3 +88,11 @@ spec:
             - batch
           receivers:
             - k8sobjects
+
+  resources:
+    limits:
+      cpu: 1
+      memory: 3Gi
+    requests:
+      cpu: 200m
+      memory: 1Gi
