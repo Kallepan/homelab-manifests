@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: mattermost-tls
+  namespace: istio-system
+spec:
+  secretName: mattermost-tls
+  issuerRef:
+    name: issuer
+    kind: Issuer
+  dnsNames:
+    - mattermost.svc.home.arpa
+    - chat.svc.home.arpa
