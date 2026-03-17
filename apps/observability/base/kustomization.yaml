@@ -8,5 +8,6 @@ resources:
   - ./resources/kiali
   - ./resources/jaeger
   - ./resources/loki
+  - ./resources/opentelemetry
   - ./resources/namespace.yaml
   - ./resources/prometheus-blackbox-exporter.yaml

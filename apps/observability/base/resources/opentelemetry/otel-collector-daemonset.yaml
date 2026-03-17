@@ -1,0 +1,190 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-daemonset
+spec:
+  env:
+    - name: K8S_POD_IP
+      valueFrom:
+        fieldRef:
+          fieldPath: status.podIP
+
+  mode: daemonset
+
+  tolerations:
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+
+  config:
+    extensions:
+      health_check:
+        endpoint: ${env:K8S_POD_IP}:13133
+
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: ${env:K8S_POD_IP}:4317
+          http:
+            endpoint: ${env:K8S_POD_IP}:4318
+
+      filelog:
+        include:
+          - /var/log/pods/*/*/*.log
+        exclude:
+          # Exclude logs from all pods named otel/opentelemetry-collector
+          - /var/log/pods/*opentelemetry*collector*/*/*.log
+          - /var/log/pods/*otel*collector*/*/*.log
+        start_at: end
+        include_file_name: false
+        include_file_path: true
+        operators:
+          - id: container-parser
+            max_log_size: 102400
+            type: container
+        retry_on_failure:
+          enabled: true
+
+    processors:
+      batch:
+        send_batch_max_size: 1500
+        send_batch_size: 1000
+        timeout: 1s
+
+      memory_limiter:
+        check_interval: 5s
+        limit_percentage: 80
+        spike_limit_percentage: 25
+
+      k8sattributes:
+        extract:
+          # Extract metadata from the k8s attributes
+          metadata:
+            - k8s.namespace.name
+            - k8s.deployment.name
+            - k8s.statefulset.name
+            - k8s.daemonset.name
+            - k8s.cronjob.name
+            - k8s.job.name
+            - k8s.node.name
+            - k8s.pod.name
+            - k8s.pod.uid
+            - k8s.pod.start_time
+        passthrough: false
+        pod_association:
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.ip
+          - sources:
+              - from: resource_attribute
+                name: k8s.pod.uid
+          - sources:
+              - from: connection
+      resource:
+        attributes:
+          - key: k8s_cluster
+            value: "infrastructure"
+            action: upsert
+
+      transform/determine_log_severity:
+        log_statements:
+          - context: log
+            error_mode: ignore
+            statements:
+              # Log Level Extraction - Extract severity from structured logs
+              # Match klog formats (e.g., "I0811 05:58:50.252573 ...")
+              - set(attributes["log_severity"], "FATAL") where IsMatch(body, "^F\\d{4} \\d{2}:\\d{2}:\\d{2}")
+              - set(attributes["log_severity"], "ERROR") where IsMatch(body, "^E\\d{4} \\d{2}:\\d{2}:\\d{2}")
+              - set(attributes["log_severity"], "WARN") where IsMatch(body, "^W\\d{4} \\d{2}:\\d{2}:\\d{2}")
+              - set(attributes["log_severity"], "INFO") where IsMatch(body, "^I\\d{4} \\d{2}:\\d{2}:\\d{2}")
+              
+              # Match level=keywords in structured logs (e.g., "level=error") - specific
+              - set(attributes["level"], "FATAL") where IsMatch(body, "(?i)\\blevel=(fatal|critical)\\b") and attributes["level"] == nil
+              - set(attributes["level"], "ERROR") where IsMatch(body, "(?i)\\blevel=(error|err)\\b") and attributes["level"] == nil
+              - set(attributes["level"], "WARN") where IsMatch(body, "(?i)\\blevel=(warn|warning)\\b") and attributes["level"] == nil
+              - set(attributes["level"], "INFO") where IsMatch(body, "(?i)\\blevel=(info|information)\\b") and attributes["level"] == nil
+              - set(attributes["level"], "DEBUG") where IsMatch(body, "(?i)\\blevel=(debug|dbg)\\b") and attributes["level"] == nil
+              - set(attributes["level"], "TRACE") where IsMatch(body, "(?i)\\blevel=trace\\b") and attributes["level"] == nil
+
+              # Match general level keywords in message body (case-insensitive) - less specific
+              - set(attributes["log_severity"], "FATAL") where IsMatch(body, "(?i)\\b(fatal|critical)\\b") and attributes["log_severity"] == nil
+              - set(attributes["log_severity"], "ERROR") where IsMatch(body, "(?i)\\b(error|err)\\b") and attributes["log_severity"] == nil
+              - set(attributes["log_severity"], "WARN") where IsMatch(body, "(?i)\\b(warn|warning)\\b") and attributes["log_severity"] == nil
+              - set(attributes["log_severity"], "INFO") where IsMatch(body, "(?i)\\b(info|information)\\b") and attributes["log_severity"] == nil
+              - set(attributes["log_severity"], "DEBUG") where IsMatch(body, "(?i)\\b(debug|dbg)\\b") and attributes["log_severity"] == nil
+              - set(attributes["log_severity"], "TRACE") where IsMatch(body, "(?i)\\btrace\\b") and attributes["log_severity"] == nil
+
+              # Default to Unknown if no level is detected
+              - set(attributes["log_severity"], "UNKNOWN") where attributes["log_severity"] == nil
+
+    exporters:
+      debug:
+        verbosity: detailed
+      otlphttp/logs:
+        endpoint: "http://loki-gateway.observability.svc.cluster.local/otlp"
+        tls:
+          insecure: true
+      otlphttp/metrics:
+        endpoint: "http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090/api/v1/otlp"
+        tls:
+          insecure: true
+      otlp/traces:
+        endpoint: "jaeger-collector.observability.svc.cluster.local:4317"
+        tls:
+          insecure: true
+
+    service:
+      extensions:
+        - health_check
+      pipelines:
+        logs:
+          exporters:
+            - otlphttp/logs
+          processors:
+            - resource
+            - k8sattributes
+            - transform/determine_log_severity
+            - memory_limiter
+            - batch
+          receivers:
+            - otlp
+            - filelog
+        metrics:
+          exporters:
+            - otlphttp/metrics
+          processors:
+            - resource
+            - k8sattributes
+            - memory_limiter
+            - batch
+          receivers:
+            - otlp
+        traces:
+          exporters:
+            - otlp/traces
+          processors:
+            - resource
+            - k8sattributes
+            - memory_limiter
+            - batch
+          receivers:
+            - otlp
+
+  volumeMounts:
+    - name: varlogpods
+      mountPath: /var/log/pods
+      readOnly: true
+    - name: varlibdockercontainers
+      mountPath: /var/lib/docker/containers
+      readOnly: true
+
+  volumes:
+    - name: varlogpods
+      hostPath:
+        path: /var/log/pods
+        type: ''
+    - name: varlibdockercontainers
+      hostPath:
+        path: /var/lib/docker/containers
+        type: ''
