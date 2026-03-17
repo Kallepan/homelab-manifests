@@ -33,21 +33,20 @@ spec:
       token_url: https://sso.infra.home.arpa/realms/homelab/protocol/openid-connect/token
       api_url: https://sso.infra.home.arpa/realms/homelab/protocol/openid-connect/userinfo
       skip_org_role_sync: "false"
-  # TODO: enable once sso is working
-  # deployment:
-  #   spec:
-  #     template:
-  #       spec:
-  #         containers:
-  #           - name: grafana
-  #             env:
-  #               - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
-  #                 valueFrom:
-  #                   secretKeyRef:
-  #                     name: grafana-oauth-credentials
-  #                     key: client_id
-  #               - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
-  #                 valueFrom:
-  #                   secretKeyRef:
-  #                     name: grafana-oauth-credentials
-  #                     key: client_secret
+  deployment:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: grafana
+              env:
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-oauth-credentials
+                      key: client_id
+                - name: GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: grafana-oauth-credentials
+                      key: client_secret
