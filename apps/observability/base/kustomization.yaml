@@ -4,7 +4,7 @@ kind: Kustomization
 resources:
   - ./resources/grafana
   - ./resources/kube-prometheus-stack
-  # - ./resources/dashboards
+  - ./resources/dashboards
   - ./resources/kiali
   - ./resources/jaeger
   - ./resources/loki

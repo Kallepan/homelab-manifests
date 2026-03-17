@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: observability
+resources:
+  - argocd.yaml
+  - ceph.yaml
+  - cert-manager.yaml
+  - docker-dashboard.yaml
+  - gitlab-runner.yaml
+  - gitlab.yaml
+  - grafana-dashboards.yaml
+  - istio.yaml
+  - kube-metrics.yaml
+  - kyverno.yaml
+  - loki-logs.yaml
+  - postgres.yaml
+  - service-cluster.yaml
