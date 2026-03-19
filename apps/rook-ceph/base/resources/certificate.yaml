@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: ceph-tls
+  namespace: istio-system
+spec:
+  secretName: ceph-tls
+  issuerRef:
+    name: cluster-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - ceph.svc.home.arpa
