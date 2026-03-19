@@ -40,10 +40,6 @@ data:
           description: WireGuard VPN into the HomeLab.
           href: http://192.168.0.10:51820
           icon: wireguard.png
-      - OpenStack:
-          description: OpenStack Dashboard (Horizon) for HomeLab.
-          href: http://openstack.infra.home.arpa/
-          icon: openstack.png
       - Traefik Docker:
           description: Traefik dashboard for Docker.
           href: https://traefik.app.home.arpa/dashboard/#/
@@ -51,7 +47,7 @@ data:
     - Development & DevOps:
       - GitLab:
           description: Fully integrated software development platform.
-          href: https://gitlab.infra.home.arpa/users/sign_in?auto_sign_in=false
+          href: https://gitlab.svc.home.arpa/users/sign_in?auto_sign_in=false
           icon: gitlab.png
       - Forgejo:
           description: Lightweight code hosting solution.
@@ -76,23 +72,23 @@ data:
     - Monitoring & Observability:
       - Monitoring:
           description: Monitoring instance.
-          href: https://monitoring.infra.home.arpa/
+          href: https://grafana.svc.home.arpa/
           icon: grafana.png
       - Prometheus:
           description: Monitoring and alerting toolkit.
-          href: https://prometheus.infra.home.arpa/
+          href: https://prometheus.svc.home.arpa/
           icon: prometheus.png
       - Alertmanager:
           description: Alertmanager for Prometheus.
-          href: https://alert.infra.home.arpa/
+          href: https://alert.svc.home.arpa/
           icon: alertmanager.png
       - Jaeger:
           description: Distributed tracing system.
-          href: https://jaeger.infra.home.arpa/
+          href: https://jaeger.svc.home.arpa/
           icon: jaeger.png
       - Kiali:
           description: Service mesh observability.
-          href: https://kiali.infra.home.arpa/
+          href: https://kiali.svc.home.arpa/
           icon: traefik-proxy.png
       - CAdvisor:
           description: Container resource usage and performance analysis.
@@ -101,20 +97,12 @@ data:
     - Security & Identity:
       - Keycloak:
           description: Open Source Identity and Access Management.
-          href: https://sso.infra.home.arpa/
+          href: https://sso.svc.home.arpa/
           icon: keycloak.png
       - Vault:
           description: Secret Storage and Management.
-          href: https://vault.infra.home.arpa/
+          href: https://vault.svc.home.arpa/
           icon: vault.png
-      - Wazuh:
-          description: Security Information and Event Management (SIEM).
-          href: https://wazuh.app.home.arpa:8443/
-          icon: wazuh.png
-      - Falco:
-          description: Runtime security monitoring tool.
-          href: https://falco.svc.home.arpa/
-          icon: si-falco
     - Communication & Collaboration:
       - Mattermost:
           description: Internal chat and collaboration platform.
@@ -133,14 +121,6 @@ data:
           description: PostgreSQL Management Tool.
           href: https://pgadmin.app.home.arpa/
           icon: postgres.png
-      - MlFlow:
-          description: Machine Learning Operations platform.
-          href: https://mlflow.svc.home.arpa/
-          icon: si-mlflow
-      - Harbor:
-          description: Container Image Registry.
-          href: https://harbor.infra.home.arpa/
-          icon: harbor.png
       - Ceph Dashboard:
           description: Ceph Storage Cluster Management.
           href: https://ceph.svc.home.arpa/
@@ -158,15 +138,11 @@ data:
           description: Web-based Desktop Environment (Ubuntu KDE).
           href: https://webtop.app.home.arpa/
           icon: webtop.png
-      - Test Proxmox VE:
-          description: Test Proxmox Virtual Environment (PVE) instance.
-          href: https://proxmox-ve.test.home.arpa/
-          icon: proxmox.png
   custom.css: ""
   custom.js: ""
   settings.yaml: |
     title: HomeLab
-    base: https://homepage.infra.home.arpa/
+    base: https://homepage.svc.home.arpa/
     showStats: false
     theme: dark
     color: slate
