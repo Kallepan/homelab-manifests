@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: TCPRoute
+metadata:
+  name: tcproute-gitlab-ssh
+  namespace: gitlab
+spec:
+  parentRefs:
+    - name: istio-gateway
+      namespace: istio-system
+      sectionName: tcp-gitlab-ssh
+  rules:
+    - backendRefs:
+        - name: gitlab-gitlab-shell
+          port: 2222

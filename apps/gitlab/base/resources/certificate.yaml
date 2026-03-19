@@ -1,0 +1,17 @@
+# GitLab super certificate
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gitlab-tls
+  namespace: istio-system
+spec:
+  secretName: gitlab-tls
+  issuerRef:
+    name: cluster-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - "gitlab.svc.home.arpa"
+    - "kas.svc.home.arpa"
+    - "registry.svc.home.arpa"
+    - "*.pages.svc.home.arpa"
+    - "pages.svc.home.arpa"
