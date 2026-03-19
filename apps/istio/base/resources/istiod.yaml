@@ -16,6 +16,8 @@ spec:
     helm:
       releaseName: istio
       valuesObject:
+        env:
+          PILOT_ENABLE_ALPHA_GATEWAY_API: "true"
         profile: ambient
         meshID: "service-cluster-mesh"
         meshConfig:
