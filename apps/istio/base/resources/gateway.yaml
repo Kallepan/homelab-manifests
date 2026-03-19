@@ -29,36 +29,6 @@ spec:
         certificateRefs:
           - kind: Secret
             name: argocd-tls
-    - name: https-mlflow
-      protocol: HTTPS
-      port: 443
-      hostname: "mlflow.svc.home.arpa"
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: mlflow
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - kind: Secret
-            name: mlflow-tls
-    - name: https-homepage
-      protocol: HTTPS
-      port: 443
-      hostname: "homepage.svc.home.arpa"
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: homepage
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - kind: Secret
-            name: homepage-tls
     - name: https-it-tools
       protocol: HTTPS
       port: 443
