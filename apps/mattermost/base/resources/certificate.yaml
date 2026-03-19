@@ -6,8 +6,8 @@ metadata:
 spec:
   secretName: mattermost-tls
   issuerRef:
-    name: issuer
-    kind: Issuer
+    name: cluster-issuer
+    kind: ClusterIssuer
   dnsNames:
     - mattermost.svc.home.arpa
     - chat.svc.home.arpa

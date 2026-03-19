@@ -27,7 +27,7 @@ spec:
       in_cluster_url: http://kube-prometheus-stack-grafana.observability.svc.cluster.local
       auth:
         insecure_skip_verify: true
-      url: https://monitoring.infra.home.arpa
+      url: https://grafana.svc.home.arpa
     prometheus:
       url: >-
         http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090
