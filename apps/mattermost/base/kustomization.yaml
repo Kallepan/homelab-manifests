@@ -3,7 +3,6 @@ kind: Kustomization
 
 resources:
   - ./resources/certificate.yaml
-  - ./resources/gateway.yaml
   - ./resources/mattermost.yaml
   - ./resources/namespace.yaml
   - ./resources/persistent-volume-claim.yaml

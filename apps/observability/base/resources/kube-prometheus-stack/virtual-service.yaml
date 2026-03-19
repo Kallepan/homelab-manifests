@@ -1,39 +1,41 @@
-apiVersion: networking.istio.io/v1
-kind: VirtualService
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
-  name: virtual-service-prometheus
+  name: httproute-prometheus
   namespace: observability
 spec:
-  hosts:
+  parentRefs:
+    - name: istio-gateway
+      namespace: istio-system
+      sectionName: https-prometheus
+  hostnames:
     - prometheus.svc.home.arpa
-  gateways:
-    - gateway-prometheus
-  http:
-    - match:
-        - uri:
-            prefix: /
-      route:
-        - destination:
-            host: kube-prometheus-stack-prometheus.observability.svc.cluster.local
-            port:
-              number: 9090
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: kube-prometheus-stack-prometheus
+          port: 9090
 ---
-apiVersion: networking.istio.io/v1
-kind: VirtualService
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
-  name: virtualservice-alertmanager
+  name: httproute-alertmanager
   namespace: observability
 spec:
-  hosts:
+  parentRefs:
+    - name: istio-gateway
+      namespace: istio-system
+      sectionName: https-alertmanager
+  hostnames:
     - alert.svc.home.arpa
-  gateways:
-    - gateway-alertmanager
-  http:
-    - match:
-        - uri:
-            prefix: /
-      route:
-        - destination:
-            host: kube-prometheus-stack-alertmanager.observability.svc.cluster.local
-            port:
-              number: 9093
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: kube-prometheus-stack-alertmanager
+          port: 9093

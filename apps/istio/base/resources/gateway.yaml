@@ -1,0 +1,286 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: istio-gateway
+  namespace: istio-system
+spec:
+  gatewayClassName: istio
+  listeners:
+    - name: http
+      protocol: HTTP
+      hostname: "*.svc.home.arpa"
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https-argocd
+      protocol: HTTPS
+      port: 443
+      hostname: "argocd.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: argocd
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: argocd-tls
+    - name: https-mlflow
+      protocol: HTTPS
+      port: 443
+      hostname: "mlflow.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: mlflow
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: mlflow-tls
+    - name: https-homepage
+      protocol: HTTPS
+      port: 443
+      hostname: "homepage.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: homepage
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: homepage-tls
+    - name: https-it-tools
+      protocol: HTTPS
+      port: 443
+      hostname: "it-tools.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: it-tools
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: it-tools-tls
+    - name: https-mattermost
+      protocol: HTTPS
+      port: 443
+      hostname: "mattermost.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: mattermost
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: mattermost-tls
+    - name: https-argo-workflows
+      protocol: HTTPS
+      port: 443
+      hostname: "workflows.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: argo
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: argo-workflows-tls
+    - name: https-ceph
+      protocol: HTTPS
+      port: 443
+      hostname: "ceph.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: rook-ceph
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: ceph-tls
+    - name: https-sonarqube
+      protocol: HTTPS
+      port: 443
+      hostname: "sonarqube.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: sonarqube
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: sonarqube-tls
+    - name: https-falco
+      protocol: HTTPS
+      port: 443
+      hostname: "falco.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: falco
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: falco-tls
+    - name: https-vault
+      protocol: HTTPS
+      port: 443
+      hostname: "vault.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: vault
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: vault-tls
+    - name: https-keycloak
+      protocol: HTTPS
+      port: 443
+      hostname: "sso.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: keycloak
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: keycloak-tls
+    - name: https-grafana
+      protocol: HTTPS
+      port: 443
+      hostname: "grafana.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: grafana-tls
+    - name: https-kiali
+      protocol: HTTPS
+      port: 443
+      hostname: "kiali.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: kiali-tls
+    - name: https-jaeger
+      protocol: HTTPS
+      port: 443
+      hostname: "jaeger.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: jaeger-tls
+    - name: https-jaeger-collector
+      protocol: HTTPS
+      port: 443
+      hostname: "jaeger-collector.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: jaeger-tls
+    - name: https-loki
+      protocol: HTTPS
+      port: 443
+      hostname: "loki.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: loki-tls
+    - name: https-prometheus
+      protocol: HTTPS
+      port: 443
+      hostname: "prometheus.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: prometheus-tls
+    - name: https-alertmanager
+      protocol: HTTPS
+      port: 443
+      hostname: "alert.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: prometheus-tls

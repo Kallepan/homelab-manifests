@@ -3,6 +3,5 @@ kind: Kustomization
 
 resources:
   - ./resources/certificate.yaml
-  - ./resources/gateway.yaml
   - ./resources/keycloak.yaml
   - ./resources/virtual-service.yaml

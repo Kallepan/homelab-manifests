@@ -3,5 +3,4 @@ kind: Kustomization
 resources:
   - application.yaml
   - certificate.yaml
-  - gateway.yaml
   - virtual-service.yaml

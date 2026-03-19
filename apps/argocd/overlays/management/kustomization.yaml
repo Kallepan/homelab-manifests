@@ -23,23 +23,12 @@ patches:
       $patch: delete
 
   - target:
-      group: networking.istio.io
-      kind: Gateway
-      name: gateway-argocd
+      group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: httproute-argocd
     patch: |-
-      apiVersion: networking.istio.io/v1
-      kind: Gateway
+      apiVersion: gateway.networking.k8s.io/v1
+      kind: HTTPRoute
       metadata:
-        name: gateway-argocd
-      $patch: delete
-
-  - target:
-      group: networking.istio.io
-      kind: VirtualService
-      name: virtual-service-argocd
-    patch: |-
-      apiVersion: networking.istio.io/v1
-      kind: VirtualService
-      metadata:
-        name: virtual-service-argocd
+        name: httproute-argocd
       $patch: delete
