@@ -59,21 +59,6 @@ spec:
         certificateRefs:
           - kind: Secret
             name: mattermost-tls
-    - name: https-argo-workflows
-      protocol: HTTPS
-      port: 443
-      hostname: "workflows.svc.home.arpa"
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: argo
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - kind: Secret
-            name: argo-workflows-tls
     - name: https-ceph
       protocol: HTTPS
       port: 443
@@ -104,21 +89,6 @@ spec:
         certificateRefs:
           - kind: Secret
             name: sonarqube-tls
-    - name: https-falco
-      protocol: HTTPS
-      port: 443
-      hostname: "falco.svc.home.arpa"
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: falco
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - kind: Secret
-            name: falco-tls
     - name: https-vault
       protocol: HTTPS
       port: 443
@@ -242,7 +212,7 @@ spec:
     - name: https-alertmanager
       protocol: HTTPS
       port: 443
-      hostname: "alert.svc.home.arpa"
+      hostname: "alerts.svc.home.arpa"
       allowedRoutes:
         namespaces:
           from: Selector

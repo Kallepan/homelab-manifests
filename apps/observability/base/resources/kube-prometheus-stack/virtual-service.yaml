@@ -30,7 +30,7 @@ spec:
       namespace: istio-system
       sectionName: https-alertmanager
   hostnames:
-    - alert.svc.home.arpa
+    - alerts.svc.home.arpa
   rules:
     - matches:
         - path:

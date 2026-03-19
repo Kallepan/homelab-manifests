@@ -10,4 +10,4 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - prometheus.svc.home.arpa
-    - alert.svc.home.arpa
+    - alerts.svc.home.arpa

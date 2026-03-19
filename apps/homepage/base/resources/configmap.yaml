@@ -81,7 +81,7 @@ data:
           icon: prometheus.png
       - Alertmanager:
           description: Alertmanager for Prometheus.
-          href: https://alert.svc.home.arpa/
+          href: https://alerts.svc.home.arpa/
           icon: alertmanager.png
       - Jaeger:
           description: Distributed tracing system.
