@@ -1,0 +1,19 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: virtual-service-sonarqube
+  namespace: sonarqube
+spec:
+  hosts:
+    - sonarqube.svc.home.arpa
+  gateways:
+    - gateway-sonarqube
+  http:
+    - match:
+        - uri:
+            prefix: /
+      route:
+        - destination:
+            host: sonarqub-sonarqube.sonarqube.svc.cluster.local
+            port:
+              number: 9000

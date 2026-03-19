@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sonarqube
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: sonarqube
+    repoURL: https://SonarSource.github.io/helm-chart-sonarqube
+    targetRevision:  "2026.*"
+    helm:
+      releaseName: sonarqube
+      valuesObject:
+        community:
+          enabled: true
+        # Custom postgres
+        jdbcOverwrite:
+          enabled: true
+          jdbcUrl: "jdbc:postgresql://psql.storage.home.arpa:5432/sonarqube_db"
+          jdbcUsername: sonarqube_user
+          jdbcSecretName: sonarqube-postgres-credentials
+        postgresql:
+          enabled: false
+        persistence:
+          enabled: true
+          size: 5Gi
+        monitoringPasscodeSecretName: sonarqube-monitoring-passcode
+        monitoringPasscodeSecretKey: passcode
+        caCerts:
+          enabled: true
+          image: adoptopenjdk/openjdk16:alpine
+          secret: sonarqube-custom-ca-certs
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: sonarqube
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
