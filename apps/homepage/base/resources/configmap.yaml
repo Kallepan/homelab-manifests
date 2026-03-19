@@ -135,10 +135,6 @@ data:
           description: Automate tasks and workflows.
           href: https://n8n.app.home.arpa/
           icon: n8n.png
-      - Webtop:
-          description: Web-based Desktop Environment (Ubuntu KDE).
-          href: https://webtop.app.home.arpa/
-          icon: webtop.png
   custom.css: ""
   custom.js: ""
   settings.yaml: |
