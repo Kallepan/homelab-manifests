@@ -224,6 +224,66 @@ spec:
         certificateRefs:
           - kind: Secret
             name: prometheus-tls
+    - name: https-gitlab
+      protocol: HTTPS
+      port: 443
+      hostname: "gitlab.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: gitlab
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: gitlab-tls
+    - name: https-gitlab-registry
+      protocol: HTTPS
+      port: 443
+      hostname: "registry.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: gitlab
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: gitlab-tls
+    - name: https-gitlab-kas
+      protocol: HTTPS
+      port: 443
+      hostname: "kas.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: gitlab
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: gitlab-tls
+    - name: https-gitlab-pages
+      protocol: HTTPS
+      port: 443
+      hostname: "*.pages.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: gitlab
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: gitlab-tls
     - name: tcp-gitlab-ssh
       protocol: TCP
       port: 2222

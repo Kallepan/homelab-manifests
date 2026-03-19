@@ -31,12 +31,7 @@ spec:
             entryPoint: ssh
         kas:
           ingress:
-            enabled: true
-            class: istio
-            provider: istio
-            tls:
-              enabled: true
-              secretName: gitlab-tls
+            enabled: false
         toolbox:
           backups:
             cron:
@@ -132,15 +127,7 @@ spec:
           ssh: ~
           tls: {}
         ingress:
-          class: istio
-          provider: istio
-          configureCertmanager: false
-          enabled: true
-          path: /
-          pathType: Prefix
-          tls:
-            enabled: true
-            secretName: gitlab-tls
+          enabled: false
         kas:
           enabled: true
         minio:
