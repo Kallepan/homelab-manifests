@@ -1,0 +1,207 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage
+data:
+  bookmarks.yaml: |
+    - Developer:
+      - Github:
+        - abbr: GH
+          href: https://github.com/kallepan
+      - DockerHub:
+        - abbr: DO
+          href: https://hub.docker.com/u/kallepan
+    - Social:
+      - LinkedIn:
+        - abbr: LI
+          href: https://www.linkedin.com/in/kajeepankandeepan1999/
+    - Mail:
+      - Gmail:
+        - abbr: GM
+          href: http://kajeepan.kandeepan@gmail.com
+  docker.yaml: ""
+  kubernetes.yaml: |
+    mode: cluster
+  services.yaml: |
+    - Core Infrastructure:
+      - Proxmox:
+          description: Proxmox Virtual Environment (PVE) for HomeLab.
+          href: https://192.168.0.2:8006/
+          icon: proxmox.png
+      - Rancher:
+          description: Rancher Management UI for Kubernetes Clusters.
+          href: https://rancher.infra.home.arpa/
+          icon: rancher.png
+      - Portainer:
+          description: Management UI for Docker.
+          href: https://portainer.app.home.arpa/
+          icon: portainer.png
+      - WireGuard:
+          description: WireGuard VPN into the HomeLab.
+          href: http://192.168.0.10:51820
+          icon: wireguard.png
+      - OpenStack:
+          description: OpenStack Dashboard (Horizon) for HomeLab.
+          href: http://openstack.infra.home.arpa/
+          icon: openstack.png
+      - Traefik Docker:
+          description: Traefik dashboard for Docker.
+          href: https://traefik.app.home.arpa/dashboard/#/
+          icon: traefik.png
+    - Development & DevOps:
+      - GitLab:
+          description: Fully integrated software development platform.
+          href: https://gitlab.infra.home.arpa/users/sign_in?auto_sign_in=false
+          icon: gitlab.png
+      - Forgejo:
+          description: Lightweight code hosting solution.
+          href: https://forgejo.app.home.arpa/
+          icon: forgejo.png
+      - Argo CD Infra:
+          description: Argo CD for managing Kubernetes applications on infrastructure cluster.
+          href: https://argocd.infra.home.arpa/
+          icon: argo-cd.png
+      - Argo CD Service:
+          description: Argo CD for managing Kubernetes applications on service cluster.
+          href: https://argocd.svc.home.arpa/
+          icon: argo-cd.png
+      - Argo Workflows:
+          description: Workflow engine for Kubernetes.
+          href: https://workflows.svc.home.arpa
+          icon: argo-cd.png
+      - Sonarqube:
+          description: Continuous code quality inspection tool.
+          href: https://sonarqube.svc.home.arpa/
+          icon: sonarqube.png
+    - Monitoring & Observability:
+      - Monitoring:
+          description: Monitoring instance.
+          href: https://monitoring.infra.home.arpa/
+          icon: grafana.png
+      - Prometheus:
+          description: Monitoring and alerting toolkit.
+          href: https://prometheus.infra.home.arpa/
+          icon: prometheus.png
+      - Alertmanager:
+          description: Alertmanager for Prometheus.
+          href: https://alert.infra.home.arpa/
+          icon: alertmanager.png
+      - Jaeger:
+          description: Distributed tracing system.
+          href: https://jaeger.infra.home.arpa/
+          icon: jaeger.png
+      - Kiali:
+          description: Service mesh observability.
+          href: https://kiali.infra.home.arpa/
+          icon: traefik-proxy.png
+      - CAdvisor:
+          description: Container resource usage and performance analysis.
+          href: https://cadvisor.app.home.arpa/
+          icon: cadvisor.png
+    - Security & Identity:
+      - Keycloak:
+          description: Open Source Identity and Access Management.
+          href: https://sso.infra.home.arpa/
+          icon: keycloak.png
+      - Vault:
+          description: Secret Storage and Management.
+          href: https://vault.infra.home.arpa/
+          icon: vault.png
+      - Wazuh:
+          description: Security Information and Event Management (SIEM).
+          href: https://wazuh.app.home.arpa:8443/
+          icon: wazuh.png
+      - Falco:
+          description: Runtime security monitoring tool.
+          href: https://falco.svc.home.arpa/
+          icon: si-falco
+    - Communication & Collaboration:
+      - Mattermost:
+          description: Internal chat and collaboration platform.
+          href: https://mattermost.svc.home.arpa/
+          icon: mattermost.png
+      - Documentation:
+          description: Internal mkdocs documentation.
+          href: https://docs.app.home.arpa/
+          icon: mkdocs.png
+    - Data & Storage:
+      - Garage:
+          description: S3 Object Storage.
+          href: https://web.storage.home.arpa/
+          icon: garage.png
+      - PgAdmin:
+          description: PostgreSQL Management Tool.
+          href: https://pgadmin.app.home.arpa/
+          icon: postgres.png
+      - MlFlow:
+          description: Machine Learning Operations platform.
+          href: https://mlflow.svc.home.arpa/
+          icon: si-mlflow
+      - Harbor:
+          description: Container Image Registry.
+          href: https://harbor.infra.home.arpa/
+          icon: harbor.png
+      - Ceph Dashboard:
+          description: Ceph Storage Cluster Management.
+          href: https://ceph.svc.home.arpa/
+          icon: ceph.png
+    - Utilities & Tools:
+      - It-Tools:
+          description: Collection of tools useful for IT professionals.
+          href: https://it-tools.svc.home.arpa/
+          icon: it-tools.png
+      - N8N:
+          description: Automate tasks and workflows.
+          href: https://n8n.app.home.arpa/
+          icon: n8n.png
+      - Webtop:
+          description: Web-based Desktop Environment (Ubuntu KDE).
+          href: https://webtop.app.home.arpa/
+          icon: webtop.png
+      - Test Proxmox VE:
+          description: Test Proxmox Virtual Environment (PVE) instance.
+          href: https://proxmox-ve.test.home.arpa/
+          icon: proxmox.png
+  custom.css: ""
+  custom.js: ""
+  settings.yaml: |
+    title: HomeLab
+    base: https://homepage.infra.home.arpa/
+    showStats: false
+    theme: dark
+    color: slate
+    headerStyle: boxed
+    quicklaunch:
+      searchDescriptions: false
+      hideInternetSearch: false
+      hideVisitURL: false
+    layout:
+      Core Infrastructure:
+        icon: mdi-server
+      Development & DevOps:
+        icon: mdi-git
+      Monitoring & Observability:
+        icon: mdi-chart-line
+      Security & Identity:
+        icon: mdi-security
+      Communication & Collaboration:
+        icon: mdi-message
+      Data & Storage:
+        icon: mdi-database
+      Utilities & Tools:
+        icon: mdi-tools
+  widgets.yaml: |
+    - datetime:
+        locale: de
+        format:
+          dateStyle: long
+          timeStyle: long
+        text_size: x1
+    - greeting:
+        text_size: xl
+        text: Welcome to my HomeLab
+  proxmox.yaml: |
+    ---
+    # url: https://proxmox.host.or.ip:8006
+    # token: username@pam!Token ID
+    # secret: secret
