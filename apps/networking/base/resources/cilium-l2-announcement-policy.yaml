@@ -5,8 +5,8 @@ metadata:
 spec:
   serviceSelector:
     matchLabels:
-      app: istio-ingressgateway
-      istio: ingressgateway
+      gateway.networking.k8s.io/gateway-class-name: istio
+      gateway.networking.k8s.io/gateway-name: istio-gateway
   nodeSelector:
     matchExpressions:
       - key: node-role.kubernetes.io/control-plane
