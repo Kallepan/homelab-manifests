@@ -73,7 +73,7 @@ spec:
           terminationMessagePolicy: File
           env:
             - name: HOMEPAGE_ALLOWED_HOSTS
-              value: "homepage.svc.home.arpa"
+              value: "home.infra.home.arpa"
           volumeMounts:
             - mountPath: /app/config/custom.js
               name: homepage-config
