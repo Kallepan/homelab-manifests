@@ -81,15 +81,14 @@ spec:
                     - severity =~ "critical|warning"
                   continue: false
             receivers:
-              # TODO: Add mattermost receivers once its ready
-              # - name: "mattermost-logging-receiver"
-              #   slack_configs:
-              #     - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
-              #       send_resolved: true
-              # - name: "mattermost-metrics-receiver"
-              #   slack_configs:
-              #     - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
-              #       send_resolved: true
+              - name: "mattermost-logging-receiver"
+                slack_configs:
+                  - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
+                    send_resolved: true
+              - name: "mattermost-metrics-receiver"
+                slack_configs:
+                  - api_url_file: /etc/alertmanager/secrets/alertmanager-mattermost-webhook-url/mattermost-webhook-url
+                    send_resolved: true
               - name: "null"
             templates:
               - "/etc/alertmanager/config/*.tmpl"
