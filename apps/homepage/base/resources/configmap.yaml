@@ -143,7 +143,7 @@ data:
   custom.js: ""
   settings.yaml: |
     title: HomeLab
-    base: https://homepage.svc.home.arpa/
+    base: https://home.infra.home.arpa/
     showStats: false
     theme: dark
     color: slate

@@ -6,7 +6,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: homepage.svc.home.arpa
+    - host: home.infra.home.arpa
       http:
         paths:
           - backend:
