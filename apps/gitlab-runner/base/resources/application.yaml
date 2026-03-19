@@ -1,0 +1,77 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitlab-runner
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: gitlab-runner
+    repoURL: https://charts.gitlab.io
+    targetRevision: 0.*.*
+    helm:
+      releaseName: gitlab-runner
+      valuesObject:
+        service:
+          enabled: true
+        metrics:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+            labels:
+              release: kube-prometheus-stack
+        gitlabUrl: https://gitlab.svc.home.arpa
+        certsSecretName: homelab-ca
+        rbac:
+          create: true
+        runners:
+          cache:
+            secretName: gitlab-runner-s3-access
+          secret: gitlab-runner-token-secret
+          config: |-
+            [[runners]]
+              limit = 3
+              name = "kubernetes-runner"
+              pre_get_sources_script = """
+              apk update > /dev/null
+              apk add --no-cache ca-certificates > /dev/null
+              rm -rf /var/cache/apk/*
+
+              # Copying is not necessary, as we mount the secret as a volume
+              update-ca-certificates --fresh > /dev/null
+              """
+
+              [runners.kubernetes]
+                allowed_pull_policies = ["always", "if-not-present"]
+                pull_policy = "if-not-present"
+                image = "alpine:latest"
+                privileged = true
+              [runners.cache]
+                Type = "s3"
+                Shared = true
+                Path = "runner"
+                [runners.cache.s3]
+                  ServerAddress = "s3.storage.home.arpa"
+                  BucketName = "gitlab-runner"
+                  BucketLocation = "eu-west-1"
+                  AuthenticationType = "access-key"
+              [runners.kubernetes.volumes]
+              [[runners.kubernetes.volumes.empty_dir]]
+                name = "docker-certs"
+                mount_path = "/certs/client"
+                medium = "Memory"
+              [[runners.kubernetes.volumes.secret]]
+                name = "homelab-ca"
+                mount_path = "/usr/local/share/ca-certificates"
+                read_only = true
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: gitlab-runner
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
