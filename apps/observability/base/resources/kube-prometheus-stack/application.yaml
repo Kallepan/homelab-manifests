@@ -30,8 +30,7 @@ spec:
           alertmanagerSpec:
             externalUrl: https://alerts.svc.home.arpa
             secrets:
-              # TODO: Add alertmanager-mattermost-webhook-url once its ready
-              # - alertmanager-mattermost-webhook-url
+              - alertmanager-mattermost-webhook-url
               - homelab-ca
           config:
             global:
