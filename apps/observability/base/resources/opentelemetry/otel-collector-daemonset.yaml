@@ -87,37 +87,6 @@ spec:
             value: "service"
             action: upsert
 
-      transform/determine_log_severity:
-        log_statements:
-          - context: log
-            error_mode: ignore
-            statements:
-              # Log Level Extraction - Extract severity from structured logs
-              # Match klog formats (e.g., "I0811 05:58:50.252573 ...")
-              - set(attributes["log_severity"], "FATAL") where IsMatch(body, "^F\\d{4} \\d{2}:\\d{2}:\\d{2}")
-              - set(attributes["log_severity"], "ERROR") where IsMatch(body, "^E\\d{4} \\d{2}:\\d{2}:\\d{2}")
-              - set(attributes["log_severity"], "WARN") where IsMatch(body, "^W\\d{4} \\d{2}:\\d{2}:\\d{2}")
-              - set(attributes["log_severity"], "INFO") where IsMatch(body, "^I\\d{4} \\d{2}:\\d{2}:\\d{2}")
-              
-              # Match level=keywords in structured logs (e.g., "level=error") - specific
-              - set(attributes["level"], "FATAL") where IsMatch(body, "(?i)\\blevel=(fatal|critical)\\b") and attributes["level"] == nil
-              - set(attributes["level"], "ERROR") where IsMatch(body, "(?i)\\blevel=(error|err)\\b") and attributes["level"] == nil
-              - set(attributes["level"], "WARN") where IsMatch(body, "(?i)\\blevel=(warn|warning)\\b") and attributes["level"] == nil
-              - set(attributes["level"], "INFO") where IsMatch(body, "(?i)\\blevel=(info|information)\\b") and attributes["level"] == nil
-              - set(attributes["level"], "DEBUG") where IsMatch(body, "(?i)\\blevel=(debug|dbg)\\b") and attributes["level"] == nil
-              - set(attributes["level"], "TRACE") where IsMatch(body, "(?i)\\blevel=trace\\b") and attributes["level"] == nil
-
-              # Match general level keywords in message body (case-insensitive) - less specific
-              - set(attributes["log_severity"], "FATAL") where IsMatch(body, "(?i)\\b(fatal|critical)\\b") and attributes["log_severity"] == nil
-              - set(attributes["log_severity"], "ERROR") where IsMatch(body, "(?i)\\b(error|err)\\b") and attributes["log_severity"] == nil
-              - set(attributes["log_severity"], "WARN") where IsMatch(body, "(?i)\\b(warn|warning)\\b") and attributes["log_severity"] == nil
-              - set(attributes["log_severity"], "INFO") where IsMatch(body, "(?i)\\b(info|information)\\b") and attributes["log_severity"] == nil
-              - set(attributes["log_severity"], "DEBUG") where IsMatch(body, "(?i)\\b(debug|dbg)\\b") and attributes["log_severity"] == nil
-              - set(attributes["log_severity"], "TRACE") where IsMatch(body, "(?i)\\btrace\\b") and attributes["log_severity"] == nil
-
-              # Default to Unknown if no level is detected
-              - set(attributes["log_severity"], "UNKNOWN") where attributes["log_severity"] == nil
-
     exporters:
       debug:
         verbosity: detailed
@@ -144,7 +113,6 @@ spec:
           processors:
             - resource
             - k8sattributes
-            - transform/determine_log_severity
             - memory_limiter
             - batch
           receivers:
