@@ -84,7 +84,7 @@ spec:
       resource:
         attributes:
           - key: k8s_cluster
-            value: "infrastructure"
+            value: "service"
             action: upsert
 
       transform/determine_log_severity:
