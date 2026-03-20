@@ -81,7 +81,7 @@ spec:
                   attributes:
                     - user.id
                 - action: index_label
-                  regex: "log_severity"
+                  regex: "detected_level"
                 - action: drop
                   regex: .*
           storage:
