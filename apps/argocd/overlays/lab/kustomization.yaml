@@ -16,3 +16,11 @@ patches:
       - op: replace
         path: /spec/dnsNames/0
         value: "argocd.lab.home.arpa"
+  - target:
+      group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: httproute-argocd
+    patch: |-
+      - op: replace
+        path: /spec/hostnames/0
+        value: "argocd.lab.home.arpa"
