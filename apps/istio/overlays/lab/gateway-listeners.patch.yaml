@@ -11,3 +11,18 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
+    - name: https-argocd
+      protocol: HTTPS
+      port: 443
+      hostname: "argocd.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: argocd
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: argocd-tls
