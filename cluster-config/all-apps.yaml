@@ -18,6 +18,7 @@ spec:
                               values:
                                   - "management"
                                   - "service"
+                                  - "lab"
 
                 # 2. Look for overlays that match the cluster type
                 - git:
