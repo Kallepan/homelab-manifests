@@ -3,4 +3,11 @@ kind: Gateway
 metadata:
   name: istio-gateway
 spec:
-  listeners: []
+  listeners:
+    - name: http
+      protocol: HTTP
+      hostname: "*.lab.home.arpa"
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
