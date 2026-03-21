@@ -137,7 +137,7 @@ spec:
   configMapRef:
     name: kyverno-dashboard
     key: kyverno.json
-  folder: Security
+  folder: Apps
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
@@ -151,7 +151,7 @@ spec:
   configMapRef:
     name: loki-logs
     key: loki-logs.json
-  folder: Observability
+  folder: Kubernetes
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard
@@ -165,18 +165,4 @@ spec:
   configMapRef:
     name: postgres-dashboard
     key: postgres.json
-  folder: Database
----
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: service-cluster-dashboard
-  namespace: observability
-spec:
-  instanceSelector:
-    matchLabels:
-      dashboards: "grafana"
-  configMapRef:
-    name: service-cluster-metrics
-    key: service_cluster_dashboard.json
-  folder: Kubernetes
+  folder: Storage

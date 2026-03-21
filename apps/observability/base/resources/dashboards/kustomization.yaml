@@ -14,4 +14,3 @@ resources:
   - kyverno.yaml
   - loki-logs.yaml
   - postgres.yaml
-  - service-cluster.yaml
