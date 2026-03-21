@@ -11,4 +11,4 @@ patches:
     patch: |-
       - op: replace
         path: /spec/blocks/0/cidr
-        value: "10.10.20.20/32"
+        value: "10.10.20.50/32"
