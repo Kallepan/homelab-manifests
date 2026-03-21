@@ -14,7 +14,7 @@ spec:
     - name: https-argocd
       protocol: HTTPS
       port: 443
-      hostname: "argocd.svc.home.arpa"
+      hostname: "argocd.lab.home.arpa"
       allowedRoutes:
         namespaces:
           from: Selector
