@@ -9,3 +9,10 @@ patches:
     target:
       kind: Application
       name: argocd
+  - target:
+      kind: Certificate
+      name: argocd-tls
+    patch: |-
+      - op: replace
+        path: /spec/dnsNames/0
+        value: "argocd.lab.home.arpa"
