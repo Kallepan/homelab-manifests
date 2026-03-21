@@ -10,6 +10,43 @@ metadata:
 data:
   loki-logs.json: |-
     {
+      "__inputs": [
+        {
+          "name": "DS_LOKI",
+          "label": "Loki",
+          "description": "",
+          "type": "datasource",
+          "pluginId": "loki",
+          "pluginName": "Loki"
+        }
+      ],
+      "__elements": {},
+      "__requires": [
+        {
+          "type": "grafana",
+          "id": "grafana",
+          "name": "Grafana",
+          "version": "12.4.1"
+        },
+        {
+          "type": "panel",
+          "id": "logs",
+          "name": "Logs",
+          "version": ""
+        },
+        {
+          "type": "datasource",
+          "id": "loki",
+          "name": "Loki",
+          "version": "12.4.1"
+        },
+        {
+          "type": "panel",
+          "id": "timeseries",
+          "name": "Time series",
+          "version": ""
+        }
+      ],
       "annotations": {
         "list": [
           {
@@ -36,13 +73,12 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
-      "id": 45,
       "links": [],
       "panels": [
         {
           "datasource": {
             "type": "loki",
-            "uid": "P982945308D3682D1"
+            "uid": "${DS_LOKI}"
           },
           "description": "Number of Logs",
           "fieldConfig": {
@@ -58,7 +94,7 @@ data:
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "barWidthFactor": 0.6,
-                "drawStyle": "bars",
+                "drawStyle": "line",
                 "fillOpacity": 0,
                 "gradientMode": "none",
                 "hideFrom": {
@@ -74,6 +110,7 @@ data:
                   "type": "linear"
                 },
                 "showPoints": "auto",
+                "showValues": false,
                 "spanNulls": false,
                 "stacking": {
                   "group": "A",
@@ -120,36 +157,29 @@ data:
               "sort": "none"
             }
           },
-          "pluginVersion": "12.1.0",
+          "pluginVersion": "12.4.1",
           "targets": [
             {
               "datasource": {
                 "type": "loki",
-                "uid": "P982945308D3682D1"
+                "uid": "${DS_LOKI}"
               },
               "direction": "backward",
               "editorMode": "code",
-              "expr": "sum(count_over_time({k8s_namespace_name=~\"$namespace\", k8s_container_name=~\"$container\",k8s_cluster=~\"$cluster\"} |= \"$query\" [$__interval]))",
-              "instant": false,
-              "legendFormat": "Log count",
+              "expr": "sum(count_over_time({k8s_namespace_name=~\"$namespace\", k8s_container_name=~\"$container\", k8s_cluster=~\"$cluster\"} |= \"$query\" [$__interval]))",
               "queryType": "range",
-              "range": true,
               "refId": "A"
             }
           ],
-          "title": "",
+          "title": "Number of Logs",
           "type": "timeseries"
         },
         {
           "datasource": {
             "type": "loki",
-            "uid": "P982945308D3682D1"
+            "uid": "${DS_LOKI}"
           },
           "description": "Logs from services running in Kubernetes",
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
-          },
           "gridPos": {
             "h": 25,
             "w": 24,
@@ -163,36 +193,34 @@ data:
             "enableLogDetails": true,
             "prettifyLogMessage": false,
             "showCommonLabels": false,
+            "showControls": false,
             "showLabels": false,
             "showTime": false,
             "sortOrder": "Descending",
+            "unwrappedColumns": false,
             "wrapLogMessage": true
           },
-          "pluginVersion": "12.1.0",
+          "pluginVersion": "12.4.1",
           "targets": [
             {
               "datasource": {
                 "type": "loki",
-                "uid": "P982945308D3682D1"
+                "uid": "${DS_LOKI}"
               },
               "direction": "backward",
               "editorMode": "code",
-              "expr": "{k8s_cluster=~\"$cluster\",k8s_namespace_name=~\"$namespace\", k8s_container_name=~\"$container\", log_severity=~\"$log_severity\"} |~ \"$query\"",
+              "expr": "{k8s_cluster=~\"$cluster\", k8s_namespace_name=~\"$namespace\", k8s_container_name=~\"$container\"}",
               "queryType": "range",
               "refId": "A"
             }
           ],
-          "title": "",
+          "title": "Observed Logs",
           "type": "logs"
         },
         {
           "datasource": {
             "type": "loki",
-            "uid": "P982945308D3682D1"
-          },
-          "fieldConfig": {
-            "defaults": {},
-            "overrides": []
+            "uid": "${DS_LOKI}"
           },
           "gridPos": {
             "h": 14,
@@ -203,21 +231,25 @@ data:
           "id": 5,
           "options": {
             "dedupStrategy": "signature",
+            "enableInfiniteScrolling": false,
             "enableLogDetails": true,
             "prettifyLogMessage": false,
             "showCommonLabels": false,
+            "showControls": false,
             "showLabels": false,
             "showTime": false,
             "sortOrder": "Descending",
+            "unwrappedColumns": false,
             "wrapLogMessage": true
           },
-          "pluginVersion": "11.4.0",
+          "pluginVersion": "12.4.1",
           "targets": [
             {
               "datasource": {
                 "type": "loki",
-                "uid": "P982945308D3682D1"
+                "uid": "${DS_LOKI}"
               },
+              "direction": "backward",
               "editorMode": "code",
               "expr": "{service_name=\"kube-events\"} |= \"$query\" | json | type = \"Warning\"",
               "queryType": "range",
@@ -230,10 +262,8 @@ data:
       ],
       "preload": false,
       "refresh": "30s",
-      "schemaVersion": 41,
-      "tags": [
-        "production"
-      ],
+      "schemaVersion": 42,
+      "tags": [],
       "templating": {
         "list": [
           {
@@ -255,16 +285,13 @@ data:
             "type": "textbox"
           },
           {
-            "allValue": ".+",
-            "current": {
-              "text": "All",
-              "value": [
-                "$__all"
-              ]
+            "allowCustomValue": false,
+            "current": {},
+            "datasource": {
+              "type": "loki",
+              "uid": "${DS_LOKI}"
             },
-            "datasource": "P982945308D3682D1",
             "definition": "",
-            "description": "",
             "includeAll": true,
             "label": "Namespace",
             "multi": true,
@@ -278,19 +305,17 @@ data:
             },
             "refresh": 1,
             "regex": "",
+            "regexApplyTo": "value",
             "type": "query"
           },
           {
-            "allValue": ".+",
-            "current": {
-              "text": "All",
-              "value": [
-                "$__all"
-              ]
+            "allowCustomValue": false,
+            "current": {},
+            "datasource": {
+              "type": "loki",
+              "uid": "${DS_LOKI}"
             },
-            "datasource": "P982945308D3682D1",
             "definition": "",
-            "description": "",
             "includeAll": true,
             "label": "Container",
             "multi": true,
@@ -304,24 +329,17 @@ data:
             },
             "refresh": 1,
             "regex": "",
+            "regexApplyTo": "value",
             "type": "query"
           },
           {
-            "current": {
-              "text": "All",
-              "value": [
-                "$__all"
-              ]
-            },
+            "current": {},
             "datasource": {
               "type": "loki",
-              "uid": "P982945308D3682D1"
+              "uid": "${DS_LOKI}"
             },
             "definition": "",
-            "description": "K8S Cluster to filter for",
-            "includeAll": true,
             "label": "Cluster",
-            "multi": true,
             "name": "cluster",
             "options": [],
             "query": {
@@ -332,35 +350,7 @@ data:
             },
             "refresh": 1,
             "regex": "",
-            "type": "query"
-          },
-          {
-            "current": {
-              "text": [
-                "All"
-              ],
-              "value": [
-                "$__all"
-              ]
-            },
-            "datasource": {
-              "type": "loki",
-              "uid": "P982945308D3682D1"
-            },
-            "definition": "",
-            "includeAll": true,
-            "label": "Log Severity",
-            "multi": true,
-            "name": "log_severity",
-            "options": [],
-            "query": {
-              "label": "log_severity",
-              "refId": "LokiVariableQueryEditor-VariableQuery",
-              "stream": "",
-              "type": 1
-            },
-            "refresh": 1,
-            "regex": "",
+            "regexApplyTo": "value",
             "type": "query"
           }
         ]
@@ -370,8 +360,9 @@ data:
         "to": "now"
       },
       "timepicker": {},
-      "timezone": "",
-      "title": "Loki Kubernetes Logs",
-      "uid": "o6-BGgnnk",
-      "version": 1
+      "timezone": "browser",
+      "title": "Loki Kubernetes Logs Copy",
+      "uid": "kac6qn5",
+      "version": 3,
+      "weekStart": ""
     }
