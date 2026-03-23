@@ -127,7 +127,7 @@ data:
               },
               "direction": "backward",
               "editorMode": "code",
-              "expr": "sum(count_over_time({k8s_namespace_name=~\"$namespace\", k8s_container_name=~\"$container\", k8s_cluster=~\"$cluster\"} |= \"$query\" [$__interval]))",
+              "expr": "sum(count_over_time({k8s_namespace_name=~\"$namespace\", k8s_container_name=~\"$container\", k8s_cluster=~\"$cluster\",log_severity=~\"$log_severity\"} |= \"$query\" [$__interval]))",
               "queryType": "range",
               "refId": "A"
             }
@@ -174,7 +174,7 @@ data:
               },
               "direction": "backward",
               "editorMode": "code",
-              "expr": "{k8s_cluster=~\"$cluster\", k8s_namespace_name=~\"$namespace\", k8s_container_name=~\"$container\"}",
+              "expr": "{k8s_cluster=~\"$cluster\", k8s_namespace_name=~\"$namespace\", k8s_container_name=~\"$container\",log_severity=~\"$log_severity\"}",
               "queryType": "range",
               "refId": "A"
             }
@@ -332,17 +332,44 @@ data:
             "regex": "",
             "regexApplyTo": "value",
             "type": "query"
+          },
+          {
+            "allValue": "",
+            "allowCustomValue": false,
+            "current": {
+              "text": "All",
+              "value": "$__all"
+            },
+            "datasource": {
+              "type": "loki",
+              "uid": "loki"
+            },
+            "definition": "",
+            "includeAll": true,
+            "label": "Log Severity",
+            "name": "log_severity",
+            "options": [],
+            "query": {
+              "label": "log_severity",
+              "refId": "LokiVariableQueryEditor-VariableQuery",
+              "stream": "",
+              "type": 1
+            },
+            "refresh": 1,
+            "regex": "",
+            "regexApplyTo": "value",
+            "type": "query"
           }
         ]
       },
       "time": {
-        "from": "now-15m",
+        "from": "now-24h",
         "to": "now"
       },
       "timepicker": {},
       "timezone": "browser",
       "title": "Loki Kubernetes Logs",
       "uid": "ka44htj",
-      "version": 4,
+      "version": 8,
       "weekStart": ""
     }
