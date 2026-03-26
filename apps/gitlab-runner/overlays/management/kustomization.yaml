@@ -22,7 +22,7 @@ patches:
       kind: Application
       name: gitlab-runner
     patch: |-
-      op: delete
+      op: remove
       path: /spec/source/helm/valuesObject/runners/cache/secretName
   - target:
       group: argoproj.io
