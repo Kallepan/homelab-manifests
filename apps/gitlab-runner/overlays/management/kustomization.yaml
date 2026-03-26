@@ -22,42 +22,41 @@ patches:
       kind: Application
       name: gitlab-runner
     patch: |-
-      op: remove
-      path: /spec/source/helm/valuesObject/runners/cache/secretName
+      - op: remove
+        path: /spec/source/helm/valuesObject/runners/cache/secretName
   - target:
       group: argoproj.io
       kind: Application
       name: gitlab-runner
     patch: |-
-      op: replace
-      path: /spec/source/helm/valuesObject/metrics/enabled
-      value: false
+      - op: replace
+        path: /spec/source/helm/valuesObject/metrics/enabled
+        value: false
   - target:
       group: argoproj.io
       kind: Application
       name: gitlab-runner
     patch: |-
-      op: replace
-      path: /spec/source/helm/valuesObject/runners/config
-      value: |-
-        [[runners]]
-          limit = 3
-          name = "kubernetes-runner"
-          pre_get_sources_script = """
-          apk update > /dev/null
-          apk add --no-cache ca-certificates > /dev/null
-          rm -rf /var/cache/apk/*
-
-          # Copying is not necessary, as we mount the secret as a volume
-          update-ca-certificates --fresh > /dev/null
-          """
-
-          [runners.kubernetes]
-            allowed_pull_policies = ["always", "if-not-present"]
-            pull_policy = "if-not-present"
-            image = "alpine:latest"
-          [runners.kubernetes.volumes]
-          [[runners.kubernetes.volumes.secret]]
-            name = "homelab-ca"
-            mount_path = "/usr/local/share/ca-certificates"
-            read_only = true
+      - op: replace
+        path: /spec/source/helm/valuesObject/runners/config
+        value: |-
+          [[runners]]
+            limit = 3
+            name = "kubernetes-runner"
+            pre_get_sources_script = """
+            apk update > /dev/null
+            apk add --no-cache ca-certificates > /dev/null
+            rm -rf /var/cache/apk/*
+            # Copying is not necessary, as we mount the secret as a volume
+            update-ca-certificates --fresh > /dev/null
+            """
+            
+            [runners.kubernetes]
+              allowed_pull_policies = ["always", "if-not-present"]
+              pull_policy = "if-not-present"
+              image = "alpine:latest"
+            [runners.kubernetes.volumes]
+            [[runners.kubernetes.volumes.secret]]
+              name = "homelab-ca"
+              mount_path = "/usr/local/share/ca-certificates"
+              read_only = true
