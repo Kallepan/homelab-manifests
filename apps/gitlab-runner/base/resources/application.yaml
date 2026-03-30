@@ -37,7 +37,6 @@ spec:
               limit = 3
               name = "kubernetes-runner"
               pre_get_sources_script = """
-              apk update > /dev/null
               apk add --no-cache ca-certificates > /dev/null
               rm -rf /var/cache/apk/*
 
@@ -115,7 +114,6 @@ spec:
               limit = 3
               name = "kubernetes-runner"
               pre_get_sources_script = """
-              apk update > /dev/null
               apk add --no-cache ca-certificates > /dev/null
               rm -rf /var/cache/apk/*
 
