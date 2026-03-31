@@ -175,18 +175,11 @@ spec:
     - name: varlogpods
       mountPath: /var/log/pods
       readOnly: true
-    - name: varlibdockercontainers
-      mountPath: /var/lib/docker/containers
-      readOnly: true
 
   volumes:
     - name: varlogpods
       hostPath:
         path: /var/log/pods
-        type: ''
-    - name: varlibdockercontainers
-      hostPath:
-        path: /var/lib/docker/containers
         type: ''
 
   resources:
