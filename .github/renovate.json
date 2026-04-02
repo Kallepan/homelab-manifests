@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "onboarding": false,
+  "requireConfig": "optional",
+  "argocd": {
+    "managerFilePatterns": [
+      "/(^|/)(application(?:-[^/]+)?|all-apps)\\.ya?ml$/"
+    ]
+  },
+  "helmv3": {
+    "managerFilePatterns": [
+      "/(^|/)Chart\\.ya?ml$/"
+    ]
+  },
+  "reviewers": [
+    "kallepan"
+  ],
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "commitMessagePrefix": "chore(deps):",
+  "prConcurrentLimit": 10,
+  "semanticCommits": "enabled"
+}
