@@ -17,21 +17,3 @@ updates:
     commit-message:
       prefix: "chore(deps):"
       include: "scope"
-
-  # Monitor GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "daily"
-      time: "03:00"
-    open-pull-requests-limit: 10
-    pull-request-branch-name:
-      separator: "/"
-    reviewers:
-      - "kallepan"
-    labels:
-      - "dependencies"
-      - "github-actions"
-    commit-message:
-      prefix: "chore(deps):"
-      include: "scope"
