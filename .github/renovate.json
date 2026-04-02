@@ -23,5 +23,6 @@
   ],
   "commitMessagePrefix": "chore(deps):",
   "prConcurrentLimit": 10,
-  "semanticCommits": "enabled"
+  "semanticCommits": "enabled",
+  "gitAuthor": "Renovate Bot <bot@home.arpa>"
 }
