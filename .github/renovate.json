@@ -2,8 +2,6 @@
   "extends": [
     "config:recommended"
   ],
-  "onboarding": false,
-  "requireConfig": "optional",
   "argocd": {
     "managerFilePatterns": [
       "/(^|/)(application(?:-[^/]+)?|all-apps)\\.ya?ml$/"
