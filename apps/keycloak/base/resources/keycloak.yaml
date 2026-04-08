@@ -23,3 +23,31 @@ spec:
     enabled: false
   proxy:
     headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers
+
+  unsupported:
+    podTemplate:
+      spec:
+        initContainers:
+          - name: fetch-provider-jar
+            image: curlimages/curl:latest
+            command:
+              - sh
+            args:
+              - -ec
+              - |
+                mkdir -p /providers && \
+                curl -fSLk -o /providers/extension.zip "https://gitlab.svc.home.arpa/releases/web-apps/keycloak-theme/-/jobs/797/artifacts/raw/artifacts/keycloak-theme.jar?inline=false" && \
+                unzip -o /providers/extension.zip -d /providers && \
+                mv /providers/extension/keycloak-theme.jar /providers/keycloak-theme.jar && \
+                rm -rf /providers/extension/ /providers/extension.zip
+            volumeMounts:
+              - name: provider-jar
+                mountPath: /providers
+        containers:
+          - name: keycloak
+            volumeMounts:
+              - name: provider-jar
+                mountPath: /opt/keycloak/providers
+        volumes:
+          - name: provider-jar
+            emptyDir: {}
