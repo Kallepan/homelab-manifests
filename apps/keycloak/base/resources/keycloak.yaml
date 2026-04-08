@@ -42,9 +42,10 @@ spec:
                 mountPath: /opt/keycloak/providers
         containers:
           - name: keycloak
-            command: ["/bin/sh", "-c"]
+            command: ["/bin/sh"]
             args:
-              - |
+              - "-c"
+              - >
                 /opt/keycloak/bin/kc.sh build && \
                 /opt/keycloak/bin/kc.sh start --optimized
             volumeMounts:
