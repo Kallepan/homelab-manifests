@@ -35,11 +35,8 @@ spec:
             args:
               - -ec
               - |
-                mkdir -p /providers && \
-                curl -fSLk -o /providers/extension.zip "https://gitlab.svc.home.arpa/releases/web-apps/keycloak-theme/-/jobs/797/artifacts/raw/artifacts/keycloak-theme.jar?inline=false" && \
-                unzip -o /providers/extension.zip -d /providers && \
-                mv /providers/extension/keycloak-theme.jar /providers/keycloak-theme.jar && \
-                rm -rf /providers/extension/ /providers/extension.zip
+                mkdir -p /providers/ && \
+                curl -fSLk -o /providers/keycloak-theme.jar "https://gitlab.svc.home.arpa/releases/web-apps/keycloak-theme/-/jobs/797/artifacts/raw/artifacts/keycloak-theme.jar?inline=false"
             volumeMounts:
               - name: provider-jar
                 mountPath: /providers
