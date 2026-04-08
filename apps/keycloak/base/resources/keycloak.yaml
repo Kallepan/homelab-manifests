@@ -35,13 +35,15 @@ spec:
             args:
               - -ec
               - |
-                mkdir -p /providers/ && \
-                curl -fSLk -o /providers/keycloak-theme.jar "https://gitlab.svc.home.arpa/releases/web-apps/keycloak-theme/-/jobs/797/artifacts/raw/artifacts/keycloak-theme.jar?inline=false"
+                mkdir -p /opt/keycloak/providers/ && \
+                curl -fSLk -o /opt/keycloak/providers/keycloak-theme.jar "https://gitlab.svc.home.arpa/releases/web-apps/keycloak-theme/-/jobs/797/artifacts/raw/artifacts/keycloak-theme.jar?inline=false"
             volumeMounts:
               - name: provider-jar
-                mountPath: /providers
+                mountPath: /opt/keycloak/providers
         containers:
           - name: keycloak
+            command: ["/opt/keycloak/bin/kc.sh"]
+            args: ["start", "--optimized"]
             volumeMounts:
               - name: provider-jar
                 mountPath: /opt/keycloak/providers
