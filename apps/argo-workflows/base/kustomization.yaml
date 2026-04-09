@@ -6,4 +6,5 @@ resources:
   - ./resources/application-workflows.yaml
   - ./resources/certificate.yaml
   - ./resources/http-route.yaml
+  - ./resources/namespace.yaml
   - ./resources/rbac.yaml
