@@ -48,9 +48,9 @@ spec:
 
     processors:
       batch:
-        send_batch_max_size: 1500
-        send_batch_size: 1000
-        timeout: 1s
+        send_batch_max_size: 2048
+        send_batch_size: 1024
+        timeout: 5s
 
       memory_limiter:
         check_interval: 5s
@@ -185,7 +185,7 @@ spec:
   resources:
     limits:
       cpu: 900m
-      memory: 3Gi
+      memory: 2Gi
     requests:
       cpu: 450m
       memory: 1Gi
