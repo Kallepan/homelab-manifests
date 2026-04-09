@@ -290,3 +290,18 @@ spec:
           selector:
             matchLabels:
               kubernetes.io/metadata.name: gitlab
+    - name: argo-workflows
+      protocol: HTTPS
+      port: 443
+      hostname: "workflows.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: argo-workflows
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: argo-workflows-tls
