@@ -1,0 +1,95 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argo-workflows
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: argo-workflows
+    repoURL: https://argoproj.github.io/argo-helm
+    targetRevision: "0.*.*"
+    helm:
+      releaseName: argo-workflows
+      valuesObject:
+        artifactRepositoryRef:
+          artifact-repositories:
+            annotations:
+              workflows.argoproj.io/default-artifact-repository: default-v1-s3-artifact-repository
+            default-v1-s3-artifact-repository:
+              s3:
+                accessKeySecret:
+                  name: argo-workflows-s3-credentials
+                  key: accessKey
+                secretKeySecret:
+                  name: argo-workflows-s3-credentials
+                  key: secretKey
+                bucket: argo-workflows
+                endpoint: s3.storage.home.arpa
+                insecure: true # Self-signed certificate
+                region: eu-west-1
+        workflow:
+          serviceAccount:
+            create: true
+            name: argo-workflows
+          rbac:
+            create: true
+        controller:
+          persistence:
+            archive: true
+            postgresql:
+              host: psql.storage.home.arpa
+              port: 5432
+              database: argo_workflows_db
+              tableName: workflows
+              userNameSecret:
+                name: argo-workflows-postgres-credentials
+                key: username
+              passwordSecret:
+                name: argo-workflows-postgres-credentials
+                key: password
+          workflowNamespaces:
+            - workflows
+        server:
+          volumeMounts:
+            - name: certificate
+              mountPath: /etc/ssl/certs/homelab-ca.crt
+              readOnly: true
+              subPath: homelab-ca.crt
+          volumes:
+            - name: certificate
+              secret:
+                secretName: homelab-ca
+          authModes:
+            - sso
+          sso:
+            enabled: true
+            issuer: https://sso.svc.home.arpa/realms/homelab
+            clientId:
+              name: argo-workflows-oauth-credentials
+              key: client-id
+            clientSecret:
+              name: argo-workflows-oauth-credentials
+              key: client-secret
+            redirectUrl: https://workflows.svc.home.arpa/oauth2/callback
+            rbac:
+              enabled: true
+            scopes:
+              - profile
+              - email
+              - groups
+          ingress:
+            enabled: false
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argo-workflows
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
