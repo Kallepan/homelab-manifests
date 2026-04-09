@@ -50,10 +50,6 @@ data:
           description: Fully integrated software development platform.
           href: https://gitlab.svc.home.arpa/users/sign_in?auto_sign_in=false
           icon: gitlab.png
-      - Kasm:
-          description: Containerized workspace platform for remote desktop access.
-          href: https://kasm.app.home.arpa/
-          icon: kasm.png
       - Argo CD Infra:
           description: Argo CD for managing Kubernetes applications on infrastructure cluster.
           href: https://argocd.infra.home.arpa/
@@ -135,6 +131,10 @@ data:
           description: Automate tasks and workflows.
           href: https://n8n.app.home.arpa/
           icon: n8n.png
+      - Kasm:
+          description: Containerized workspace platform for remote desktop access. For setup visit https://kasm-admin.app.home.arpa/
+          href: https://kasm.app.home.arpa/
+          icon: kasm.png
   custom.css: ""
   custom.js: ""
   settings.yaml: |
