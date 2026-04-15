@@ -1,0 +1,83 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openbao
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: openbao
+    repoURL: https://openbao.github.io/openbao-helm
+    targetRevision: 0.*.*
+    helm:
+      releaseName: openbao
+      valuesObject:
+        global:
+          enabled: true
+          tlsDisable: true
+          serverTelemetry:
+            prometheusOperator: true
+        injector:
+          webhook:
+            failurePolicy: Fail
+          metrics:
+            enabled: true
+          resources:
+            requests:
+              cpu: 500m
+              memory: 128Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+        server:
+          logLevel: info
+          standalone:
+            config: |-
+              ui = true
+
+              listener "tcp" {
+                tls_disable = 1
+                address = "[::]:8200"
+                cluster_address = "[::]:8201"
+                # Enable unauthenticated metrics access (necessary for Prometheus Operator)
+                telemetry {
+                  unauthenticated_metrics_access = "true"
+                }
+              }
+              storage "file" {
+                path = "/vault/data"
+              }
+              telemetry {
+                prometheus_retention_time = "30s"
+                disable_hostname = true
+              }
+          resources:
+            requests:
+              cpu: 250m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          ingress:
+            enabled: false
+          dataStorage:
+            enabled: true
+            size: 10Gi
+            storageClass: ceph-block
+            accessMode: ReadWriteOnce
+        serverTelemetry:
+          serviceMonitor:
+            enabled: true
+            selectors:
+              release: kube-prometheus-stack
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: openbao
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

@@ -16,6 +16,7 @@ help:
 	@echo "  make list-kustomizations  # List all discovered kustomization directories"
 	@echo "  make render-apps          # Render all kustomizations under apps/"
 	@echo "  make check-apps           # Render all kustomizations and print concise OK/FAIL summary"
+	@echo "  make template             # Generate a new kustomization directory structure under apps/"
 
 list-kustomizations:
 	@printf '%s\n' $(KUSTOMIZATION_DIRS)
@@ -35,7 +36,8 @@ template:
 	mkdir -p "$$dir"; \
 	mkdir -p "$$dir/base"; \
 	mkdir -p "$$dir/base/resources"; \
-	mkdir -p "$$dir/overlays";
+	mkdir -p "$$dir/overlays"; \
+	touch "$$dir/base/kustomization.yaml";
 
 render-apps:
 	@set -e; \

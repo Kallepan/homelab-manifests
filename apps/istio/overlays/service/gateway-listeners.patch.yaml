@@ -101,6 +101,21 @@ spec:
         certificateRefs:
           - kind: Secret
             name: vault-tls
+    - name: https-openbao
+      protocol: HTTPS
+      port: 443
+      hostname: "openbao.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: openbao
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: openbao-tls
     - name: https-keycloak
       protocol: HTTPS
       port: 443
