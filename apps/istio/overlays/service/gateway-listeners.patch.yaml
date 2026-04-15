@@ -86,21 +86,6 @@ spec:
         certificateRefs:
           - kind: Secret
             name: sonarqube-tls
-    - name: https-vault
-      protocol: HTTPS
-      port: 443
-      hostname: "vault.svc.home.arpa"
-      allowedRoutes:
-        namespaces:
-          from: Selector
-          selector:
-            matchLabels:
-              kubernetes.io/metadata.name: vault
-      tls:
-        mode: Terminate
-        certificateRefs:
-          - kind: Secret
-            name: vault-tls
     - name: https-openbao
       protocol: HTTPS
       port: 443
