@@ -11,8 +11,8 @@ spec:
   project: default
   source:
     chart: loki
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 6.*.*
+    repoURL: oci://ghcr.io/grafana-community/helm-charts/loki
+    targetRevision: 7.*.*
     helm:
       releaseName: loki
       valuesObject:
