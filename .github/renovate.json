@@ -12,8 +12,8 @@
       "/(^|/)Chart\\.ya?ml$/"
     ]
   },
-  "reviewers": [
-    "kallepan"
+  "assignees": [
+    "Kallepan"
   ],
   "labels": [
     "dependencies",
