@@ -98,7 +98,7 @@ data:
           icon: keycloak.png
       - Vault:
           description: Secret Storage and Management.
-          href: https://vault.svc.home.arpa/
+          href: https://openbao.svc.home.arpa/
           icon: vault.png
     - Communication & Collaboration:
       - Mattermost:
