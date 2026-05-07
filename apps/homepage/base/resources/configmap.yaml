@@ -127,10 +127,6 @@ data:
           description: Collection of tools useful for IT professionals.
           href: https://it-tools.svc.home.arpa/
           icon: it-tools.png
-      - N8N:
-          description: Automate tasks and workflows.
-          href: https://n8n.app.home.arpa/
-          icon: n8n.png
       - Kasm:
           description: Containerized workspace platform for remote desktop access. For setup visit https://kasm-admin.app.home.arpa/
           href: https://kasm.app.home.arpa/
