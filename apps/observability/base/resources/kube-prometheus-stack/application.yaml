@@ -147,7 +147,7 @@ spec:
                       - https://google.com
                       # Core Cluster
                       - https://gitlab.svc.home.arpa/-/liveness?token=HP9GkY_ebzpBLi3UaNCL
-                      - https://vault.svc.home.arpa
+                      - https://openbao.svc.home.arpa
                       - https://sso.svc.home.arpa
                       - https://mattermost.svc.home.arpa
                       # Rancher
