@@ -81,3 +81,9 @@ spec:
     automated:
       prune: true
       selfHeal: true
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      name: openbao-agent-injector-cfg
+      jsonPointers:
+        - /webhooks/0/admissionReviewVersions/clientConfig/caBundle
