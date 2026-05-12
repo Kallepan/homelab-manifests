@@ -17,9 +17,14 @@ spec:
       releaseName: harbor
       valuesObject:
         expose:
-          type: loadBalancer
+          type: ingress
           tls:
-            enabled: false
+            enabled: true
+            certSource: none
+          ingress:
+            hosts:
+              core: harbor.infra.home.arpa
+            controller: traefik
         externalURL: https://harbor.infra.home.arpa
         persistence:
           enabled: true
