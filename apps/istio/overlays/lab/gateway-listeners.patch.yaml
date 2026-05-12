@@ -26,3 +26,18 @@ spec:
         certificateRefs:
           - kind: Secret
             name: argocd-tls
+    - name: https-falco
+      protocol: HTTPS
+      port: 443
+      hostname: "falco.lab.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: falco
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: falco-tls

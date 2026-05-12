@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute-falco
+  namespace: falco
+spec:
+  parentRefs:
+    - name: istio-gateway
+      namespace: istio-system
+      sectionName: https-falco
+  hostnames:
+    - falco.lab.home.arpa
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: falco
+          port: 2802
