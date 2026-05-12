@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: falco
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
@@ -79,7 +79,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd
+  name: fluent-bit
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "1"
