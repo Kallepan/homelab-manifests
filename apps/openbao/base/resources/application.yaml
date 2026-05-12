@@ -22,6 +22,7 @@ spec:
           serverTelemetry:
             prometheusOperator: true
         injector:
+          enabled: false
           webhook:
             failurePolicy: Fail
           metrics:
