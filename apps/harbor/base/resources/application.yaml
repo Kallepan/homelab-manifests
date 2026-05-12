@@ -31,6 +31,13 @@ spec:
               bucket: harbor
               skipverify: true
               regionendpoint: https://s3.storage.home.arpa
+            jobservice:
+              jobLog:
+                storageClass: local-path
+            redis:
+              storageClass: local-path
+            trivy:
+              storageClass: local-path
         registry:
           credentials:
             username: harbor_registry_user
