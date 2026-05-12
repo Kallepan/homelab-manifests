@@ -92,7 +92,7 @@ spec:
     repoURL: https://fluent.github.io/helm-charts
     targetRevision: 0.*.*
     helm:
-      releaseName: falco
+      releaseName: fluent-bit
       valuesObject:
         podAnnotations:
           fluentbit.io/exclude: 'true'
