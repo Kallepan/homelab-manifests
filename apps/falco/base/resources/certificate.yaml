@@ -1,0 +1,13 @@
+# GitLab super certificate
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: falco-tls
+  namespace: istio-system
+spec:
+  secretName: falco-tls
+  issuerRef:
+    name: cluster-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - "falco.lab.home.arpa"
