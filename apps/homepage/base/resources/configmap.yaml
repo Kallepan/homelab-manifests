@@ -69,7 +69,7 @@ data:
       - Microcks:
           description: Test API endpoints
           href: https://microcks.app.home.arpa/
-          icon microcks.png
+          icon: microcks.png
     - Monitoring & Observability:
       - Monitoring:
           description: Monitoring instance.
