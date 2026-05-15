@@ -66,6 +66,10 @@ data:
           description: Continuous code quality inspection tool.
           href: https://sonarqube.svc.home.arpa/
           icon: sonarqube.png
+      - Microcks:
+          description: Test API endpoints
+          href: https://microcks.app.home.arpa/
+          icon microcks.png
     - Monitoring & Observability:
       - Monitoring:
           description: Monitoring instance.
