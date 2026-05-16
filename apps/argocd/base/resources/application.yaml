@@ -38,6 +38,13 @@ spec:
                   hs.status = "Healthy"
                   hs.message = "Probably just fine"
                   return hs
+          rbac:
+            policy.csv: |
+              # Allow Backstage read-only access to all applications
+              p, role:backstage, applications, get, */*, allow
+              p, role:backstage, clusters, get, *, allow
+              p, role:backstage, projects, get, *, allow
+              g, backstage, role:backstage
         server:
           ingress:
             enabled: true
