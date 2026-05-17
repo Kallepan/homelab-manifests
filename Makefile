@@ -53,6 +53,10 @@ render-apps:
 
 check-apps:
 	@set -e; \
+	if ! command -v $(KUSTOMIZE) >/dev/null 2>&1; then \
+		echo "Error: $(KUSTOMIZE) is not installed or not in PATH."; \
+		exit 1; \
+	fi; \
 	if [ -z "$(KUSTOMIZATION_DIRS)" ]; then \
 		echo "No kustomizations found under $(APPS_DIR)/"; \
 		exit 0; \
