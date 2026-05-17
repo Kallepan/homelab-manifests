@@ -305,3 +305,18 @@ spec:
         certificateRefs:
           - kind: Secret
             name: argo-workflows-tls
+    - name: https-backstage
+      protocol: HTTPS
+      port: 443
+      hostname: "backstage.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: backstage
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: backstage-tls
