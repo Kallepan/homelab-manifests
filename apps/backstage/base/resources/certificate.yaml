@@ -1,4 +1,4 @@
-# GitLab super certificate
+# Backstage TLS certificate
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
