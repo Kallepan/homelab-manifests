@@ -66,10 +66,6 @@ data:
           description: Continuous code quality inspection tool.
           href: https://sonarqube.svc.home.arpa/
           icon: sonarqube.png
-      - Microcks:
-          description: Test API endpoints
-          href: https://microcks.app.home.arpa/
-          icon: microcks.png
     - Monitoring & Observability:
       - Monitoring:
           description: Monitoring instance.
@@ -135,6 +131,10 @@ data:
           description: Containerized workspace platform for remote desktop access. For setup visit https://kasm-admin.app.home.arpa/
           href: https://kasm.app.home.arpa/
           icon: kasm.png
+      - Microcks:
+          description: Test API endpoints
+          href: https://microcks.app.home.arpa/
+          icon: microcks.png
   custom.css: ""
   custom.js: ""
   settings.yaml: |
