@@ -21,7 +21,7 @@ spec:
       containers:
         - name: backstage
           image: backstage:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: backstage-application-credentials
