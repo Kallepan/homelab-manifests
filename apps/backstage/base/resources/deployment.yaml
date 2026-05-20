@@ -7,6 +7,8 @@ metadata:
     app.kubernetes.io/name: backstage
 spec:
   replicas: 1
+  imagePullSecrets:
+    - name: backstage-registry-credentials
   selector:
     matchLabels:
       app.kubernetes.io/name: backstage
@@ -20,7 +22,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: backstage
-          image: backstage:latest
+          image: registry.svc.home.arpa/organizations/homelab/backstage/main:0.0.1
           imagePullPolicy: Always
           envFrom:
             - secretRef:
