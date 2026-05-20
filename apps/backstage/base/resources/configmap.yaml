@@ -1,0 +1,252 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backstage-config
+  namespace: backstage
+data:
+  app-config-production.yaml: |
+    app:
+      # Should be the same as backend.baseUrl when using the `app-backend` plugin.
+      baseUrl: https://backstage.svc.home.arpa
+
+    backend:
+      # Note that the baseUrl should be the URL that the browser and other clients
+      # should use when communicating with the backend, i.e. it needs to be
+      # reachable not just from within the backend host, but from all of your
+      # callers. When its value is "http://localhost:7007", it's strictly private
+      # and can't be reached by others.
+      baseUrl: https://backstage.svc.home.arpa
+      # The listener can also be expressed as a single <host>:<port> string. In this case we bind to
+      # all interfaces, the most permissive setting. The right value depends on your specific deployment.
+      listen: ':7007'
+
+      cors:
+        # The CORS settings are used to allow the frontend to communicate with the backend.
+        origin: ['https://backstage.svc.home.arpa']
+        methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+        credentials: true
+
+      # config options: https://node-postgres.com/apis/client
+      database:
+        client: pg
+        connection:
+          host: ${POSTGRES_HOST}
+          port: ${POSTGRES_PORT}
+          user: ${POSTGRES_USER}
+          password: ${POSTGRES_PASSWORD}
+          database: ${POSTGRES_DB}
+          # https://node-postgres.com/features/ssl
+          # you can set the sslmode configuration option via the `PGSSLMODE` environment variable
+          # see https://www.postgresql.org/docs/current/libpq-ssl.html Table 33.1. SSL Mode Descriptions (e.g. require)
+          # ssl:
+          #   ca: # if you have a CA file and want to verify it you can uncomment this section
+          #     $file: <file-path>/ca/server.crt
+
+    integrations:
+      # GitLab integration configuration
+      # See https://backstage.io/docs/integrations/gitlab/locations
+      gitlab:
+        - host: ${GITLAB_HOST}
+          apiBaseUrl: https://${GITLAB_HOST}/api/v4
+          token: ${GITLAB_TOKEN}
+
+    argocd:
+      baseUrl: https://${ARGOCD_SERVER}
+      appLocatorMethods:
+        - type: config
+          instances:
+            - name: default
+              url: https://${ARGOCD_SERVER}
+              token: ${ARGOCD_TOKEN}
+
+    auth:
+      session:
+        secret: ${AUTH_SESSION_SECRET}
+      environment: production
+      providers:
+        oidc:
+          production:
+            clientId: ${KEYCLOAK_CLIENT_ID}
+            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+            metadataUrl: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration
+            prompt: auto
+            signIn:
+              resolvers:
+                - resolver: emailMatchingUserEntityProfileEmail
+
+        guest: {}
+
+    catalog:
+      # Overrides the default list locations from app-config.yaml as these contain example data.
+      # See https://backstage.io/docs/features/software-catalog/#adding-components-to-the-catalog for more details
+      # on how to get entities into the catalog.
+      locations:
+        # Local example data, replace this with your production config, these are intended for demo use only.
+        # File locations are relative to the backend process, typically in a deployed context, such as in a Docker container, this will be the root
+        - type: file
+          target: ./catalog/entities.yaml
+
+        # Local example organizational data
+        - type: file
+          target: ./catalog/org.yaml
+          rules:
+            - allow: [User, Group]
+
+  app-config.yaml: |
+    app:
+      title: HomeLab Backstage
+      baseUrl: http://localhost:3000
+
+    # Enable all packages by default, this will discover packages from packages/app/package.json
+      packages: all
+
+      extensions:
+        # Disable the nav items that we're manually rendering in packages/app/src/modules/nav/Sidebar.tsx
+        - nav-item:search: false
+        - nav-item:user-settings: false
+        - nav-item:catalog: false
+        - nav-item:scaffolder: false
+
+        # Configure the catalog index page to be the root page, this is normally mounted on /catalog
+        - page:catalog:
+            config:
+              path: /
+
+    organization:
+      name: HomeLab
+
+    backend:
+      # Used for enabling authentication, secret is shared by all backend plugins
+      # See https://backstage.io/docs/auth/service-to-service-auth for
+      # information on the format
+      # auth:
+      #   keys:
+      #     - secret: ${BACKEND_SECRET}
+      baseUrl: http://localhost:7007
+      listen:
+        port: 7007
+        # Uncomment the following host directive to bind to specific interfaces
+        # host: 127.0.0.1
+      csp:
+        connect-src: ["'self'", 'http:', 'https:']
+        # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
+        # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+      cors:
+        origin: ['http://localhost:3000']
+        methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+        credentials: true
+      # This is for local development only, it is not recommended to use this in production
+      # The production database configuration is stored in app-config.production.yaml
+      database:
+        client: pg
+        connection:
+          host: ${POSTGRES_HOST}
+          port: ${POSTGRES_PORT}
+          user: ${POSTGRES_USER}
+          password: ${POSTGRES_PASSWORD}
+          database: ${POSTGRES_DB}
+      # see https://backstage.io/docs/ai/mcp-actions#actions-configuration for more details
+      actions:
+        pluginSources:
+          - auth
+          - catalog
+          - scaffolder
+      # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
+
+    integrations:
+      # GitLab integration configuration
+      # See https://backstage.io/docs/integrations/gitlab/locations
+      gitlab:
+        - host: ${GITLAB_HOST}
+          apiBaseUrl: https://${GITLAB_HOST}/api/v4
+          token: ${GITLAB_TOKEN}
+
+    argocd:
+      baseUrl: https://${ARGOCD_SERVER}
+      appLocatorMethods:
+        - type: config
+          instances:
+            - name: default
+              url: https://${ARGOCD_SERVER}
+              token: ${ARGOCD_TOKEN}
+
+    proxy:
+      ### Example for how to add a proxy endpoint for the frontend.
+      ### A typical reason to do this is to handle HTTPS and CORS for internal services.
+      # endpoints:
+      #   '/test':
+      #     target: 'https://example.com'
+      #     changeOrigin: true
+
+    # Reference documentation http://backstage.io/docs/features/techdocs/configuration
+    # Note: After experimenting with basic setup, use CI/CD to generate docs
+    # and an external cloud storage when deploying TechDocs for production use-case.
+    # https://backstage.io/docs/features/techdocs/how-to-guides#how-to-migrate-from-techdocs-basic-to-recommended-deployment-approach
+    techdocs:
+      builder: 'local' # Alternatives - 'external'
+      generator:
+        runIn: 'docker' # Alternatives - 'local'
+      publisher:
+        type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+
+    auth:
+      session:
+        secret: ${AUTH_SESSION_SECRET}
+      environment: development
+
+      # see https://backstage.io/docs/auth/ to learn about auth providers
+      providers:
+        # Keycloak authentication provider
+        oidc:
+          development:
+            clientId: ${KEYCLOAK_CLIENT_ID}
+            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
+            metadataUrl: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration
+            prompt: auto
+            signIn:
+              resolvers:
+                - resolver: emailMatchingUserEntityProfileEmail
+
+        # See https://backstage.io/docs/auth/guest/provider
+        guest: {}
+
+      # see https://backstage.io/docs/ai/mcp-actions#client-id-metadata-documents
+      # to learn more about client id metadata documents
+      experimentalClientIdMetadataDocuments:
+        enabled: false
+        # Optional: restrict which `client_id` URLs are allowed (defaults to ['*'])
+        # allowedClientIdPatterns:
+        #   - 'https://example.com/*'
+        #   - 'https://*.trusted-domain.com/*'
+        # Optional: restrict which redirect URIs are allowed (defaults to ['*'])
+        # allowedRedirectUriPatterns:
+        #   - 'http://localhost:*'
+        #   - 'https://*.example.com/*'
+
+    scaffolder:
+      # see https://backstage.io/docs/features/software-templates/configuration for software template options
+
+    catalog:
+      import:
+        entityFilename: catalog-info.yaml
+        pullRequestBranchName: backstage-integration
+      rules:
+        - allow: [Component, System, API, Resource, Location]
+      locations:
+        # Local example data, file locations are relative to the backend process, typically `packages/backend`
+        - type: file
+          target: ../../catalog/entities.yaml
+
+        # Local example organizational data
+        - type: file
+          target: ../../catalog/org.yaml
+          rules:
+            - allow: [User, Group]
+
+    kubernetes:
+      # see https://backstage.io/docs/features/kubernetes/configuration for kubernetes configuration options
+
+    # see https://backstage.io/docs/permissions/getting-started for more on the permission framework
+    permission:
+      # setting this to `false` will disable permissions
+      enabled: true
