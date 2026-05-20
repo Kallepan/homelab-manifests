@@ -37,6 +37,11 @@ spec:
             - name: backstage-config
               mountPath: /app/app-config.yaml
               subPath: app-config.yaml
+              readOnly: true
+            - name: backstage-config
+              mountPath: /app/config/app-config-production.yaml
+              subPath: app-config-production.yaml
+              readOnly: true
           ports:
             - name: http
               containerPort: 7007
