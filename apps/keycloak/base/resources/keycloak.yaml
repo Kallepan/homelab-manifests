@@ -24,4 +24,4 @@ spec:
   proxy:
     headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers
 
-  image: "registry.svc.home.arpa/releases/container-images/keycloak/main:26.6.0"
+  image: "registry.svc.home.arpa/releases/container-images/keycloak/main:26.6.2"
