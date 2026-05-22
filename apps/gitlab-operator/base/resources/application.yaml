@@ -12,7 +12,7 @@ spec:
   source:
     chart: gitlab-operator
     repoURL: https://charts.gitlab.io
-    targetRevision: 2.*.*
+    targetRevision: 3.*
     helm:
       releaseName: gitlab-operator
       valuesObject: {}
