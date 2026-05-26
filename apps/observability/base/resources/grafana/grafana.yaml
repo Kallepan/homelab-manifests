@@ -37,8 +37,18 @@ spec:
     spec:
       template:
         spec:
+          volumes:
+            - name: grafana-provisioning
+              emptyDir: {}
+            - name: grafana-share-data
+              emptyDir: {}
           containers:
             - name: grafana
+              volumeMounts:
+              - mountPath: /etc/grafana/provisioning
+                name: grafana-provisioning
+              - mountPath: /usr/share/grafana/data
+                name: grafana-share-data
               env:
                 - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
                   valueFrom:
