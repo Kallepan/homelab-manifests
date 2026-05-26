@@ -21,7 +21,7 @@ spec:
           namespaceSelector: "kubernetes.io/metadata.name=homepage"
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: strimzi-kafka-operator
+    namespace: reloader
   syncPolicy:
     automated:
       prune: true
