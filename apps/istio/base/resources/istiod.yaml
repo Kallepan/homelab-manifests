@@ -19,7 +19,7 @@ spec:
         env:
           PILOT_ENABLE_ALPHA_GATEWAY_API: "true"
         profile: ambient
-        meshID: "service-cluster-mesh"
+        meshID: "replace-me"
         meshConfig:
           extensionProviders:
             - name: "oauth2-proxy"

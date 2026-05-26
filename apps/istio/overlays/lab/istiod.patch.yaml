@@ -1,0 +1,10 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istiod
+  namespace: argocd
+spec:
+  source:
+    helm:
+      valuesObject:
+        meshID: "lab-cluster-mesh"
