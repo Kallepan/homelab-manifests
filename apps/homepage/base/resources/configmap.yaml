@@ -135,6 +135,10 @@ data:
           description: Test API endpoints
           href: https://microcks.app.home.arpa/
           icon: microcks.png
+      - Backstage:
+          description: Backstage Developer Portal.
+          href: https://backstage.svc.home.arpa/
+          icon: backstage.png
   custom.css: ""
   custom.js: ""
   settings.yaml: |
