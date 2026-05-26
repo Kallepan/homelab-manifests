@@ -38,18 +38,13 @@ spec:
       template:
         spec:
           volumes:
-            - name: grafana-home
-              emptyDir: {}
-            - name: root-cache
-              emptyDir: {}
+          - name: ephemeral-run
+            emptyDir: {}
           containers:
             - name: grafana
               volumeMounts:
-                - mountPath: /home/grafana
-                  name: grafana-home
-                # 2. Writable workspace for the underlying storage engine
-                - mountPath: /.cache
-                  name: root-cache
+              - mountPath: /run
+                name: ephemeral-run
               env:
                 - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
                   valueFrom:
