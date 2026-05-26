@@ -38,21 +38,17 @@ spec:
       template:
         spec:
           volumes:
-          - name: grafana-plugins-cache
-            emptyDir: {}
-          - name: grafana-plugins-alt
-            emptyDir: {}
-          - name: grafana-aws-cache
-            emptyDir: {}
+            - name: grafana-provisioning
+              emptyDir: {}
+            - name: grafana-share-data
+              emptyDir: {}
           containers:
             - name: grafana
               volumeMounts:
-              - mountPath: /var/lib/grafana/plugins
-                name: grafana-plugins-cache
-              - mountPath: /var/lib/grafana-plugins
-                name: grafana-plugins-alt
-              - mountPath: /var/lib/grafana/.aws
-                name: grafana-aws-cache
+              - mountPath: /etc/grafana/provisioning
+                name: grafana-provisioning
+              - mountPath: /usr/share/grafana/data
+                name: grafana-share-data
               env:
                 - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
                   valueFrom:
