@@ -38,13 +38,10 @@ spec:
       template:
         spec:
           volumes:
-          - name: ephemeral-run
-            emptyDir: {}
           containers:
             - name: grafana
-              volumeMounts:
-              - mountPath: /run
-                name: ephemeral-run
+              securityContext:
+                readOnlyRootFilesystem: false
               env:
                 - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
                   valueFrom:
