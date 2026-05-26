@@ -7,6 +7,7 @@ spec:
   parentRefs:
     - name: istio-gateway
       namespace: istio-system
+      sectionName: https-jaeger
   hostnames:
     - jaeger.svc.home.arpa
     - jaeger-collector.svc.home.arpa
