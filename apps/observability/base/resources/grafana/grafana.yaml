@@ -40,8 +40,6 @@ spec:
           volumes:
           containers:
             - name: grafana
-              securityContext:
-                readOnlyRootFilesystem: false
               env:
                 - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
                   valueFrom:
