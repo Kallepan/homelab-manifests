@@ -3,7 +3,7 @@ kind: Kustomization
 
 images:
   - name: registry.svc.home.arpa/organizations/homelab/backstage/main
-    newTag: 0.0.3
+    newTag: 0.0.4
 
 resources:
   - ./resources/certificate.yaml
