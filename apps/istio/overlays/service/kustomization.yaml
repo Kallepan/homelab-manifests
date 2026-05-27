@@ -11,3 +11,9 @@ patches:
       version: v1
       kind: Gateway
       name: istio-gateway
+  - path: ./istiod.patch.yaml
+    target:
+      group: argoproj.io
+      version: v1alpha1
+      kind: Application
+      name: istiod
