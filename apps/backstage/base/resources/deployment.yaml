@@ -24,6 +24,9 @@ spec:
         - name: backstage
           image: registry.svc.home.arpa/organizations/homelab/backstage/main
           imagePullPolicy: Always
+          env:
+            - name: NODE_EXTRA_CA_CERTS
+              value: /usr/local/share/ca-certificates/self-signed-ca.crt
           envFrom:
             - secretRef:
                 name: backstage-application-credentials
