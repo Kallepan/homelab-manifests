@@ -106,8 +106,8 @@ data:
           href: https://mattermost.svc.home.arpa/
           icon: mattermost.png
       - Documentation:
-          description: Internal mkdocs documentation.
-          href: https://docs.app.home.arpa/
+          description: Internal mkdocs documentation, hosted on backstage.
+          href: https://backstage.svc.home.arpa/docs/default/component/homelab-documentation
           icon: mkdocs.png
     - Data & Storage:
       - Garage:

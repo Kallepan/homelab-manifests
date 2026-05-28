@@ -166,7 +166,7 @@ spec:
                 static_configs:
                   - targets:
                       # Docker Machine
-                      - https://docs.app.home.arpa
+                      - https://traefik.app.home.arpa/dashboard/#
                 relabel_configs:
                   - source_labels: [__address__]
                     target_label: __param_target
