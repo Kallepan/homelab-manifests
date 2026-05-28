@@ -96,6 +96,47 @@ spec:
             providers:
               - secret: gitlab-keycloak-omniauth
                 key: omniauth.yml
+          contentSecurityPolicy:
+            enabled: true
+            report_only: true
+          cron_jobs:
+            # Flag stuck CI builds as failed
+            stuck_ci_jobs_worker:
+              cron: "0 * * * *"
+            # Schedule pipelines in the near future
+            pipeline_schedule_worker:
+              cron: "3-59/10 * * * *"
+            # Remove expired build artifacts
+            expire_build_artifacts_worker:
+              cron: "*/7 * * * *"
+            # Periodically run 'git fsck' on all repositories.
+            repository_check_worker:
+              cron: "20 * * * *"
+            # Remove outdated repository archives
+            repository_archive_cache_worker:
+              cron: "0 * * * *"
+            # Verify custom GitLab Pages domains
+            pages_domain_verification_cron_worker:
+              cron: "*/15 * * * *"
+            schedule_migrate_external_diffs_worker:
+              cron: "15 * * * *"
+            # Prune stale group runners on opted-in namespaces
+            ci_runners_stale_group_runners_prune_worker_cron:
+              cron: "30 * * * *"
+            # Periodically update ci_runner_versions table with up-to-date versions and status
+            ci_runner_versions_reconciliation_worker:
+              cron: "@daily"
+            # Periodically clean up stale ci_runner_machines records
+            ci_runners_stale_machines_cleanup_worker:
+              cron: "36 * * * *"
+            ci_click_house_finished_pipelines_sync_worker:
+              cron: "*/4 * * * *"
+              args: [0, 1]
+            # Snapshot active user statistics
+            historical_data_worker:
+              cron: "0 12 * * *"
+            loose_foreign_keys_cleanup_worker_cron:
+              cron: "*/5 * * * *"
         certificates:
           customCAs:
             - secret: homelab-ca
@@ -113,6 +154,13 @@ spec:
             useSecret: true
             secret: gitlab-postgres-credentials
             key: postgres_password
+        redis:
+          auth:
+            enabled: true
+            secret: gitlab-redis-credentials
+            key: redis_password
+          host: redis.storage.home.arpa
+          port: 6379
         hosts:
           domain: svc.home.arpa
           externalIP: 10.10.20.20
@@ -151,16 +199,8 @@ spec:
         time_zone: Europe/Berlin
       traefik:
         install: false
-      postgresql:
-        install: false
       prometheus:
-        install: false
-      redis:
         install: true
-        metrics:
-          enabled: true
-        global:
-          storageClass: ceph-block
       registry:
         storage:
           secret: gitlab-registry-minio-connection
@@ -176,5 +216,3 @@ spec:
             key: postgres_password
           migrations:
             enabled: true
-      nginx-ingress:
-        enabled: false
