@@ -161,7 +161,7 @@ spec:
             enabled: true
             secret: gitlab-redis-credentials
             key: redis_password
-          host: redis.storage.home.arpa
+          host: valkey.storage.home.arpa
           port: 6379
         hosts:
           domain: svc.home.arpa
