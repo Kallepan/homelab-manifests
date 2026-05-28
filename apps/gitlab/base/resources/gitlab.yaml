@@ -182,8 +182,6 @@ spec:
           enabled: false
         monitoring:
           enabled: true
-        spamcheck:
-          enabled: true
         shell:
           port: 2222
         pages:
