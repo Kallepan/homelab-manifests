@@ -78,15 +78,16 @@ data:
       # Overrides the default list locations from app-config.yaml as these contain example data.
       # See https://backstage.io/docs/features/software-catalog/#adding-components-to-the-catalog for more details
       # on how to get entities into the catalog.
+      rules:
+        - allow: [Component, System, API, Resource, Location, User, Group]
       locations:
-        # Local example data, replace this with your production config, these are intended for demo use only.
-        # File locations are relative to the backend process, typically in a deployed context, such as in a Docker container, this will be the root
-        - type: file
-          target: ./catalog/entities.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/documentation/homelab-backstage-catalog/blob/main/catalog/entities.yaml
+          rules:
+            - allow: [Component, System, API, Resource, Location]
 
-        # Local example organizational data
-        - type: file
-          target: ./catalog/org.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/documentation/homelab-backstage-catalog/blob/main/catalog/org.yaml
           rules:
             - allow: [User, Group]
 
@@ -105,10 +106,27 @@ data:
         - nav-item:catalog: false
         - nav-item:scaffolder: false
 
-        # Configure the catalog index page to be the root page, this is normally mounted on /catalog
-        - page:catalog:
+        # Configure Homepage
+        - page:home:
             config:
               path: /
+              title: Home
+
+        # Configure the catalog plugin to be available at the /catalog path with the title "Catalog"
+        - page:catalog:
+            config:
+              path: /catalog
+              title: Catalog
+
+        # The Backstage integration for the Tech Radar based on Zalando's Tech Radar open sourced on GitHub.
+        - page:tech-radar:
+            config:
+              path: /tech-radar
+              title: Tech Radar
+
+    techRadar:
+      url: https://gitlab.svc.home.arpa/documentation/homelab-tech-radar/-/blob/main/techradar.json
+
 
     organization:
       name: HomeLab
@@ -183,7 +201,7 @@ data:
     techdocs:
       builder: 'local' # Alternatives - 'external'
       generator:
-        runIn: 'local' # Alternatives - 'docker'
+        runIn: 'local' # Alternatives - 'local'
       publisher:
         type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
@@ -227,17 +245,17 @@ data:
     catalog:
       import:
         entityFilename: catalog-info.yaml
-        pullRequestBranchName: backstage-integration
+        pullRequestBranchName: backstage-integrations
       rules:
-        - allow: [Component, System, API, Resource, Location]
+        - allow: [Component, System, API, Resource, Location, User, Group]
       locations:
-        # Local example data, file locations are relative to the backend process, typically `packages/backend`
-        - type: file
-          target: ../../catalog/entities.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/documentation/homelab-backstage-catalog/blob/main/catalog/entities.yaml
+          rules:
+            - allow: [Component, System, API, Resource, Location]
 
-        # Local example organizational data
-        - type: file
-          target: ../../catalog/org.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/documentation/homelab-backstage-catalog/blob/main/catalog/org.yaml
           rules:
             - allow: [User, Group]
 
