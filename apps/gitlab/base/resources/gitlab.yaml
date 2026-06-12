@@ -200,7 +200,7 @@ spec:
       traefik:
         install: false
       prometheus:
-        install: true
+        install: false
       registry:
         storage:
           secret: gitlab-registry-minio-connection
