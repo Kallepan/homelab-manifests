@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - ./resources/application-cluster.yaml
+  - ./resources/application-drivers.yaml
   - ./resources/application-operator.yaml
   - ./resources/certificate.yaml
   - ./resources/deployment.yaml

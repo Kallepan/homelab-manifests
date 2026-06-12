@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: rook-ceph
+  name: ceph-csi-drivers
   namespace: argocd
   annotations:
     argocd.argoproj.io/sync-wave: "2"
@@ -10,12 +10,19 @@ metadata:
 spec:
   project: default
   source:
-    chart: rook-ceph
-    repoURL: https://charts.rook.io/release
+    chart: ceph-csi-drivers
+    repoURL: https://ceph.github.io/ceph-csi-operator-charts
     targetRevision: "1.*.*"
     helm:
-      releaseName: rook-ceph
-      valuesObject: {}
+      releaseName: ceph-csi-drivers
+      valuesObject:
+        drivers:
+          cephfs:
+            name: rook-ceph.cephfs.csi.ceph.com
+            enabled: true
+          rbd:
+            name: rook-ceph.rbd.csi.ceph.com
+            enabled: true
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: rook-ceph
