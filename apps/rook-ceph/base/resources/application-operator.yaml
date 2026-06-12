@@ -15,10 +15,7 @@ spec:
     targetRevision: "1.*.*"
     helm:
       releaseName: rook-ceph
-      valuesObject:
-        csi:
-          enableRdbDriver: true
-          enableCephfsDriver: true
+      valuesObject: {}
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: rook-ceph
