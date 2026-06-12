@@ -11,7 +11,7 @@ spec:
   project: default
   source:
     chart: ceph-csi-drivers
-    repoURL: https://ceph.github.io/ceph-csi-operator-charts
+    repoURL: https://ceph.github.io/ceph-csi-operator/
     targetRevision: "1.*.*"
     helm:
       releaseName: ceph-csi-drivers
