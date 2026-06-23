@@ -36,6 +36,7 @@ spec:
               memory: 512Mi
         server:
           logLevel: info
+          updateStrategyType: "RollingUpdate"
           standalone:
             config: |-
               ui = true
