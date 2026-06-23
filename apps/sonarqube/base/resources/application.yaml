@@ -12,7 +12,7 @@ spec:
   source:
     chart: sonarqube
     repoURL: https://SonarSource.github.io/helm-chart-sonarqube
-    targetRevision:  "2026.3.0"
+    targetRevision:  "2026.3.1"
     helm:
       releaseName: sonarqube
       valuesObject:
