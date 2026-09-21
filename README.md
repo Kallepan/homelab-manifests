@@ -6,7 +6,7 @@ This repository contains the GitOps configuration for my homelab Kubernetes clus
 
 ```no-highlight
 homelab-manifests/
-├── apps/
+├── applications/
 │   ├── cert-manager/              # Application name
 │   │   ├── base/                  # Base manifests
 │   │   │   ├── kustomization.yaml
@@ -39,7 +39,7 @@ This repository uses **ArgoCD ApplicationSets** with **Kustomize overlays** to d
 The setup uses a **single ApplicationSet** with a **matrix generator** that combines:
 
 1. **Cluster Generator**: Discovers all clusters with `type=management` or `type=workload` labels
-2. **Git Generator**: Finds overlay directories matching cluster names: `apps/*/overlays/{{.name}}`
+2. **Git Generator**: Finds overlay directories matching cluster names: `applications/*/overlays/{{.name}}`
 
 This automatically deploys the right applications to the right clusters based on which overlays exist.
 
@@ -48,7 +48,7 @@ This automatically deploys the right applications to the right clusters based on
 Each application follows the Kustomize pattern:
 
 ```no-highlight
-apps/{app-name}/
+applications/{app-name}/
 ├── base/                       # Common resources for all clusters
 │   ├── kustomization.yaml     # Base Kustomize config
 │   └── resources/             # Your Kubernetes manifests
@@ -72,9 +72,9 @@ Your clusters should have labels applied in ArgoCD:
 
 The ApplicationSet matches **app overlays with cluster names**:
 
-- If `apps/cert-manager/overlays/management/` exists → deploys to cluster named `management`
-- If `apps/cert-manager/overlays/service/` exists → deploys to cluster named `service`
-- If `apps/my-app/overlays/production/` exists → deploys to cluster named `production`
+- If `applications/cert-manager/overlays/management/` exists → deploys to cluster named `management`
+- If `applications/cert-manager/overlays/service/` exists → deploys to cluster named `service`
+- If `applications/my-app/overlays/production/` exists → deploys to cluster named `production`
 
 **Key Point**: The overlay directory name must match the cluster name exactly (case-sensitive).
 
@@ -115,14 +115,14 @@ To add a new application:
 #### Step 1: Create the base structure
 
 ```bash
-mkdir -p apps/my-new-app/base/resources
+mkdir -p applications/my-new-app/base/resources
 ```
 
 #### Step 2: Add your Kubernetes manifests
 
 ```bash
 # Create namespace
-cat > apps/my-new-app/base/resources/namespace.yaml <<EOF
+cat > applications/my-new-app/base/resources/namespace.yaml <<EOF
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -130,7 +130,7 @@ metadata:
 EOF
 
 # Create deployment
-cat > apps/my-new-app/base/resources/deployment.yaml <<EOF
+cat > applications/my-new-app/base/resources/deployment.yaml <<EOF
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -157,7 +157,7 @@ EOF
 #### Step 3: Create the base kustomization.yaml
 
 ```bash
-cat > apps/my-new-app/base/kustomization.yaml <<EOF
+cat > applications/my-new-app/base/kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -170,9 +170,9 @@ EOF
 #### Step 4: Create overlay for your target cluster (must match cluster name exactly)
 
 ```bash
-mkdir -p apps/my-new-app/overlays/management
+mkdir -p applications/my-new-app/overlays/management
 
-cat > apps/my-new-app/overlays/management/kustomization.yaml <<EOF
+cat > applications/my-new-app/overlays/management/kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -191,9 +191,9 @@ To deploy an existing app to another cluster, just create a new overlay with the
 
 ```bash
 # Deploy cert-manager to a cluster named "production"
-mkdir -p apps/cert-manager/overlays/production
+mkdir -p applications/cert-manager/overlays/production
 
-cat > apps/cert-manager/overlays/production/kustomization.yaml <<EOF
+cat > applications/cert-manager/overlays/production/kustomization.yaml <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -234,7 +234,7 @@ kubectl describe applicationset homelab-apps -n argocd
 Use Kustomize patches in overlays for cluster-specific customizations:
 
 ```yaml
-# apps/my-app/overlays/production/kustomization.yaml
+# applications/my-app/overlays/production/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -269,7 +269,7 @@ patches:
 Create cluster-specific ConfigMaps in overlays:
 
 ```yaml
-# apps/my-app/overlays/production/config.yaml
+# applications/my-app/overlays/production/config.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -282,7 +282,7 @@ data:
 ```
 
 ```yaml
-# apps/my-app/overlays/production/kustomization.yaml
+# applications/my-app/overlays/production/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -293,11 +293,11 @@ resources:
 
 ### Organizing Apps
 
-All apps are at the root level of `apps/`. You can organize by naming convention:
+All apps are at the root level of `applications/`. You can organize by naming convention:
 
-- `apps/cert-manager/` - Common utilities
-- `apps/prometheus/` - Infrastructure monitoring  
-- `apps/my-web-app/` - Business applications
+- `applications/cert-manager/` - Common utilities
+- `applications/prometheus/` - Infrastructure monitoring  
+- `applications/my-web-app/` - Business applications
 
 Control which clusters get which apps by creating overlays only for the desired clusters.
 
@@ -308,4 +308,4 @@ Control which clusters get which apps by creating overlays only for the desired 
 3. **Consistent naming** - Use lowercase with hyphens for app and cluster names
 4. **Namespace per app** - Create namespaces in your base manifests (ApplicationSet uses `CreateNamespace=true`)
 5. **Minimal overlays** - Start with empty overlays that just reference the base, add customizations only when needed
-6. **Test with kustomize build** - Before committing, test with `kubectl kustomize build apps/{app}/overlays/{cluster}/`
+6. **Test with kustomize build** - Before committing, test with `kubectl kustomize build applications/{app}/overlays/{cluster}/`
