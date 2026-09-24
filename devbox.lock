@@ -5,7 +5,7 @@
       "last_modified": "2026-09-18T09:35:58Z",
       "resolved": "github:NixOS/nixpkgs/0a3468a402c449992505b6a9fc5b06580141b750?lastModified=1789724158&narHash=sha256-nlKgrm0dsVhOSopKheVBCcOpiIticufPPVLdVOI0euA%3D"
     },
-    "just@latest": {
+    "just@1.58.0": {
       "last_modified": "2026-08-27T07:16:00Z",
       "resolved": "github:NixOS/nixpkgs/c27cdad491a991b11ed731760aa2ef8db0cb0410#just",
       "source": "devbox-search",
