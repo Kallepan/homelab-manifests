@@ -5,4 +5,4 @@ metadata:
   name: cluster-issuer
 spec:
   ca:
-    secretName: homelab-ca-secret
+    secretName: cert-manager-ca
