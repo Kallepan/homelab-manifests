@@ -6,7 +6,9 @@ metadata:
   namespace: argocd
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-system
       sectionName: https-argocd
   hostnames:
@@ -17,5 +19,7 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: argocd-server
+        - group: ''
+          kind: Service
+          name: argocd-server
           port: 80
