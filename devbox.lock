@@ -173,7 +173,7 @@
         }
       }
     },
-    "kustomize@latest": {
+    "kustomize@5.8.1": {
       "last_modified": "2026-08-27T07:16:00Z",
       "resolved": "github:NixOS/nixpkgs/c27cdad491a991b11ed731760aa2ef8db0cb0410#kustomize",
       "source": "devbox-search",

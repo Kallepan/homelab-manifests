@@ -3,7 +3,7 @@
   "packages": [
     "kubernetes-helm@latest",
     "kubectl@latest",
-    "kustomize@latest",
+    "kustomize@5.8.1",
     "just@latest"
   ],
   "shell": {
