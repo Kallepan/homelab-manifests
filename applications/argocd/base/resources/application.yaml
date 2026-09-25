@@ -12,12 +12,12 @@ spec:
   source:
     chart: argocd
     repoURL: oci://ghcr.io/argoproj/argo-helm/argo-cd
-    targetRevision: 9.*.*
+    targetRevision: 10.*.*
     helm:
       releaseName: argocd
       valuesObject:
         global:
-          domain: example.com
+          domain: argocd.svc.home.arpa
         configs:
           params:
             server.insecure: true
@@ -47,8 +47,7 @@ spec:
               g, backstage, role:backstage
         server:
           ingress:
-            enabled: true
-            ingressClassName: "traefik"
+            enabled: false
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd
