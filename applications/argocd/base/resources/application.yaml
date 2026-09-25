@@ -11,6 +11,7 @@ spec:
   project: default
   source:
     chart: argocd
+    # renovate: datasource=ghcr.io/argoproj/argo-helm/argo-cd depName=argo-cd versioning=semver
     repoURL: oci://ghcr.io/argoproj/argo-helm/argo-cd
     targetRevision: 10.*.*
     helm:
