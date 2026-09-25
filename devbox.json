@@ -4,7 +4,9 @@
     "kubernetes-helm@latest",
     "kubectl@latest",
     "kustomize@latest",
-    "just@latest"
+    "just@latest",
+    "prek@latest",
+    "yamllint@latest"
   ],
   "shell": {
     "init_hook": [

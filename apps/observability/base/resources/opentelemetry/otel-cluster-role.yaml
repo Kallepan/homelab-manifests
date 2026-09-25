@@ -5,7 +5,7 @@ metadata:
   name: otel-collector-role
 rules:
   - apiGroups: [""]
-    resources: ["events", "namespaces", "namespaces/status", "nodes", "nodes/stats", "nodes/spec", "pods", "pods/status", "replicationcontrollers", "replicationcontrollers/status", "resourcequotas", "services" ]
+    resources: ["events", "namespaces", "namespaces/status", "nodes", "nodes/stats", "nodes/spec", "pods", "pods/status", "replicationcontrollers", "replicationcontrollers/status", "resourcequotas", "services"]
     verbs: ["get", "list", "watch"]
   - apiGroups: ["apps"]
     resources: ["daemonsets", "deployments", "replicasets", "statefulsets"]

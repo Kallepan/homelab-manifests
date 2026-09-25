@@ -4,4 +4,4 @@ metadata:
   name: "main-pool"
 spec:
   blocks:
-  - cidr: "10.10.20.20/32"
+    - cidr: "10.10.20.20/32"
