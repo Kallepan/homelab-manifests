@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: argocd
+    repoURL: oci://ghcr.io/argoproj/argo-helm/argo-cd
+    targetRevision: 10.*.*
+    helm:
+      releaseName: argocd
+      valuesObject:
+        global:
+          domain: argocd.svc.home.arpa
+        configs:
+          params:
+            server.insecure: true
+            application.namespaces: "*"
+          cm:
+            accounts.backstage: apiKey
+            accounts.backstage.enabled: "true"
+            # resource.customizations: |
+            #   gateway.networking.k8s.io/HTTPRoute:
+            #     health.lua: |
+            #       hs = {}
+            #       hs.status = "Healthy"
+            #       hs.message = "Probably just fine"
+            #       return hs
+          rbac:
+            policy.csv: |
+              # Allow Backstage read-only access to all applications
+              p, role:backstage, applications, get, */*, allow
+              p, role:backstage, clusters, get, *, allow
+              p, role:backstage, projects, get, *, allow
+              g, backstage, role:backstage
+        server:
+          ingress:
+            enabled: false
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: false
+    syncOptions:
+      - ServerSideApply=true

@@ -309,3 +309,17 @@ Control which clusters get which apps by creating overlays only for the desired 
 4. **Namespace per app** - Create namespaces in your base manifests (ApplicationSet uses `CreateNamespace=true`)
 5. **Minimal overlays** - Start with empty overlays that just reference the base, add customizations only when needed
 6. **Test with kustomize build** - Before committing, test with `kubectl kustomize build applications/{app}/overlays/{cluster}/`
+
+## YAML linting
+
+YAML files are linted with `yamllint` through `prek`. Install the Git hook once:
+
+```bash
+devbox run -- prek install
+```
+
+Run the hook manually against all repository files with:
+
+```bash
+devbox run -- prek run --all-files
+```

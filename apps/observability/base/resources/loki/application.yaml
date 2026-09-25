@@ -109,7 +109,7 @@ spec:
         queryScheduler:
           replicas: 2
         distributor:
-          replicas: 3 
+          replicas: 3
           maxUnavailable: 2
         compactor:
           replicas: 1

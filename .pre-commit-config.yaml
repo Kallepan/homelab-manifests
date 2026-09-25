@@ -1,0 +1,11 @@
+repos:
+  - repo: local
+    hooks:
+      - id: yamllint
+        name: yamllint
+        entry: devbox run -- yamllint --strict
+        language: system
+        types: [yaml]
+        require_serial: true
+        # This generated Gateway API CRD bundle uses nonstandard indentation.
+        exclude: ^applications/networking/base/resources/gateway-api\.yaml$

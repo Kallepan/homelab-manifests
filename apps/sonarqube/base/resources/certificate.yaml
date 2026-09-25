@@ -10,4 +10,3 @@ spec:
     kind: ClusterIssuer
   dnsNames:
     - sonarqube.svc.home.arpa
-
