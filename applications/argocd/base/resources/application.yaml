@@ -25,19 +25,13 @@ spec:
           cm:
             accounts.backstage: apiKey
             accounts.backstage.enabled: "true"
-            resource.customizations: |
-              networking.k8s.io/Ingress:
-                health.lua: |
-                  hs = {}
-                  hs.status = "Healthy"
-                  hs.message = "Probably just fine"
-                  return hs
-              gateway.networking.k8s.io/HTTPRoute:
-                health.lua: |
-                  hs = {}
-                  hs.status = "Healthy"
-                  hs.message = "Probably just fine"
-                  return hs
+            # resource.customizations: |
+            #   gateway.networking.k8s.io/HTTPRoute:
+            #     health.lua: |
+            #       hs = {}
+            #       hs.status = "Healthy"
+            #       hs.message = "Probably just fine"
+            #       return hs
           rbac:
             policy.csv: |
               # Allow Backstage read-only access to all applications
