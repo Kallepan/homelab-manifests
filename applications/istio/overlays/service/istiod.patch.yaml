@@ -7,4 +7,4 @@ spec:
   source:
     helm:
       valuesObject:
-        meshID: "lab-cluster-mesh"
+        meshID: "service-cluster-mesh"
