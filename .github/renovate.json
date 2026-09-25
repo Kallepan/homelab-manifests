@@ -5,11 +5,24 @@
   "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": [
-        "(^|/)kustomization\\.ya?ml$"
+      "description": "Update GitHub raw content URLs in Kustomize manifests",
+      "managerFilePatterns": [
+        "/(^|/)kustomization\\.ya?ml$/"
       ],
       "matchStrings": [
-        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?) depName=(?<depName>[^\\s]+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s*\\n\\s*-\\s*https?://[^/]+/[^/]+/[^/]+/(?<currentValue>[^/]+)/"
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?) depName=(?<depName>[^\\s]+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s*\\n\\s*-\\s*https?://raw\\.githubusercontent\\.com/[^/]+/[^/]+/(?<currentValue>[^/]+)/"
+      ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update GitHub release download URLs in Kustomize manifests",
+      "managerFilePatterns": [
+        "/(^|/)kustomization\\.ya?ml$/"
+      ],
+      "matchStringsStrategy": "combination",
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?) depName=(?<depName>[^\\s]+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s*\\n",
+        "https?://github\\.com/[^/]+/[^/]+/releases/download/(?<currentValue>[^/]+)/"
       ]
     }
   ],
