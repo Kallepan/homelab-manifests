@@ -2,6 +2,17 @@
   "extends": [
     "config:recommended"
   ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/)kustomization\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?) depName=(?<depName>[^\\s]+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s*\\n\\s*-\\s*https?://[^/]+/[^/]+/[^/]+/(?<currentValue>[^/]+)/"
+      ]
+    }
+  ],
   "argocd": {
     "managerFilePatterns": [
       "/(^|/)(application(?:-[^/]+)?|all-apps)\\.ya?ml$/"
