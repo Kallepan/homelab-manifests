@@ -3,4 +3,6 @@ kind: Kustomization
 
 resources:
   - ./resources/application.yaml
+  - ./resources/cluster-issuer.yaml
+  - ./resources/external-secret.yaml
   - ./resources/namespace.yaml

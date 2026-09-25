@@ -12,10 +12,10 @@ spec:
   source:
     chart: strimzi-kafka-operator
     repoURL: oci://quay.io/strimzi-helm/strimzi-kafka-operator
-    targetRevision:  "1.*"
+    targetRevision: "1.*"
     helm:
       releaseName: strimzi-kafka-operator
-      valuesObject: 
+      valuesObject:
         watchNamespaces:
           - kafka
   destination:

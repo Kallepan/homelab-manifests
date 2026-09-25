@@ -1,0 +1,14 @@
+extends: default
+
+rules:
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: disable
+  document-start: disable
+  indentation:
+    spaces: 2
+    indent-sequences: true
+  # Embedded values and generated manifests often contain long scalar lines.
+  line-length: disable
+  truthy:
+    check-keys: false

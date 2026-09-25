@@ -1,3 +1,0 @@
-- op: replace
-  path: /spec/source/helm/valuesObject/global/domain
-  value: "argocd.infra.home.arpa"

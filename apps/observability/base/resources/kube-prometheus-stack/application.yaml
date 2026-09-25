@@ -12,7 +12,7 @@ spec:
   source:
     chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: "89.*"
+    targetRevision: "91.*"
     helm:
       releaseName: kube-prometheus-stack
       valuesObject:
@@ -200,7 +200,7 @@ spec:
               - default: true
                 name: cluster-label
                 relabelings:
-                  - sourceLabels: [ __name__ ]
+                  - sourceLabels: [__name__]
                     regex: (.*)
                     targetLabel: k8s_cluster
                     replacement: infrastructure

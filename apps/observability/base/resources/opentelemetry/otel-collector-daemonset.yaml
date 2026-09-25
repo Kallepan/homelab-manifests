@@ -98,7 +98,7 @@ spec:
               - set(attributes["log_severity"], "ERROR") where IsMatch(body, "^E\\d{4} \\d{2}:\\d{2}:\\d{2}")
               - set(attributes["log_severity"], "WARN") where IsMatch(body, "^W\\d{4} \\d{2}:\\d{2}:\\d{2}")
               - set(attributes["log_severity"], "INFO") where IsMatch(body, "^I\\d{4} \\d{2}:\\d{2}:\\d{2}")
-              
+
               # Match log_severity=keywords in structured logs (e.g., "log_severity=error") - specific
               - set(attributes["log_severity"], "FATAL") where IsMatch(body, "(?i)\\blevel=(fatal|critical)\\b") and attributes["log_severity"] == nil
               - set(attributes["log_severity"], "ERROR") where IsMatch(body, "(?i)\\blevel=(error|err)\\b") and attributes["log_severity"] == nil
