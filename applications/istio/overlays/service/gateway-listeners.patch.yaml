@@ -27,6 +27,21 @@ spec:
           - group: ''
             kind: Secret
             name: argocd-tls
+    - name: https-keycloak
+      protocol: HTTPS
+      port: 443
+      hostname: "sso.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: keycloak
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - kind: Secret
+            name: keycloak-tls
     # - name: https-it-tools
     #   protocol: HTTPS
     #   port: 443
@@ -102,21 +117,6 @@ spec:
     #     certificateRefs:
     #       - kind: Secret
     #         name: openbao-tls
-    # - name: https-keycloak
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "sso.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: keycloak
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: keycloak-tls
     # - name: https-grafana
     #   protocol: HTTPS
     #   port: 443
