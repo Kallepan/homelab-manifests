@@ -21,6 +21,9 @@ spec:
         secretAccessKey:
           name: postgres-backup-credentials
           key: ACCESS_SECRET_KEY
+      endpointCA:
+        name: postgres-backup-credentials
+        key: ca.crt
       wal:
         compression: gzip
         maxParallel: 2
