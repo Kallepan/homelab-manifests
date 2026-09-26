@@ -16,3 +16,4 @@ spec:
           kind: Service
           name: gitlab-gitlab-shell
           port: 2222
+          weight: 1
