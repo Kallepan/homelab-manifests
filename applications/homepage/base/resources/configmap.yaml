@@ -31,8 +31,8 @@ data:
           icon: proxmox.png
       - Portainer:
           description: Management UI for Docker.
-          href: https://portainer.app.home.arpa/
-          icon: portainer.pngs
+          href: https://portainer.infra.home.arpa/
+          icon: portainer.png
       - Traefik Docker:
           description: Traefik dashboard for Docker.
           href: https://traefik.infra.home.arpa/dashboard/#/
