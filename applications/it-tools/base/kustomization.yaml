@@ -4,6 +4,6 @@ kind: Kustomization
 resources:
   - ./resources/certificate.yaml
   - ./resources/deployment.yaml
-  - ./resources/virtual-service.yaml
+  - ./resources/http-route.yaml
   - ./resources/namespace.yaml
   - ./resources/service.yaml
