@@ -260,66 +260,22 @@ spec:
           - group: ''
             kind: Secret
             name: it-tools-tls
-    # - name: https-ceph
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "ceph.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: rook-ceph
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: ceph-tls
-    # - name: https-sonarqube
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "sonarqube.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: sonarqube
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: sonarqube-tls
-    # - name: https-openbao
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "openbao.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: openbao
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: openbao-tls
-    # - name: https-kiali
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "kiali.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: observability
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: kiali-tls
+    - name: https-sonarqube
+      protocol: HTTPS
+      port: 443
+      hostname: "sonarqube.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: sonarqube
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: sonarqube-tls
     # - name: https-argo-workflows
     #   protocol: HTTPS
     #   port: 443

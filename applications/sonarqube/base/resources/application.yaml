@@ -18,23 +18,21 @@ spec:
       valuesObject:
         community:
           enabled: true
-        # Custom postgres
         jdbcOverwrite:
           enabled: true
-          jdbcUrl: "jdbc:postgresql://psql.storage.home.arpa:5432/sonarqube_db"
-          jdbcUsername: sonarqube_user
-          jdbcSecretName: sonarqube-postgres-credentials
+          jdbcUrl: "jdbc:postgresql://sonarqube-postgresql-rw.sonarqube.svc.cluster.local:5432/sonarqube"
+          jdbcUsername: sonarqube
+          jdbcSecretName: sonarqube-postgresql-app
+          jdbcSecretPasswordKey: password
         postgresql:
           enabled: false
         persistence:
           enabled: true
           size: 5Gi
-        monitoringPasscodeSecretName: sonarqube-monitoring-passcode
-        monitoringPasscodeSecretKey: passcode
+          storageClass: ceph-block
         caCerts:
           enabled: true
-          image: adoptopenjdk/openjdk16:alpine
-          secret: sonarqube-custom-ca-certs
+          secret: homelab-ca
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: sonarqube
