@@ -3,6 +3,9 @@ kind: Kustomization
 
 resources:
   - ./resources/certificate.yaml
-  - ./resources/gitlab.yaml
+  - ./resources/external-secret-postgres.yaml
+  - ./resources/external-secret.yaml
+  - ./resources/postgres.yaml
+  # - ./resources/gitlab.yaml
   - ./resources/http-route.yaml
   - ./resources/tcp-route.yaml

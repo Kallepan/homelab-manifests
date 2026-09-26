@@ -1,0 +1,77 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: gitlab-postgresql
+  namespace: gitlab
+spec:
+  instances: 2
+
+  storage:
+    storageClass: ceph-block
+    size: 20Gi
+
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://pg-backups/gitlab-postgresql
+      endpointCA:
+        name: postgres-backup-credentials
+        key: ca.crt
+      endpointURL: https://s3.storage.home.arpa
+      s3Credentials:
+        accessKeyId:
+          name: postgres-backup-credentials
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: postgres-backup-credentials
+          key: ACCESS_SECRET_KEY
+        region:
+          name: postgres-backup-credentials
+          key: REGION
+      wal:
+        compression: gzip
+        maxParallel: 2
+    retentionPolicy: "30d"
+
+  bootstrap:
+    initdb:
+      database: gitlab_db
+      owner: gitlab
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: gitlab-registry-postgresql
+  namespace: gitlab
+spec:
+  instances: 2
+
+  storage:
+    storageClass: ceph-block
+    size: 10Gi
+
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://pg-backups/gitlab-registry-postgresql
+      endpointCA:
+        name: postgres-backup-credentials
+        key: ca.crt
+      endpointURL: https://s3.storage.home.arpa
+      s3Credentials:
+        accessKeyId:
+          name: postgres-backup-credentials
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: postgres-backup-credentials
+          key: ACCESS_SECRET_KEY
+        region:
+          name: postgres-backup-credentials
+          key: REGION
+      wal:
+        compression: gzip
+        maxParallel: 2
+    retentionPolicy: "30d"
+
+  bootstrap:
+    initdb:
+      database: gitlab_registry_db
+      owner: gitlab_registry

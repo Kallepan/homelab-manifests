@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - ./resources/certificate.yaml
+  - ./resources/cluster.yaml
   - ./resources/external-secret.yaml
-  - ./resources/postgres.yaml
   - ./resources/keycloak.yaml
   - ./resources/http-route.yaml
