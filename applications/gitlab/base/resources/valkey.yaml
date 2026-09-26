@@ -17,7 +17,12 @@ spec:
       releaseName: valkey
       valuesObject:
         auth:
-          enabled: false
+          enabled: true
+          usersExistingSecret: gitlab-redis-credentials
+          aclUsers:
+            default:
+              permissions: "~* &* +@all"
+              passwordKey: redis_password
         replica:
           enabled: true
           replicas: 1
