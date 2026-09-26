@@ -1,0 +1,61 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: jaeger
+  namespace: observability
+spec:
+  image: jaegertracing/jaeger:latest
+  ports:
+    - name: jaeger-query
+      port: 16686
+    - name: otlp-grpc
+      port: 4317
+    - name: otlp-http
+      port: 4318
+  config:
+    service:
+      extensions:
+        - jaeger_storage
+        - jaeger_query
+      pipelines:
+        traces:
+          receivers:
+            - otlp
+          processors:
+            - batch
+          exporters:
+            - jaeger_storage_exporter
+    extensions:
+      jaeger_query:
+        storage:
+          traces: opensearch
+      jaeger_storage:
+        backends:
+          opensearch:
+            opensearch:
+              server_urls:
+                - http://opensearch-cluster.observability.svc.cluster.local:9200
+              indices:
+                index_prefix: "jaeger"
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+    processors:
+      batch:
+        send_batch_max_size: 2048
+        send_batch_size: 1024
+        timeout: 5s
+    exporters:
+      jaeger_storage_exporter:
+        trace_storage: opensearch
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+    requests:
+      cpu: 250m
+      memory: 512Mi

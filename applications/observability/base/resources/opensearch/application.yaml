@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: opensearch
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "4"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: opensearch
+    repoURL: https://opensearch-project.github.io/helm-charts
+    targetRevision: 2.*
+    helm:
+      releaseName: opensearch
+      valuesObject:
+        clusterName: "opensearch-cluster"
+        nodeGroup: "master"
+        replicas: 1
+        singleNode: true
+        config:
+          opensearch.yml:
+            plugins.security.disabled: true
+        persistence:
+          enabled: true
+          size: 30Gi
+          storageClass: ceph-block
+        resources:
+          requests:
+            cpu: 500m
+            memory: 2Gi
+          limits:
+            cpu: 2000m
+            memory: 4Gi
+        opensearchJavaOpts: "-Xms1g -Xmx1g"
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

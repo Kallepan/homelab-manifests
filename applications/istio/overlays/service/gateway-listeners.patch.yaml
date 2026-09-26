@@ -132,6 +132,102 @@ spec:
           selector:
             matchLabels:
               kubernetes.io/metadata.name: gitlab
+    - name: https-grafana
+      protocol: HTTPS
+      port: 443
+      hostname: "grafana.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: grafana-tls
+    - name: https-jaeger
+      protocol: HTTPS
+      port: 443
+      hostname: "jaeger.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: jaeger-tls
+    - name: https-jaeger-collector
+      protocol: HTTPS
+      port: 443
+      hostname: "jaeger-collector.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: jaeger-tls
+    - name: https-loki
+      protocol: HTTPS
+      port: 443
+      hostname: "loki.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: loki-tls
+    - name: https-prometheus
+      protocol: HTTPS
+      port: 443
+      hostname: "prometheus.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: prometheus-tls
+    - name: https-alertmanager
+      protocol: HTTPS
+      port: 443
+      hostname: "alerts.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: observability
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: prometheus-tls
     # - name: https-it-tools
     #   protocol: HTTPS
     #   port: 443
@@ -207,21 +303,6 @@ spec:
     #     certificateRefs:
     #       - kind: Secret
     #         name: openbao-tls
-    # - name: https-grafana
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "grafana.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: observability
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: grafana-tls
     # - name: https-kiali
     #   protocol: HTTPS
     #   port: 443
@@ -237,81 +318,6 @@ spec:
     #     certificateRefs:
     #       - kind: Secret
     #         name: kiali-tls
-    # - name: https-jaeger
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "jaeger.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: observability
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: jaeger-tls
-    # - name: https-jaeger-collector
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "jaeger-collector.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: observability
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: jaeger-tls
-    # - name: https-loki
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "loki.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: observability
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: loki-tls
-    # - name: https-prometheus
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "prometheus.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: observability
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: prometheus-tls
-    # - name: https-alertmanager
-    #   protocol: HTTPS
-    #   port: 443
-    #   hostname: "alerts.svc.home.arpa"
-    #   allowedRoutes:
-    #     namespaces:
-    #       from: Selector
-    #       selector:
-    #         matchLabels:
-    #           kubernetes.io/metadata.name: observability
-    #   tls:
-    #     mode: Terminate
-    #     certificateRefs:
-    #       - kind: Secret
-    #         name: prometheus-tls
     # - name: https-argo-workflows
     #   protocol: HTTPS
     #   port: 443

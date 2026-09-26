@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - certificate.yaml
   - jaeger.yaml
-  - virtual-service.yaml
+  - http-route.yaml

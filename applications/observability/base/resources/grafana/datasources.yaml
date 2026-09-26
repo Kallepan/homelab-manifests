@@ -50,7 +50,7 @@ spec:
     name: Jaeger
     type: jaeger
     access: proxy
-    url: http://jaeger-query.observability.svc.cluster.local:16686
+    url: http://jaeger-collector.observability.svc.cluster.local:16686
     isDefault: false
     editable: true
     uid: jaeger
