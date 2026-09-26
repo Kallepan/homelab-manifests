@@ -221,9 +221,9 @@
         }
       }
     },
-    "prek@latest": {
-      "last_modified": "2026-08-27T07:16:00Z",
-      "resolved": "github:NixOS/nixpkgs/c27cdad491a991b11ed731760aa2ef8db0cb0410#prek",
+    "prek@0.4.14": {
+      "last_modified": "2026-09-04T02:50:00Z",
+      "resolved": "github:NixOS/nixpkgs/e5ead30d0824debba629dcf0720abeddee57b7d6#prek",
       "source": "devbox-search",
       "version": "0.4.14",
       "systems": {
