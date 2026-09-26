@@ -18,20 +18,3 @@ spec:
       backendRefs:
         - name: jaeger-collector
           port: 16686
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: GRPCRoute
-metadata:
-  name: grpcroute-jaeger-collector
-  namespace: observability
-spec:
-  parentRefs:
-    - name: istio-gateway
-      namespace: istio-system
-      sectionName: https-jaeger-collector
-  hostnames:
-    - jaeger-collector.svc.home.arpa
-  rules:
-    - backendRefs:
-        - name: jaeger-collector
-          port: 4317
