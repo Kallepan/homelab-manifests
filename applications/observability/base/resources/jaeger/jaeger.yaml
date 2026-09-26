@@ -34,7 +34,7 @@ spec:
           opensearch:
             opensearch:
               server_urls:
-                - http://opensearch-cluster.observability.svc.cluster.local:9200
+                - http://opensearch-cluster-master.observability.svc.cluster.local:9200
               indices:
                 index_prefix: "jaeger"
     receivers:
