@@ -5,7 +5,9 @@ metadata:
   namespace: mattermost
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-system
       sectionName: https-mattermost
   hostnames:
@@ -16,5 +18,8 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: mattermost
+        - group: ''
+          kind: Service
+          name: mattermost
           port: 8065
+          weight: 1
