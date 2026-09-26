@@ -37,7 +37,6 @@ spec:
     spec:
       template:
         spec:
-          volumes:
           containers:
             - name: grafana
               env:

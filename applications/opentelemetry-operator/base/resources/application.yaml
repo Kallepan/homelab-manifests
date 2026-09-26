@@ -15,7 +15,10 @@ spec:
     targetRevision: 0.*.*
     helm:
       releaseName: opentelemetry-operator
-      valuesObject: {}
+      valuesObject:
+        manager:
+          featureGatesMap:
+            operator.networkpolicy: false
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: opentelemetry-operator
