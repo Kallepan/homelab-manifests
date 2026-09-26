@@ -72,7 +72,8 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - kind: Secret
+          - group: ''
+            kind: Secret
             name: gitlab-tls
     - name: https-gitlab-kas
       protocol: HTTPS
