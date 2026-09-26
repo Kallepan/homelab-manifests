@@ -6,6 +6,7 @@ resources:
   - ./resources/external-secret-postgres.yaml
   - ./resources/external-secret.yaml
   - ./resources/cluster.yaml
+  - ./resources/valkey.yaml
   - ./resources/gitlab.yaml
   - ./resources/http-route.yaml
   - ./resources/tcp-route.yaml
