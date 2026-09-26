@@ -1,0 +1,38 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: mattermost-postgresql
+  namespace: mattermost
+spec:
+  instances: 2
+
+  storage:
+    storageClass: ceph-block
+    size: 10Gi
+
+  backup:
+    barmanObjectStore:
+      destinationPath: s3://pg-backups/mattermost-postgresql
+      endpointURL: https://s3.storage.home.arpa
+      s3Credentials:
+        accessKeyId:
+          name: postgres-backup-credentials
+          key: ACCESS_KEY_ID
+        secretAccessKey:
+          name: postgres-backup-credentials
+          key: ACCESS_SECRET_KEY
+        region:
+          name: postgres-backup-credentials
+          key: REGION
+      endpointCA:
+        name: postgres-backup-credentials
+        key: ca.crt
+      wal:
+        compression: gzip
+        maxParallel: 2
+    retentionPolicy: "30d"
+
+  bootstrap:
+    initdb:
+      database: mattermost
+      owner: mattermost

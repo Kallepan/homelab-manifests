@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./resources/namespace.yaml
+  - ./resources/certificate.yaml
+  - ./resources/http-route.yaml
+  - ./resources/persistent-volume-claim.yaml
+  - ./resources/cluster.yaml
+  - ./resources/external-secret.yaml
+  - ./resources/database-secret.yaml
+  - ./resources/mattermost.yaml
