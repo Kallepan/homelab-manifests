@@ -123,12 +123,6 @@ spec:
               - name: "web.enable-remote-write-receiver"
                 value: ""
             additionalScrapeConfigs:
-              - job_name: postgres
-                metrics_path: /metrics
-                scheme: http
-                static_configs:
-                  - targets:
-                      - psql.storage.home.arpa:9187
               - job_name: gitlab
                 metrics_path: /-/metrics
                 scheme: https
@@ -147,11 +141,9 @@ spec:
                       - https://google.com
                       # Core Cluster
                       - https://gitlab.svc.home.arpa/-/liveness?token=HP9GkY_ebzpBLi3UaNCL
-                      - https://openbao.svc.home.arpa
+                      - https://bao.infra.home.arpa
                       - https://sso.svc.home.arpa
                       - https://mattermost.svc.home.arpa
-                      # Rancher
-                      - https://rancher.infra.home.arpa
                 relabel_configs:
                   - source_labels: [__address__]
                     target_label: __param_target
@@ -166,7 +158,7 @@ spec:
                 static_configs:
                   - targets:
                       # Docker Machine
-                      - https://traefik.app.home.arpa/dashboard/#
+                      - https://traefik.infra.home.arpa/dashboard/#
                 relabel_configs:
                   - source_labels: [__address__]
                     target_label: __param_target
