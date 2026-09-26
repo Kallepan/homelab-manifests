@@ -5,5 +5,5 @@ resources:
   - ./resources/certificate.yaml
   - ./resources/external-secret.yaml
   - ./resources/postgres.yaml
-  # - ./resources/keycloak.yaml
+  - ./resources/keycloak.yaml
   - ./resources/virtual-service.yaml
