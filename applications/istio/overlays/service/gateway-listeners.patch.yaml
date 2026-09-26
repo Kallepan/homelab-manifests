@@ -40,7 +40,8 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - kind: Secret
+          - group: ''
+            kind: Secret
             name: keycloak-tls
     # - name: https-it-tools
     #   protocol: HTTPS
