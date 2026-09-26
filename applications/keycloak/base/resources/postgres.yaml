@@ -22,7 +22,8 @@ spec:
           name: postgres-backup-credentials
           key: ACCESS_SECRET_KEY
         region:
-          value: eu-west-1
+          name: postgres-backup-credentials
+          key: REGION
       endpointCA:
         name: postgres-backup-credentials
         key: ca.crt
