@@ -8,13 +8,13 @@ spec:
   db:
     database: keycloak_db
     vendor: postgres
-    host: psql.storage.home.arpa
+    host: keycloak-postgresql-rw
     usernameSecret:
-      name: keycloak-postgres-credentials
-      key: postgres_username
+      name: keycloak-postgresql-app
+      key: username
     passwordSecret:
-      name: keycloak-postgres-credentials
-      key: postgres_password
+      name: keycloak-postgresql-app
+      key: password
   http:
     httpEnabled: true
   hostname:
