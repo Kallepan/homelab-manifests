@@ -33,6 +33,8 @@ spec:
         caCerts:
           enabled: true
           secret: homelab-ca
+        monitoringPasscodeSecretName: sonarqube-monitoring-passcode
+        monitoringPasscodeSecretKey: passcode
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: sonarqube
