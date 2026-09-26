@@ -5,7 +5,9 @@ metadata:
   namespace: observability
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-system
       sectionName: https-grafana
   hostnames:
@@ -16,5 +18,8 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: grafana-service
+        - group: ''
+          kind: Service
+          name: grafana-service
           port: 3000
+          weight: 1

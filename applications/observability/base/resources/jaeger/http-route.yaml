@@ -22,3 +22,4 @@ spec:
           kind: Service
           name: jaeger-collector
           port: 16686
+          weight: 1
