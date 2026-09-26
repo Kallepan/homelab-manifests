@@ -158,7 +158,9 @@ spec:
             key: password
         redis:
           auth:
-            enabled: false
+            enabled: true
+            secret: gitlab-redis-credentials
+            key: redis_password
           host: valkey
           port: 6379
         hosts:
