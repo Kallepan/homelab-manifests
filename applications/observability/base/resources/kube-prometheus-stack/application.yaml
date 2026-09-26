@@ -195,7 +195,7 @@ spec:
                   - sourceLabels: [__name__]
                     regex: (.*)
                     targetLabel: k8s_cluster
-                    replacement: infrastructure
+                    replacement: service
                     action: replace
             storageSpec:
               volumeClaimTemplate:
