@@ -5,7 +5,9 @@ metadata:
   namespace: observability
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-system
       sectionName: https-jaeger
   hostnames:
@@ -16,5 +18,7 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: jaeger-collector
+        - group: ''
+          kind: Service
+          name: jaeger-collector
           port: 16686

@@ -8,10 +8,16 @@ spec:
   ports:
     - name: jaeger-query
       port: 16686
+      protocol: TCP
+      targetPort: 0
     - name: otlp-grpc
       port: 4317
+      protocol: TCP
+      targetPort: 0
     - name: otlp-http
       port: 4318
+      protocol: TCP
+      targetPort: 0
   config:
     service:
       extensions:
@@ -54,7 +60,7 @@ spec:
         trace_storage: opensearch
   resources:
     limits:
-      cpu: 1000m
+      cpu: 750m
       memory: 2Gi
     requests:
       cpu: 250m

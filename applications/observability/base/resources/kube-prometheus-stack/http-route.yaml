@@ -5,7 +5,9 @@ metadata:
   namespace: observability
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-system
       sectionName: https-prometheus
   hostnames:
@@ -16,7 +18,9 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: kube-prometheus-stack-prometheus
+        - group: ''
+          kind: Service
+          name: kube-prometheus-stack-prometheus
           port: 9090
 ---
 apiVersion: gateway.networking.k8s.io/v1
@@ -26,7 +30,9 @@ metadata:
   namespace: observability
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-system
       sectionName: https-alertmanager
   hostnames:
@@ -37,5 +43,7 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: kube-prometheus-stack-alertmanager
+        - group: ''
+          kind: Service
+          name: kube-prometheus-stack-alertmanager
           port: 9093
