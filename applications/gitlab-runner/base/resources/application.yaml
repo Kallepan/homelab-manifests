@@ -37,6 +37,13 @@ spec:
               limit = 3
               request_concurrency = 2
               name = "kubernetes-runner"
+              environment = [
+                "GIT_SSL_CAINFO=/usr/local/share/ca-certificates/ca.crt",
+                "SSL_CERT_FILE=/usr/local/share/ca-certificates/ca.crt",
+                "REQUESTS_CA_BUNDLE=/usr/local/share/ca-certificates/ca.crt",
+                "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt",
+                "TF_HTTP_CLIENT_CA_CERTIFICATE_PEM=/usr/local/share/ca-certificates/ca.crt"
+              ]
               pre_get_sources_script = """
               # 1. Debian / Ubuntu / Alpine
               if command -v update-ca-certificates > /dev/null 2>&1; then
@@ -62,14 +69,6 @@ spec:
                 cpu_limit = "2"
                 memory_request = "1Gi"
                 memory_limit = "4Gi"
-
-                environment = [
-                  "GIT_SSL_CAINFO=/usr/local/share/ca-certificates/ca.crt",
-                  "SSL_CERT_FILE=/usr/local/share/ca-certificates/ca.crt",
-                  "REQUESTS_CA_BUNDLE=/usr/local/share/ca-certificates/ca.crt",
-                  "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt",
-                  "TF_HTTP_CLIENT_CA_CERTIFICATE_PEM=/usr/local/share/ca-certificates/ca.crt"
-                ]
 
               [[runners.kubernetes.volumes.secret]]
                 name = "homelab-ca"
