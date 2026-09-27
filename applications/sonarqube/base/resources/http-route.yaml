@@ -22,3 +22,4 @@ spec:
           kind: Service
           name: sonarqube-sonarqube
           port: 9000
+          weight: 1
