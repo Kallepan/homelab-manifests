@@ -6,6 +6,10 @@ metadata:
 spec:
   instances: 2
 
+  postgresql:
+    parameters:
+      max_connections: "500"
+
   storage:
     storageClass: ceph-block
     size: 20Gi
