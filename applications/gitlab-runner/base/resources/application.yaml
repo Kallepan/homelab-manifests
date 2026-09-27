@@ -41,8 +41,7 @@ spec:
                 "GIT_SSL_CAINFO=/usr/local/share/ca-certificates/ca.crt",
                 "SSL_CERT_FILE=/usr/local/share/ca-certificates/ca.crt",
                 "REQUESTS_CA_BUNDLE=/usr/local/share/ca-certificates/ca.crt",
-                "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt",
-                "TF_HTTP_CLIENT_CA_CERTIFICATE_PEM=/usr/local/share/ca-certificates/ca.crt"
+                "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt"
               ]
               pre_get_sources_script = """
               echo "Updating CA certificates..."
