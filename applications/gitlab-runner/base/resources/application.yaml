@@ -35,6 +35,7 @@ spec:
           config: |-
             [[runners]]
               limit = 3
+              request_concurrency = 2
               name = "kubernetes-runner"
               pre_get_sources_script = """
               # 1. Debian / Ubuntu / Alpine
