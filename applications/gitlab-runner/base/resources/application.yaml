@@ -45,18 +45,18 @@ spec:
                 "TF_HTTP_CLIENT_CA_CERTIFICATE_PEM=/usr/local/share/ca-certificates/ca.crt"
               ]
               pre_get_sources_script = """
+              echo "Updating CA certificates..."
               # 1. Debian / Ubuntu / Alpine
               if command -v update-ca-certificates > /dev/null 2>&1; then
-                update-ca-certificates --fresh > /dev/null 2>&1
+                echo "update-ca-certificates found, updating CA certificates..."
+                update-ca-certificates --fresh
               # 2. RHEL / CentOS / Fedora
               elif command -v update-ca-trust > /dev/null 2>&1; then
-                update-ca-trust extract > /dev/null 2>&1
+                echo "update-ca-trust found, updating CA certificates..."
+                update-ca-trust extract
               else
-                for bundle in /usr/local/share/ca-certificates/*.crt; do
-                  if [ -f "$bundle" ]; then
-                    cat "$bundle" >> /etc/ssl/certs/ca-certificates.crt 2>/dev/null || true
-                  fi
-                done
+                echo "No built-in command found to update CA certificates, appending CA certificates to /etc/ssl/certs/ca-certificates.crt..."
+                echo "/usr/local/share/ca-certificates/*.crt" >> /etc/ssl/certs/ca-certificates.crt
               fi
               """
 
