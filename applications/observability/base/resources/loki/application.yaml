@@ -60,7 +60,7 @@ spec:
               resource_attributes:
                 attributes_config:
                   - action: index_label
-                    regex: "k8s.cluster"
+                    regex: "k8s_cluster"
               scope_attributes:
                 - action: drop
                   attributes:

@@ -2,6 +2,7 @@ apiVersion: opentelemetry.io/v1beta1
 kind: OpenTelemetryCollector
 metadata:
   name: otel-deployment
+  namespace: observability
 spec:
   mode: deployment
 
@@ -21,6 +22,15 @@ spec:
         endpoint: http://loki-gateway.observability.svc.cluster.local/otlp
         tls:
           insecure: true
+        retry_on_failure:
+          enabled: true
+          initial_interval: 5s
+          max_interval: 30s
+          max_elapsed_time: 5m
+        sending_queue:
+          enabled: true
+          num_consumers: 4
+          queue_size: 2000
 
     receivers:
       k8sobjects:
@@ -47,7 +57,7 @@ spec:
             value: "infrastructure"
             action: upsert
           - key: service_name
-            value: "k8s_events"
+            value: "kube-events"
             action: upsert
 
       transform/events:
