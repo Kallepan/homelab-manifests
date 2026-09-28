@@ -33,8 +33,16 @@ spec:
             #       hs.status = "Healthy"
             #       hs.message = "Probably just fine"
             #       return hs
+            oidc.config: |
+              name: OIDC-PKCE
+              issuer: https://sso.svc.home.arpa/realms/homelab
+              clientID: argocd
+              enablePKCE: true
+              requestedScopes: ["openid", "profile", "email", "groups"]
           rbac:
+            policy.default: role:readonly
             policy.csv: |
+              g, argocd-admins, role:admin, *, allow
               # Allow Backstage read-only access to all applications
               p, role:backstage, applications, get, */*, allow
               p, role:backstage, clusters, get, *, allow
