@@ -42,7 +42,7 @@ spec:
           rbac:
             policy.default: role:readonly
             policy.csv: |
-              g, argocd-admins, role:admin, *, allow
+              g, argocd-admins, role:admin
               # Allow Backstage read-only access to all applications
               p, role:backstage, applications, get, */*, allow
               p, role:backstage, clusters, get, *, allow
