@@ -37,7 +37,8 @@ spec:
               name: OIDC-PKCE
               issuer: https://sso.svc.home.arpa/realms/homelab
               clientID: argocd
-              enablePKCE: true
+              enablePKCEAuthentication: true
+              refreshTokenThreshold: 2m
               requestedScopes: ["openid", "profile", "email", "groups"]
               rootCA: |
                 -----BEGIN CERTIFICATE-----
