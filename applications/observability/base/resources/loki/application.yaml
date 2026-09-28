@@ -231,25 +231,6 @@ spec:
                         annotations:
                           summary: Unauthorized access attempts detected in {{ $labels.k8s_container_name }}
                           description: More than 2 unauthorized access attempts in the last 5 minutes.
-              high_log_volume.yaml: |
-                groups:
-                  - name: HighLogVolume
-                    rules:
-                      - alert: LogVolumeAnomaly
-                        expr: |
-                          sum(rate({k8s_container_name=~".+"}[5m])) by (k8s_namespace_name, k8s_pod_name)
-                            >
-                          (sum(rate({k8s_container_name=~".+"}[5m])) by (k8s_namespace_name, k8s_pod_name) * 1.5)
-                        for: 10m
-                        labels:
-                          severity: warning
-                          namespace: "{{ $labels.k8s_namespace_name }}"
-                          pod: "{{ $labels.k8s_pod_name }}"
-                          cluster: "{{ $labels.cluster }}"
-                          source: "loki"
-                        annotations:
-                          summary: Log volume anomaly detected for {{ $labels.k8s_container_name }}
-                          description: Unusual increase in log volume detected for {{ $labels.k8s_container_name }} over the last 10 minutes.
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: observability
