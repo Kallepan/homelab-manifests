@@ -58,7 +58,7 @@ data:
           description: Internal tools for development and DevOps.
           href: https://it-tools.svc.home.arpa/
           icon: it-tools.png
-    - Monitoring & Observability:
+    - Observability:
       - Monitoring:
           description: Monitoring instance.
           href: https://grafana.svc.home.arpa/
@@ -116,7 +116,7 @@ data:
         icon: mdi-server
       Development & DevOps:
         icon: mdi-git
-      Monitoring & Observability:
+      Observability:
         icon: mdi-chart-line
       Security & Identity:
         icon: mdi-security
