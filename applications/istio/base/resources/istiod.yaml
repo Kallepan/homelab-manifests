@@ -29,14 +29,16 @@ spec:
                 includeHeadersInCheck: ["cookie", "authorization"]
                 headersToDownstreamOnDeny: ["content-type", "set-cookie"]
                 headersToUpstreamOnAllow:
-                  [
-                    "x-forwarded-access-token",
-                    "authorization",
-                    "path",
-                    "x-auth-request-user",
-                    "x-auth-request-email",
-                    "x-auth-request-access-token",
-                  ]
+                  - "x-forwarded-access-token"
+                  - "authorization"
+                  - "path"
+                  - "x-auth-request-user"
+                  - "x-auth-request-email"
+                  - "x-auth-request-access-token"
+            - name: "jaeger"
+              opentelemetry:
+                service: "jaeger-collector.observability.svc.cluster.local"
+                port: 4317
           enableTracing: true
   destination:
     server: 'https://kubernetes.default.svc'

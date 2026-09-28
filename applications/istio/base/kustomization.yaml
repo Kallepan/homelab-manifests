@@ -8,4 +8,5 @@ resources:
   - ./resources/istio-cni.yaml
   - ./resources/istiod.yaml
   - ./resources/namespace.yaml
+  - ./resources/telemetry.yaml
   - ./resources/ztunnel.yaml
