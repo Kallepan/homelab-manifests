@@ -18,7 +18,8 @@ spec:
       valuesObject:
         reloader:
           watchGlobally: false
-          namespaceSelector: "kubernetes.io/metadata.name=homepage"
+          namespaces:
+            - homepage
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: reloader
