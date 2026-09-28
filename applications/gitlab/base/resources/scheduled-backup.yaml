@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: gitlab-postgresql-backup
+  namespace: gitlab
+spec:
+  schedule: "0 0 1 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: gitlab-postgresql
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: gitlab-registry-postgresql-backup
+  namespace: gitlab
+spec:
+  schedule: "0 0 1 * * *"
+  backupOwnerReference: self
+  cluster:
+    name: gitlab-registry-postgresql

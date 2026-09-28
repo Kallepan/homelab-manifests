@@ -6,5 +6,6 @@ resources:
   - ./resources/certificate.yaml
   - ./resources/http-route.yaml
   - ./resources/cluster.yaml
+  - ./resources/scheduled-backup.yaml
   - ./resources/external-secret.yaml
   - ./resources/application.yaml
