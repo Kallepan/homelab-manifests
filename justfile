@@ -1,9 +1,9 @@
 kustomize := env("KUSTOMIZE", "kustomize")
-apps_dir := env("APPS_DIR", "apps")
+apps_dir := env("APPS_DIR", "applications")
 
-# Run check-apps and render-apps
+# Render all application Kustomizations and report failures
 [default]
-all: check-apps render-apps
+all: check-apps
 
 # Show available recipes
 help:
@@ -14,7 +14,7 @@ list-kustomizations:
     #!/usr/bin/env sh
     find "{{ apps_dir }}" -type f -name kustomization.yaml -exec dirname {} \; | sort
 
-# Generate a new kustomization directory structure under apps/
+# Generate a new kustomization directory structure under applications/
 template name="":
     #!/usr/bin/env sh
     set -e
@@ -38,7 +38,7 @@ template name="":
     mkdir -p "$dir/overlays"
     touch "$dir/base/kustomization.yaml"
 
-# Render all kustomizations under apps/
+# Render all Kustomizations under applications/
 render-apps:
     #!/usr/bin/env sh
     set -e
@@ -68,7 +68,7 @@ check-apps:
     fi
     failed=0
     for d in $dirs; do
-        if "{{ kustomize }}" build "$d" >/dev/null 2>&1; then
+        if "{{ kustomize }}" build "$d" >/dev/null; then
             echo "[OK]   $d"
         else
             echo "[FAIL] $d"
