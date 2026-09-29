@@ -16,6 +16,18 @@ spec:
     helm:
       releaseName: prometheus-blackbox-exporter
       valuesObject:
+        extraVolumes:
+          - name: homelab-ca
+            secret:
+              secretName: homelab-ca
+              items:
+                - key: homelab-ca.crt
+                  path: homelab-ca.crt
+        extraVolumeMounts:
+          - name: homelab-ca
+            mountPath: /etc/ssl/certs/homelab-ca.crt
+            subPath: homelab-ca.crt
+            readOnly: true
         config:
           modules:
             http_2xx:
@@ -29,7 +41,22 @@ spec:
                 fail_if_ssl: false
                 fail_if_not_ssl: false
                 tls_config:
-                  insecure_skip_verify: true # for now
+                  insecure_skip_verify: false
+                preferred_ip_protocol: "ip4"
+                ip_protocol_fallback: false
+            http_2xx_homelab:
+              prober: http
+              timeout: 5s
+              http:
+                valid_http_versions: ["HTTP/1.1", "HTTP/2.0"]
+                valid_status_codes: [200, 204, 301, 302]
+                method: GET
+                follow_redirects: true
+                fail_if_ssl: false
+                fail_if_not_ssl: false
+                tls_config:
+                  ca_file: /etc/ssl/certs/homelab-ca.crt
+                  insecure_skip_verify: false
                 preferred_ip_protocol: "ip4"
                 ip_protocol_fallback: false
             http_auth:
@@ -42,7 +69,8 @@ spec:
                 fail_if_ssl: false
                 fail_if_not_ssl: false
                 tls_config:
-                  insecure_skip_verify: true # for now
+                  ca_file: /etc/ssl/certs/homelab-ca.crt
+                  insecure_skip_verify: false
                 preferred_ip_protocol: "ip4"
                 ip_protocol_fallback: false
             http_post_2xx:
@@ -53,16 +81,6 @@ spec:
                 headers:
                   Content-Type: application/json
                 body: "{}"
-            http_basic_auth_example:
-              prober: http
-              timeout: 5s
-              http:
-                method: POST
-                headers:
-                  Content-Type: application/json
-                basic_auth:
-                  username: "username"
-                  password: "mysecret"
             tls_connect:
               prober: tcp
               timeout: 5s

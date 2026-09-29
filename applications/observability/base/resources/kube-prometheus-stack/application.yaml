@@ -139,6 +139,19 @@ spec:
                   - targets:
                       # Network Health
                       - https://google.com
+                relabel_configs:
+                  - source_labels: [__address__]
+                    target_label: __param_target
+                  - source_labels: [__param_target]
+                    target_label: instance
+                  - target_label: __address__
+                    replacement: prometheus-blackbox-exporter.observability.svc.cluster.local:9115
+              - job_name: blackbox_http_homelab
+                metrics_path: /probe
+                params:
+                  module: [http_2xx_homelab]
+                static_configs:
+                  - targets:
                       # Core Cluster
                       - https://gitlab.svc.home.arpa/-/liveness?token=HP9GkY_ebzpBLi3UaNCL
                       - https://bao.infra.home.arpa
