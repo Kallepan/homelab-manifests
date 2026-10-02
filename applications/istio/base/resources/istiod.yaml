@@ -26,15 +26,21 @@ spec:
               envoyExtAuthzHttp:
                 service: "oauth2-proxy.oauth2-proxy.svc.cluster.local"
                 port: 80
-                includeHeadersInCheck: ["cookie", "authorization"]
-                headersToDownstreamOnDeny: ["content-type", "set-cookie"]
+                pathPrefix: "/oauth2/auth"
+                includeRequestHeadersInCheck: ["cookie", "authorization"]
+                includeAdditionalHeadersInCheck:
+                  X-Auth-Request-Redirect: "https://%REQ(:authority)%%REQ(:path)%"
+                headersToDownstreamOnDeny: ["content-type", "set-cookie", "location", "www-authenticate"]
+                headersToDownstreamOnAllow: ["set-cookie"]
                 headersToUpstreamOnAllow:
-                  - "x-forwarded-access-token"
                   - "authorization"
                   - "path"
                   - "x-auth-request-user"
                   - "x-auth-request-email"
+                  - "x-auth-request-preferred-username"
+                  - "x-auth-request-groups"
                   - "x-auth-request-access-token"
+                  - "x-forwarded-access-token"
             - name: "jaeger"
               opentelemetry:
                 service: "jaeger-collector.observability.svc.cluster.local"
