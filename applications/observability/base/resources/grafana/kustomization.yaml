@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
   - ./certificate.yaml
+  - ./contact-point.yaml
   - ./datasources.yaml
   - ./grafana.yaml
   - ./http-route.yaml
+  - ./notification-policy.yaml

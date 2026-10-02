@@ -45,8 +45,20 @@ spec:
     spec:
       template:
         spec:
+          volumes:
+            - name: homelab-ca
+              secret:
+                secretName: homelab-ca
+                items:
+                  - key: homelab-ca.crt
+                    path: homelab-ca.crt
           containers:
             - name: grafana
+              volumeMounts:
+                - name: homelab-ca
+                  mountPath: /etc/ssl/certs/homelab-ca.crt
+                  subPath: homelab-ca.crt
+                  readOnly: true
               env:
                 - name: GF_AUTH_GENERIC_OAUTH_CLIENT_ID
                   valueFrom:

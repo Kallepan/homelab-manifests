@@ -231,6 +231,48 @@ spec:
                         annotations:
                           summary: Unauthorized access attempts detected in {{ $labels.k8s_container_name }}
                           description: More than 2 unauthorized access attempts in the last 5 minutes.
+              fatal_logs.yaml: |
+                groups:
+                  - name: fatal_logs
+                    rules:
+                      - alert: FatalLogDetected
+                        expr: |
+                          sum by (k8s_namespace_name, k8s_pod_name) (
+                            count_over_time({k8s_container_name=~".+", log_severity="FATAL"}[5m])
+                          ) > 0
+                        for: 1m
+                        labels:
+                          severity: critical
+                          namespace: "{{ $labels.k8s_namespace_name }}"
+                          pod: "{{ $labels.k8s_pod_name }}"
+                          cluster: "{{ $labels.cluster }}"
+                          source: "loki"
+                        annotations:
+                          summary: Fatal log detected in {{ $labels.k8s_pod_name }}.
+                          description: "A fatal log entry was emitted by {{ $labels.k8s_pod_name }} in {{ $labels.k8s_namespace_name }} within the last 5 minutes."
+              postgres_backup_failures.yaml: |
+                groups:
+                  - name: postgres_backup_failures
+                    rules:
+                      - alert: PostgresBackupFailure
+                        expr: |
+                          sum by (k8s_namespace_name, k8s_pod_name) (
+                            count_over_time(
+                              {k8s_container_name=~".+", k8s_pod_name=~".+-postgresql-\\d+"}
+                                |~ "(?i)((backup|barman|wal).*(fail|error|unable|cannot|could not))|((fail|error|unable|cannot|could not).*(backup|barman|wal))"
+                                [15m]
+                            )
+                          ) > 0
+                        for: 1m
+                        labels:
+                          severity: critical
+                          namespace: "{{ $labels.k8s_namespace_name }}"
+                          pod: "{{ $labels.k8s_pod_name }}"
+                          cluster: "{{ $labels.cluster }}"
+                          source: "loki"
+                        annotations:
+                          summary: PostgreSQL backup failure detected in {{ $labels.k8s_pod_name }}.
+                          description: "A backup or WAL archival failure was logged by {{ $labels.k8s_pod_name }} in {{ $labels.k8s_namespace_name }} within the last 15 minutes."
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: observability
