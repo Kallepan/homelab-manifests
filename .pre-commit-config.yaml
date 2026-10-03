@@ -1,4 +1,14 @@
 repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: check-added-large-files
+      - id: check-merge-conflict
+
   - repo: local
     hooks:
       - id: yamllint
@@ -9,3 +19,8 @@ repos:
         require_serial: true
         # This generated Gateway API CRD bundle uses nonstandard indentation.
         exclude: ^applications/networking/base/resources/gateway-api\.yaml$
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.0
+    hooks:
+      - id: gitleaks
