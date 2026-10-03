@@ -6,6 +6,7 @@ resources:
   - ./resources/external-secret-postgres.yaml
   - ./resources/external-secret.yaml
   - ./resources/cluster.yaml
+  - ./resources/pod-monitor.yaml
   - ./resources/scheduled-backup.yaml
   - ./resources/valkey.yaml
   - ./resources/gitlab.yaml

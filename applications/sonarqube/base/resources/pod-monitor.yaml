@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  labels:
+    release: kube-prometheus-stack
+  name: sonarqube-postgresql
+  namespace: sonarqube
+spec:
+  namespaceSelector: {}
+  podMetricsEndpoints:
+  - port: metrics
+  selector:
+    matchLabels:
+      cnpg.io/cluster: sonarqube-postgresql
+      cnpg.io/podRole: instance
