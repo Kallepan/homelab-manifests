@@ -195,19 +195,6 @@ spec:
     key: loki-logs.json
   folder: Kubernetes
 ---
-apiVersion: grafana.integreatly.org/v1beta1
-kind: GrafanaDashboard
-metadata:
-  name: postgres-dashboard
-  namespace: observability
-spec:
-  instanceSelector:
-    matchLabels:
-      dashboards: "grafana"
-  configMapRef:
-    name: postgres-dashboard
-    key: postgres.json
-  folder: Storage
 ---
 apiVersion: grafana.integreatly.org/v1beta1
 kind: GrafanaDashboard

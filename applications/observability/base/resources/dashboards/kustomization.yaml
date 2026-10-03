@@ -108,12 +108,3 @@ configMapGenerator:
     options:
       labels:
         grafana_dashboard: "true"
-
-  - name: postgres-dashboard
-    files:
-      - postgres.json=json/postgres.json
-    options:
-      labels:
-        grafana_dashboard: "true"
-      annotations:
-        grafana_dashboard_folder: "Custom"
