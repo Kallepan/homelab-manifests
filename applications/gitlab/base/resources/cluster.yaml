@@ -6,9 +6,6 @@ metadata:
 spec:
   instances: 2
 
-  monitoring:
-    enablePodMonitor: true
-
   postgresql:
     parameters:
       max_connections: "500"
@@ -51,9 +48,6 @@ metadata:
   namespace: gitlab
 spec:
   instances: 2
-
-  monitoring:
-    enablePodMonitor: true
 
   storage:
     storageClass: ceph-block
