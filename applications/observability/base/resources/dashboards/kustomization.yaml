@@ -1,16 +1,119 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: observability
+
+generatorOptions:
+  disableNameSuffixHash: true
+
 resources:
-  - argocd.yaml
-  - ceph.yaml
-  - cert-manager.yaml
-  - docker-dashboard.yaml
-  - gitlab-runner.yaml
-  - gitlab.yaml
   - grafana-dashboards.yaml
-  - istio.yaml
-  - kube-metrics.yaml
-  - kyverno.yaml
-  - loki-logs.yaml
-  - postgres.yaml
+
+configMapGenerator:
+  - name: argocd-dashboard
+    files:
+      - argocd.json=json/argocd.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Apps"
+
+  - name: ceph-dashboard
+    files:
+      - ceph.json=json/ceph.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Custom"
+
+  - name: cert-manager-dashboard
+    files:
+      - cert-manager.json=json/cert-manager.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Apps"
+
+  - name: docker-dashboard
+    files:
+      - docker-dashboard.json=json/docker-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Custom"
+
+  - name: gitlab-runner-dashboard
+    files:
+      - gitlab-runner.json=json/gitlab-runner.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Apps"
+
+  - name: gitlab-dashboard
+    files:
+      - gitlab.json=json/gitlab.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Apps"
+
+  - name: istio-performance-dashboard
+    files:
+      - istio-performance-dashboard.json=json/istio-performance-dashboard.json
+      - pilot-dashboard.json=json/pilot-dashboard.json
+      - ztunnel-dashboard.json=json/ztunnel-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "istio"
+
+  - name: istio-services-dashboard
+    files:
+      - istio-extension-dashboard.json=json/istio-extension-dashboard.json
+      - istio-mesh-dashboard.json=json/istio-mesh-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "istio"
+
+  - name: kube-metrics
+    files:
+      - kubernetes_dashboard.json=json/kubernetes_dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Custom"
+
+  - name: kyverno-dashboard
+    files:
+      - kyverno.json=json/kyverno.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Apps"
+
+  - name: loki-logs
+    files:
+      - loki-logs.json=json/loki-logs.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+
+  - name: postgres-dashboard
+    files:
+      - postgres.json=json/postgres.json
+    options:
+      labels:
+        grafana_dashboard: "true"
+      annotations:
+        grafana_dashboard_folder: "Custom"
