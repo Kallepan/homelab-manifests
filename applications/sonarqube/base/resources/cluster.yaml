@@ -6,6 +6,9 @@ metadata:
 spec:
   instances: 2
 
+  monitoring:
+    enablePodMonitor: true
+
   storage:
     storageClass: ceph-block
     size: 10Gi
