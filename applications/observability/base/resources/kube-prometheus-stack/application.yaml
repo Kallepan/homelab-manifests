@@ -123,6 +123,14 @@ spec:
               - name: "web.enable-remote-write-receiver"
                 value: ""
             additionalScrapeConfigs:
+              - job_name: docker-host
+                metrics_path: /metrics
+                scheme: https
+                static_configs:
+                  - targets:
+                      - alloy.infra.home.arpa
+                tls_config:
+                  ca_file: /etc/prometheus/secrets/homelab-ca/homelab-ca.crt
               - job_name: gitlab
                 metrics_path: /-/metrics
                 scheme: https
