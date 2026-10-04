@@ -58,10 +58,6 @@ data:
           description: Internal tools for development and DevOps.
           href: https://it-tools.svc.home.arpa/
           icon: it-tools.png
-      - pgAdmin:
-          description: Web-based PostgreSQL administration interface.
-          href: https://pgadmin.svc.home.arpa/
-          icon: postgresql.png
     - Observability:
       - Monitoring:
           description: Monitoring instance.
@@ -102,6 +98,10 @@ data:
           description: S3 Object Storage.
           href: https://web.storage.home.arpa/
           icon: garage.png
+      - pgAdmin:
+          description: Web-based PostgreSQL administration interface.
+          href: https://pgadmin.svc.home.arpa/
+          icon: postgresql.png
   custom.css: ""
   custom.js: ""
   settings.yaml: |
