@@ -4,6 +4,8 @@ metadata:
   name: buildkitd
   namespace: gitlab-runner
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
@@ -13,9 +15,10 @@ spec:
       labels:
         app: buildkitd
     spec:
+      terminationGracePeriodSeconds: 60
       containers:
         - name: buildkitd
-          image: moby/buildkit:v0.20.1-rootless
+          image: moby/buildkit:v0.33.1-rootless
           args:
             - --addr
             - unix:///run/user/1000/buildkit/buildkitd.sock
@@ -24,6 +27,13 @@ spec:
             - --config
             - /etc/buildkit/buildkitd.toml
             - --oci-worker-no-process-sandbox
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 8
+              memory: 8Gi
           ports:
             - name: tcp
               containerPort: 1234
@@ -50,6 +60,16 @@ spec:
               type: Unconfined
             runAsUser: 1000
             runAsGroup: 1000
+            runAsNonRoot: true
+            allowPrivilegeEscalation: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SETUID
+                - SETGID
+                - CHOWN
+                - FOWNER
+                - DAC_OVERRIDE
           volumeMounts:
             - name: buildkitd
               mountPath: /home/user/.local/share/buildkit
@@ -61,7 +81,8 @@ spec:
               subPath: ca.crt
       volumes:
         - name: buildkitd
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: 20Gi
         - name: config
           configMap:
             name: buildkitd-config

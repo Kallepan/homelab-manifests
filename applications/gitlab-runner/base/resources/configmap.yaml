@@ -5,5 +5,18 @@ metadata:
   namespace: gitlab-runner
 data:
   buildkitd.toml: |
+    [worker.oci]
+      platforms = ["linux/amd64", "linux/arm64"]
+      enabled = true
+      rootless = true
+      noProcessSandbox = true
+      gc = true
+      maxUsedSpace = "80%"
+      minFreeSpace = "5GB"
+
+      [[worker.oci.gcpolicy]]
+        all = true
+        keepDuration = "48h"
+
     [registry."registry.svc.home.arpa"]
       ca = ["/etc/ssl/certs/registry-ca.crt"]
