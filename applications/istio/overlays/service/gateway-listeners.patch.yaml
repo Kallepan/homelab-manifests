@@ -276,6 +276,22 @@ spec:
           - group: ''
             kind: Secret
             name: it-tools-tls
+    - name: https-pgadmin
+      protocol: HTTPS
+      port: 443
+      hostname: "pgadmin.svc.home.arpa"
+      allowedRoutes:
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: pgadmin
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - group: ''
+            kind: Secret
+            name: pgadmin-tls
     - name: https-sonarqube
       protocol: HTTPS
       port: 443
