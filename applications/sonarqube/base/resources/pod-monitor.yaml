@@ -8,7 +8,7 @@ metadata:
 spec:
   namespaceSelector: {}
   podMetricsEndpoints:
-  - port: metrics
+    - port: metrics
   selector:
     matchLabels:
       cnpg.io/cluster: sonarqube-postgresql

@@ -8,7 +8,7 @@ metadata:
 spec:
   namespaceSelector: {}
   podMetricsEndpoints:
-  - port: metrics
+    - port: metrics
   selector:
     matchLabels:
       cnpg.io/cluster: gitlab-postgresql
@@ -24,7 +24,7 @@ metadata:
 spec:
   namespaceSelector: {}
   podMetricsEndpoints:
-  - port: metrics
+    - port: metrics
   selector:
     matchLabels:
       cnpg.io/cluster: gitlab-registry-postgresql

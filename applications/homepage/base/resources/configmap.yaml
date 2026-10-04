@@ -54,14 +54,14 @@ data:
           description: Continuous code quality inspection tool.
           href: https://sonarqube.svc.home.arpa/
           icon: sonarqube.png
-       - It Tools:
-           description: Internal tools for development and DevOps.
-           href: https://it-tools.svc.home.arpa/
-           icon: it-tools.png
-       - pgAdmin:
-           description: Web-based PostgreSQL administration interface.
-           href: https://pgadmin.svc.home.arpa/
-           icon: postgresql.png
+      - It Tools:
+          description: Internal tools for development and DevOps.
+          href: https://it-tools.svc.home.arpa/
+          icon: it-tools.png
+      - pgAdmin:
+          description: Web-based PostgreSQL administration interface.
+          href: https://pgadmin.svc.home.arpa/
+          icon: postgresql.png
     - Observability:
       - Monitoring:
           description: Monitoring instance.
