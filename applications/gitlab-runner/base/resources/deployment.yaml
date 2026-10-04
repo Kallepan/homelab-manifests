@@ -21,6 +21,8 @@ spec:
             - unix:///run/user/1000/buildkit/buildkitd.sock
             - --addr
             - tcp://0.0.0.0:1234
+            - --config
+            - /etc/buildkit/buildkitd.toml
             - --oci-worker-no-process-sandbox
           ports:
             - name: tcp
@@ -49,20 +51,20 @@ spec:
             runAsUser: 1000
             runAsGroup: 1000
           volumeMounts:
-            - mountPath: /home/user/.local/share/buildkit
-              name: buildkitd
+            - name: buildkitd
+              mountPath: /home/user/.local/share/buildkit
+            - name: config
+              mountPath: /etc/buildkit/buildkitd.toml
+              subPath: buildkitd.toml
+            - name: registry-ca
+              mountPath: /etc/ssl/certs/registry-ca.crt
+              subPath: ca.crt
       volumes:
         - name: buildkitd
           emptyDir: {}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: buildkitd
-  namespace: gitlab-runner
-spec:
-  ports:
-    - port: 1234
-      targetPort: 1234
-  selector:
-    app: buildkitd
+        - name: config
+          configMap:
+            name: buildkitd-config
+        - name: registry-ca
+          secret:
+            secretName: homelab-ca

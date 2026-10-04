@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: buildkitd-config
+  namespace: gitlab-runner
+data:
+  buildkitd.toml: |
+    [registry."registry.svc.home.arpa"]
+      ca = ["/etc/ssl/certs/registry-ca.crt"]

@@ -3,6 +3,8 @@ kind: Kustomization
 
 resources:
   - ./resources/application.yaml
-  - ./resources/buildkit.yaml
+  - ./resources/deployment.yaml
+  - ./resources/service.yaml
+  - ./resources/configmap.yaml
   - ./resources/external-secret.yaml
   - ./resources/namespace.yaml
