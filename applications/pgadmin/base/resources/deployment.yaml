@@ -17,6 +17,7 @@ spec:
         app.kubernetes.io/name: pgadmin
     spec:
       securityContext:
+        fsGroup: 5050
         seccompProfile:
           type: RuntimeDefault
       containers:
@@ -26,14 +27,18 @@ spec:
           envFrom:
             - secretRef:
                 name: pgadmin-credentials
+          env:
+            - name: PGADMIN_LISTEN_PORT
+              value: "8080"
           securityContext:
             allowPrivilegeEscalation: false
+            runAsUser: 5050
+            runAsNonRoot: true
             capabilities:
               drop:
                 - ALL
-            runAsNonRoot: false
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: http
               protocol: TCP
           volumeMounts:
@@ -45,7 +50,7 @@ spec:
             successThreshold: 1
             httpGet:
               path: /misc/ping
-              port: 80
+              port: 8080
               scheme: HTTP
           readinessProbe:
             failureThreshold: 3
@@ -53,7 +58,7 @@ spec:
             successThreshold: 1
             httpGet:
               path: /misc/ping
-              port: 80
+              port: 8080
               scheme: HTTP
             timeoutSeconds: 1
           resources:
