@@ -29,16 +29,16 @@ spec:
                 - buildctl
                 - debug
                 - workers
-              initialDelaySeconds: 5
-              periodSeconds: 30
+            initialDelaySeconds: 5
+            periodSeconds: 30
           livenessProbe:
             exec:
               command:
                 - buildctl
                 - debug
                 - workers
-              initialDelaySeconds: 10
-              periodSeconds: 30
+            initialDelaySeconds: 10
+            periodSeconds: 30
           securityContext:
             seccompProfile:
               type: Unconfined
