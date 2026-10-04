@@ -32,6 +32,8 @@ spec:
           env:
             - name: PGADMIN_LISTEN_PORT
               value: "8080"
+            - name: PGADMIN_DISABLE_POSTFIX
+              value: "true"
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 5050
