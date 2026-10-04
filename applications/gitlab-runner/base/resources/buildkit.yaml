@@ -18,6 +18,8 @@ spec:
           image: moby/buildkit:v0.20.1-rootless
           args:
             - --addr
+            - unix:///run/user/1000/buildkit/buildkitd.sock
+            - --addr
             - tcp://0.0.0.0:1234
             - --oci-worker-no-process-sandbox
           ports:
