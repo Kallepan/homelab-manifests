@@ -1,7 +1,7 @@
 {
   "lockfile_version": "1",
   "packages": {
-    "git@latest": {
+    "git@2.55.0": {
       "last_modified": "2026-09-30T11:58:46Z",
       "resolved": "github:NixOS/nixpkgs/c9fe7d12cd78d1adcd12dd15e24432dde5b155a0#git",
       "source": "devbox-search",
