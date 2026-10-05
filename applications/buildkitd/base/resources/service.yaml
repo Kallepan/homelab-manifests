@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: buildkitd
+  namespace: buildkitd
+spec:
+  ports:
+    - name: grpc-tls
+      port: 1234
+      targetPort: grpc-tls
+      protocol: TCP
+  selector:
+    app: buildkitd

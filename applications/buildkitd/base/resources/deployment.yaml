@@ -2,7 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: buildkitd
-  namespace: gitlab-runner
+  namespace: buildkitd
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   strategy:
     type: Recreate
@@ -24,6 +26,10 @@ spec:
             - unix:///run/user/1000/buildkit/buildkitd.sock
             - --addr
             - tcp://0.0.0.0:1234
+            - --tlscert
+            - /etc/buildkit/tls/tls.crt
+            - --tlskey
+            - /etc/buildkit/tls/tls.key
             - --config
             - /etc/buildkit/buildkitd.toml
             - --oci-worker-no-process-sandbox
@@ -35,7 +41,7 @@ spec:
               cpu: 8
               memory: 8Gi
           ports:
-            - name: tcp
+            - name: grpc-tls
               containerPort: 1234
           readinessProbe:
             exec:
@@ -79,6 +85,10 @@ spec:
             - name: registry-ca
               mountPath: /etc/ssl/certs/registry-ca.crt
               subPath: ca.crt
+              readOnly: true
+            - name: buildkitd-tls
+              mountPath: /etc/buildkit/tls
+              readOnly: true
       volumes:
         - name: buildkitd
           emptyDir:
@@ -89,3 +99,6 @@ spec:
         - name: registry-ca
           secret:
             secretName: homelab-ca
+        - name: buildkitd-tls
+          secret:
+            secretName: buildkitd-tls

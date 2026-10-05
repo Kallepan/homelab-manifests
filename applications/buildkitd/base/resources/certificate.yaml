@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: buildkitd-tls
+  namespace: buildkitd
+spec:
+  secretName: buildkitd-tls
+  issuerRef:
+    name: buildkitd-ca
+    kind: Issuer
+  dnsNames:
+    - buildkitd.buildkitd.svc
+    - buildkitd.buildkitd.svc.cluster.local
+  usages:
+    - digital signature
+    - server auth
