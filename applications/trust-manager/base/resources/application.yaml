@@ -1,32 +1,33 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: reloader
+  name: trust-manager
   namespace: argocd
   annotations:
-    argocd.argoproj.io/sync-wave: "3"
+    argocd.argoproj.io/sync-wave: "2"
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    chart: reloader
-    repoURL: https://stakater.github.io/stakater-charts
-    targetRevision: "2.*"
+    chart: trust-manager
+    repoURL: https://charts.jetstack.io
+    targetRevision: 0.24.0
     helm:
-      releaseName: reloader
+      releaseName: trust-manager
       valuesObject:
-        reloader:
-          watchGlobally: false
-          namespaces:
-            - homepage
-            - buildkitd
+        crds:
+          enabled: true
+        app:
+          trust:
+            namespace: buildkitd
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: reloader
+    namespace: trust-manager
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
     syncOptions:
+      - CreateNamespace=true
       - ServerSideApply=true

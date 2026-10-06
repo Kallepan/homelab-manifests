@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: buildkitd-config
-  namespace: gitlab-runner
+  namespace: buildkitd
 data:
   buildkitd.toml: |
     [worker.oci]
