@@ -43,10 +43,11 @@ spec:
               request_concurrency = 2
               name = "kubernetes-runner"
               environment = [
-                "GIT_SSL_CAINFO=/usr/local/share/ca-certificates/ca.crt",
-                "SSL_CERT_FILE=/usr/local/share/ca-certificates/ca.crt",
-                "REQUESTS_CA_BUNDLE=/usr/local/share/ca-certificates/ca.crt",
+                "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt",
+                "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt",
+                "REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt",
                 "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt",
+                "CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt",
                 "BUILDKIT_HOST=tcp://buildkitd.buildkitd.svc.cluster.local:1234",
                 "BUILDKIT_TLS_CACERT=/etc/buildkit/ca/ca.crt"
               ]
@@ -61,9 +62,12 @@ spec:
                 echo "update-ca-trust found, updating CA certificates..."
                 update-ca-trust extract
               else
-                echo "No built-in command found to update CA certificates, appending CA certificates to /etc/ssl/certs/ca-certificates.crt..."
+                echo "No cert update tool found; appending certificates directly..."
+                mkdir -p /etc/ssl/certs
+                touch /etc/ssl/certs/ca-certificates.crt
                 for cert in /usr/local/share/ca-certificates/*.crt; do
                   if [ -f "$cert" ]; then
+                    echo "" >> /etc/ssl/certs/ca-certificates.crt
                     cat "$cert" >> /etc/ssl/certs/ca-certificates.crt
                   fi
                 done
