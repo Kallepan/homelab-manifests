@@ -56,10 +56,12 @@ spec:
               if command -v update-ca-certificates > /dev/null 2>&1; then
                 echo "update-ca-certificates found, updating CA certificates..."
                 update-ca-certificates --fresh
+                cp /etc/ssl/certs/ca-certificates.crt /tmp/custom-ca-bundle.crt
               # 2. RHEL / CentOS / Fedora
               elif command -v update-ca-trust > /dev/null 2>&1; then
                 echo "update-ca-trust found, updating CA certificates..."
                 update-ca-trust extract
+                cp /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /tmp/custom-ca-bundle.crt
               else
                 echo "No cert update tool found; appending certificates directly..."
                 mkdir -p /tmp
