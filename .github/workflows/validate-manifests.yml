@@ -1,0 +1,28 @@
+name: Validate manifests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Install Devbox
+        uses: jetify-com/devbox-install-action@v0.13.0
+
+      - name: Render application manifests
+        run: devbox run -- just check-apps
