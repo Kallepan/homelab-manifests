@@ -43,37 +43,37 @@ spec:
               request_concurrency = 2
               name = "kubernetes-runner"
               environment = [
-                "SSL_CERT_FILE=/builds/custom-ca-bundle.crt",
-                "GIT_SSL_CAINFO=/builds/custom-ca-bundle.crt",
-                "CURL_CA_BUNDLE=/builds/custom-ca-bundle.crt",
-                "REQUESTS_CA_BUNDLE=/builds/custom-ca-bundle.crt",
-                "NODE_EXTRA_CA_CERTS=/builds/custom-ca-bundle.crt"
+                "SSL_CERT_FILE=/tmp/custom-ca-bundle.crt",
+                "GIT_SSL_CAINFO=/tmp/custom-ca-bundle.crt",
+                "CURL_CA_BUNDLE=/tmp/custom-ca-bundle.crt",
+                "REQUESTS_CA_BUNDLE=/tmp/custom-ca-bundle.crt",
+                "NODE_EXTRA_CA_CERTS=/tmp/custom-ca-bundle.crt",
                 "BUILDKIT_HOST=tcp://buildkitd.buildkitd.svc.cluster.local:1234",
                 "BUILDKIT_TLS_CACERT=/etc/buildkit/ca/ca.crt"
               ]
 
               pre_get_sources_script = """
-              echo "Assembling CA certificates into shared workspace..."
+              echo "Assembling CA certificates into shared /tmp volume..."
 
-              mkdir -p /builds
+              mkdir -p /tmp
 
               if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
-                cp /etc/ssl/certs/ca-certificates.crt /builds/custom-ca-bundle.crt
+                cp /etc/ssl/certs/ca-certificates.crt /tmp/custom-ca-bundle.crt
               elif [ -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ]; then
-                cp /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /builds/custom-ca-bundle.crt
+                cp /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /tmp/custom-ca-bundle.crt
               else
-                touch /builds/custom-ca-bundle.crt
+                touch /tmp/custom-ca-bundle.crt
               fi
 
               for cert in /usr/local/share/ca-certificates/*; do
                 if [ -f "$cert" ]; then
                   echo "Appending $cert"
-                  echo "" >> /builds/custom-ca-bundle.crt
-                  cat "$cert" >> /builds/custom-ca-bundle.crt
+                  echo "" >> /tmp/custom-ca-bundle.crt
+                  cat "$cert" >> /tmp/custom-ca-bundle.crt
                 fi
               done
 
-              chmod 644 /builds/custom-ca-bundle.crt
+              chmod 644 /tmp/custom-ca-bundle.crt
               """
 
               [runners.kubernetes]
@@ -86,6 +86,11 @@ spec:
                 cpu_limit = "2"
                 memory_request = "1Gi"
                 memory_limit = "4Gi"
+
+              [[runners.kubernetes.volumes.empty_dir]]
+                name = "shared-tmp"
+                mount_path = "/tmp"
+                medium = "Memory"
 
               [[runners.kubernetes.volumes.secret]]
                 name = "homelab-ca"
