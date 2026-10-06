@@ -43,12 +43,13 @@ spec:
               request_concurrency = 2
               name = "kubernetes-runner"
               environment = [
-                "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt",
-                "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt",
-                "REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt",
-                "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt",
-                "CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt"
+                  "SSL_CERT_FILE=/tmp/custom-ca-bundle.crt",
+                  "GIT_SSL_CAINFO=/tmp/custom-ca-bundle.crt",
+                  "CURL_CA_BUNDLE=/tmp/custom-ca-bundle.crt",
+                  "REQUESTS_CA_BUNDLE=/tmp/custom-ca-bundle.crt",
+                  "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt"
               ]
+
               pre_get_sources_script = """
               echo "Updating CA certificates..."
               # 1. Debian / Ubuntu / Alpine
@@ -61,12 +62,17 @@ spec:
                 update-ca-trust extract
               else
                 echo "No cert update tool found; appending certificates directly..."
-                mkdir -p /etc/ssl/certs
-                touch /etc/ssl/certs/ca-certificates.crt
+                mkdir -p /tmp
+                if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
+                  cp /etc/ssl/certs/ca-certificates.crt /tmp/custom-ca-bundle.crt
+                else
+                  touch /tmp/custom-ca-bundle.crt
+                fi
+
                 for cert in /usr/local/share/ca-certificates/*.crt; do
                   if [ -f "$cert" ]; then
-                    echo "" >> /etc/ssl/certs/ca-certificates.crt
-                    cat "$cert" >> /etc/ssl/certs/ca-certificates.crt
+                    echo "" >> /tmp/custom-ca-bundle.crt
+                    cat "$cert" >> /tmp/custom-ca-bundle.crt
                   fi
                 done
               fi
