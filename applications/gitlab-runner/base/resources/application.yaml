@@ -51,33 +51,27 @@ spec:
               ]
 
               pre_get_sources_script = """
-              echo "Updating CA certificates..."
-              # 1. Debian / Ubuntu / Alpine
-              if command -v update-ca-certificates > /dev/null 2>&1; then
-                echo "update-ca-certificates found, updating CA certificates..."
-                update-ca-certificates --fresh
+              mkdir -p /tmp
+              # 1. Initialize custom-ca-bundle with the existing system store if available
+              if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
                 cp /etc/ssl/certs/ca-certificates.crt /tmp/custom-ca-bundle.crt
-              # 2. RHEL / CentOS / Fedora
-              elif command -v update-ca-trust > /dev/null 2>&1; then
-                echo "update-ca-trust found, updating CA certificates..."
-                update-ca-trust extract
+              elif [ -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ]; then
                 cp /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /tmp/custom-ca-bundle.crt
               else
-                echo "No cert update tool found; appending certificates directly..."
-                mkdir -p /tmp
-                if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
-                  cp /etc/ssl/certs/ca-certificates.crt /tmp/custom-ca-bundle.crt
-                else
-                  touch /tmp/custom-ca-bundle.crt
-                fi
-
-                for cert in /usr/local/share/ca-certificates/*.crt; do
-                  if [ -f "$cert" ]; then
-                    echo "" >> /tmp/custom-ca-bundle.crt
-                    cat "$cert" >> /tmp/custom-ca-bundle.crt
-                  fi
-                done
+                touch /tmp/custom-ca-bundle.crt
               fi
+
+              # 2. Append all mounted certs (*.crt and *.pem), handling bundles/chains cleanly
+              for cert in /usr/local/share/ca-certificates/*; do
+                if [ -f "$cert" ]; then
+                  echo "Appending $cert to /tmp/custom-ca-bundle.crt"
+                  echo "" >> /tmp/custom-ca-bundle.crt
+                  cat "$cert" >> /tmp/custom-ca-bundle.crt
+                fi
+              done
+
+              # Ensure world-readable permissions so container users can access it
+              chmod 644 /tmp/custom-ca-bundle.crt
               """
 
               [runners.kubernetes]
