@@ -43,35 +43,37 @@ spec:
               request_concurrency = 2
               name = "kubernetes-runner"
               environment = [
-                "GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt",
-                "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt",
-                "REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt",
-                "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt",
-                "CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt",
+                "SSL_CERT_FILE=/builds/custom-ca-bundle.crt",
+                "GIT_SSL_CAINFO=/builds/custom-ca-bundle.crt",
+                "CURL_CA_BUNDLE=/builds/custom-ca-bundle.crt",
+                "REQUESTS_CA_BUNDLE=/builds/custom-ca-bundle.crt",
+                "NODE_EXTRA_CA_CERTS=/builds/custom-ca-bundle.crt"
                 "BUILDKIT_HOST=tcp://buildkitd.buildkitd.svc.cluster.local:1234",
                 "BUILDKIT_TLS_CACERT=/etc/buildkit/ca/ca.crt"
               ]
+
               pre_get_sources_script = """
-              echo "Updating CA certificates..."
-              # 1. Debian / Ubuntu / Alpine
-              if command -v update-ca-certificates > /dev/null 2>&1; then
-                echo "update-ca-certificates found, updating CA certificates..."
-                update-ca-certificates --fresh
-              # 2. RHEL / CentOS / Fedora
-              elif command -v update-ca-trust > /dev/null 2>&1; then
-                echo "update-ca-trust found, updating CA certificates..."
-                update-ca-trust extract
+              echo "Assembling CA certificates into shared workspace..."
+
+              mkdir -p /builds
+
+              if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
+                cp /etc/ssl/certs/ca-certificates.crt /builds/custom-ca-bundle.crt
+              elif [ -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ]; then
+                cp /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /builds/custom-ca-bundle.crt
               else
-                echo "No cert update tool found; appending certificates directly..."
-                mkdir -p /etc/ssl/certs
-                touch /etc/ssl/certs/ca-certificates.crt
-                for cert in /usr/local/share/ca-certificates/*.crt; do
-                  if [ -f "$cert" ]; then
-                    echo "" >> /etc/ssl/certs/ca-certificates.crt
-                    cat "$cert" >> /etc/ssl/certs/ca-certificates.crt
-                  fi
-                done
+                touch /builds/custom-ca-bundle.crt
               fi
+
+              for cert in /usr/local/share/ca-certificates/*; do
+                if [ -f "$cert" ]; then
+                  echo "Appending $cert"
+                  echo "" >> /builds/custom-ca-bundle.crt
+                  cat "$cert" >> /builds/custom-ca-bundle.crt
+                fi
+              done
+
+              chmod 644 /builds/custom-ca-bundle.crt
               """
 
               [runners.kubernetes]
