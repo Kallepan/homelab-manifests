@@ -75,20 +75,33 @@
       "datasourceTemplate": "npm",
       "depNameTemplate": "renovate",
       "versioningTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "description": "Update the Devbox schema version",
+      "managerFilePatterns": [
+        "/^devbox\\.json$/"
+      ],
+      "matchStrings": [
+        "https?://raw\\.githubusercontent\\.com/jetify-com/devbox/(?<currentValue>\\d+\\.\\d+\\.\\d+)/\\.schema/devbox\\.schema\\.json"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "jetify-com/devbox",
+      "versioningTemplate": "semver"
     }
   ],
   "argocd": {
     "managerFilePatterns": [
-      "/(^|/)(application(?:-[^/]+)?|all-apps)\\.ya?ml$/",
-      "/^applications/istio/base/resources/(?:istio-base|istio-cni|istiod|ztunnel)\\.ya?ml$/",
-      "/^applications/observability/base/resources/prometheus-blackbox-exporter\\.ya?ml$/",
-      "/^applications/gitlab/base/resources/valkey\\.ya?ml$/"
+      "applications/**/*.yaml",
+      "applications/**/*.yml",
+      "!applications/networking/base/resources/gateway-api.yaml"
     ]
   },
   "kubernetes": {
     "managerFilePatterns": [
-      "/^applications/(?:argocd|cert-manager|cnpg-operator|external-secrets|external-secrets-operator|gitlab|gitlab-operator|gitlab-runner|grafana-operator|homepage|istio|it-tools|keycloak|keycloak-operator|local-path-storage|mattermost|mattermost-operator|metrics-server|oauth2-proxy|observability|olm|opentelemetry-operator|pgadmin|reloader|sonarqube)/.+\\.ya?ml$/",
-      "/^_deprecated/.+\\.ya?ml$/"
+      "applications/**/*.yaml",
+      "applications/**/*.yml",
+      "!applications/networking/base/resources/gateway-api.yaml"
     ]
   },
   "pre-commit": {
@@ -111,6 +124,7 @@
   ],
   "commitMessagePrefix": "chore(deps):",
   "prConcurrentLimit": 10,
+  "minimumReleaseAge": "3 days",
   "semanticCommits": "enabled",
   "gitAuthor": "Renovate Bot <bot@home.arpa>"
 }
