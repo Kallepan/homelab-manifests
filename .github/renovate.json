@@ -115,6 +115,9 @@
       "/(^|/)Chart\\.ya?ml$/"
     ]
   },
+  "ignorePaths": [
+    "_deprecated/**"
+  ],
   "assignees": [
     "Kallepan"
   ],
