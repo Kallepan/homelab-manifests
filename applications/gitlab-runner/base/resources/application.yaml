@@ -43,35 +43,35 @@ spec:
               request_concurrency = 2
               name = "kubernetes-runner"
               environment = [
-                  "SSL_CERT_FILE=/tmp/custom-ca-bundle.crt",
-                  "GIT_SSL_CAINFO=/tmp/custom-ca-bundle.crt",
-                  "CURL_CA_BUNDLE=/tmp/custom-ca-bundle.crt",
-                  "REQUESTS_CA_BUNDLE=/tmp/custom-ca-bundle.crt",
-                  "NODE_EXTRA_CA_CERTS=/usr/local/share/ca-certificates/ca.crt"
+                  "SSL_CERT_FILE=/builds/custom-ca-bundle.crt",
+                  "GIT_SSL_CAINFO=/builds/custom-ca-bundle.crt",
+                  "CURL_CA_BUNDLE=/builds/custom-ca-bundle.crt",
+                  "REQUESTS_CA_BUNDLE=/builds/custom-ca-bundle.crt",
+                  "NODE_EXTRA_CA_CERTS=/builds/custom-ca-bundle.crt"
               ]
 
               pre_get_sources_script = """
-              mkdir -p /tmp
-              # 1. Initialize custom-ca-bundle with the existing system store if available
+              echo "Assembling CA certificates into shared workspace..."
+
+              mkdir -p /builds
+
               if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
-                cp /etc/ssl/certs/ca-certificates.crt /tmp/custom-ca-bundle.crt
+                cp /etc/ssl/certs/ca-certificates.crt /builds/custom-ca-bundle.crt
               elif [ -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ]; then
-                cp /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /tmp/custom-ca-bundle.crt
+                cp /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /builds/custom-ca-bundle.crt
               else
-                touch /tmp/custom-ca-bundle.crt
+                touch /builds/custom-ca-bundle.crt
               fi
 
-              # 2. Append all mounted certs (*.crt and *.pem), handling bundles/chains cleanly
               for cert in /usr/local/share/ca-certificates/*; do
                 if [ -f "$cert" ]; then
-                  echo "Appending $cert to /tmp/custom-ca-bundle.crt"
-                  echo "" >> /tmp/custom-ca-bundle.crt
-                  cat "$cert" >> /tmp/custom-ca-bundle.crt
+                  echo "Appending $cert"
+                  echo "" >> /builds/custom-ca-bundle.crt
+                  cat "$cert" >> /builds/custom-ca-bundle.crt
                 fi
               done
 
-              # Ensure world-readable permissions so container users can access it
-              chmod 644 /tmp/custom-ca-bundle.crt
+              chmod 644 /builds/custom-ca-bundle.crt
               """
 
               [runners.kubernetes]
