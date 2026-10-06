@@ -1,4 +1,5 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
   ],
@@ -34,11 +35,66 @@
         "#\\s*renovate:\\s*datasource=(?<datasource>[a-z-]+?) depName=(?<depName>[^\\s]+?)(?: versioning=(?<versioning>[a-z-]+?))?\\s*\\n",
         "https?://github\\.com/[^/]+/[^/]+/releases/download/(?<currentValue>[^/]+)/"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "Update the GitLab chart version managed by the GitLab operator",
+      "managerFilePatterns": [
+        "/^applications/gitlab/base/resources/gitlab\\.yaml$/"
+      ],
+      "matchStrings": [
+        "(?m)^\\s+version:\\s*[\\\"]?(?<currentValue>\\d+\\.\\d+\\.\\d+)[\\\"]?\\s*$"
+      ],
+      "datasourceTemplate": "helm",
+      "depNameTemplate": "gitlab",
+      "registryUrlTemplate": "https://charts.gitlab.io",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Update the Gateway API bundle version",
+      "managerFilePatterns": [
+        "/^applications/networking/base/resources/gateway-api\\.yaml$/"
+      ],
+      "matchStrings": [
+        "gateway\\.networking\\.k8s\\.io/bundle-version:\\s*(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "kubernetes-sigs/gateway-api",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "description": "Update the Renovate CLI version used to validate the configuration",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/renovate\\.yml$/"
+      ],
+      "matchStrings": [
+        "--package\\s+renovate@(?<currentValue>\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "renovate",
+      "versioningTemplate": "npm"
     }
   ],
   "argocd": {
     "managerFilePatterns": [
-      "/(^|/)(application(?:-[^/]+)?|all-apps)\\.ya?ml$/"
+      "/(^|/)(application(?:-[^/]+)?|all-apps)\\.ya?ml$/",
+      "/^applications/istio/base/resources/(?:istio-base|istio-cni|istiod|ztunnel)\\.ya?ml$/",
+      "/^applications/observability/base/resources/prometheus-blackbox-exporter\\.ya?ml$/",
+      "/^applications/gitlab/base/resources/valkey\\.ya?ml$/"
+    ]
+  },
+  "kubernetes": {
+    "managerFilePatterns": [
+      "/^applications/(?:argocd|cert-manager|cnpg-operator|external-secrets|external-secrets-operator|gitlab|gitlab-operator|gitlab-runner|grafana-operator|homepage|istio|it-tools|keycloak|keycloak-operator|local-path-storage|mattermost|mattermost-operator|metrics-server|oauth2-proxy|observability|olm|opentelemetry-operator|pgadmin|reloader|sonarqube)/.+\\.ya?ml$/",
+      "/^_deprecated/.+\\.ya?ml$/"
+    ]
+  },
+  "pre-commit": {
+    "enabled": true,
+    "managerFilePatterns": [
+      "/(^|/)\\.pre-commit-config\\.ya?ml$/"
     ]
   },
   "helmv3": {
