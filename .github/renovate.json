@@ -142,5 +142,6 @@
   "prConcurrentLimit": 10,
   "minimumReleaseAge": "3 days",
   "semanticCommits": "enabled",
-  "gitAuthor": "Renovate Bot <bot@home.arpa>"
+  "gitAuthor": "Renovate Bot <bot@home.arpa>",
+  "prCreation": "immediate"
 }
