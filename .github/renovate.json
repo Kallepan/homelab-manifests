@@ -52,6 +52,19 @@
     },
     {
       "customType": "regex",
+      "description": "Update the default GitLab Runner job image",
+      "managerFilePatterns": [
+        "/^applications/gitlab-runner/base/resources/application\\.yaml$/"
+      ],
+      "matchStrings": [
+        "(?m)^\\s*image\\s*=\\s*\\\"alpine:(?<currentValue>\\d+\\.\\d+\\.\\d+)\\\"\\s*$"
+      ],
+      "datasourceTemplate": "docker",
+      "depNameTemplate": "alpine",
+      "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
       "description": "Update the Gateway API bundle version",
       "managerFilePatterns": [
         "/^applications/networking/base/resources/gateway-api\\.yaml$/"
