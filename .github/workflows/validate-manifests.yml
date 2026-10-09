@@ -22,7 +22,7 @@ jobs:
           persist-credentials: false
 
       - name: Install Devbox
-        uses: jetify-com/devbox-install-action@v0.13.0
+        uses: jetify-com/devbox-install-action@v0.15.0
 
       - name: Render manifests and run repository checks
         run: devbox run -- test
