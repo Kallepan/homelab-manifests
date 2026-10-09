@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: cloudnative-pg
-    repoURL: https://cloudnative-pg.github.io/charts
-    targetRevision: 0.*.*
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/cnpg-operator/charts/cloudnative-pg
     helm:
       releaseName: cnpg-operator
       valuesObject: {}

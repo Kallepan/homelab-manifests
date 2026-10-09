@@ -1,0 +1,24 @@
+{{- if .Values.watchCluster }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "name" . }}-manager-role
+rules:
+{{ include "manager.rules.namespaced" . }}
+{{ include "manager.rules.cluster" . }}
+{{- else }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "name" . }}-manager-role
+  namespace: {{ .Release.Namespace }}
+rules:
+{{ include "manager.rules.namespaced" . }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "name" . }}-manager-cluster-role
+rules:
+{{ include "manager.rules.cluster" . }}
+{{- end }}

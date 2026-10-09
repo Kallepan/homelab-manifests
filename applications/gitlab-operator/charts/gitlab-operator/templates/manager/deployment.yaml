@@ -1,0 +1,128 @@
+{{- $imageCfg := dict "image" .Values.image "context" $ -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    control-plane: controller-manager
+  name: {{ include "name" . }}-controller-manager
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: controller-manager
+  template:
+    metadata:
+      annotations: {{- toYaml .Values.podAnnotations | nindent 8 }}
+      labels:
+        control-plane: controller-manager
+    spec:
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range $index, $entry := .Values.image.pullSecrets }}
+      - name: {{ $entry.name }}
+      {{- end }}
+      {{- end }}
+      containers:
+      - args:
+        - --metrics-addr=:8443
+        - --enable-leader-election
+        - --zap-devel={{ .Values.manager.debug.enabled }}
+        - --zap-log-level={{ .Values.manager.log.level }}
+        - --zap-time-encoding={{ .Values.manager.log.timeEncoding }}
+        command:
+        - /manager
+        image: {{ include "gitlab.image.fullPath" $imageCfg }}
+        {{- if .Values.image.pullPolicy }}
+        imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+        {{- end }}
+        {{- if .Values.manager.containerSecurityContext }}
+        securityContext: {{- toYaml .Values.manager.containerSecurityContext | nindent 12 }}
+        {{- end }}
+        name: manager
+        ports:
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        - containerPort: 6060
+          name: health-port
+        - containerPort: 8443
+          name: metrics
+        {{- if .Values.bridge.enabled }}
+        - containerPort: {{ .Values.bridge.port }}
+          name: bridge
+        {{- end }}
+        env:
+        {{- if .Values.bridge.enabled }}
+        - name: ENABLE_BRIDGE
+          value: "true"
+        - name: BRIDGE_BIND_ADDRESS
+          value: ":{{ .Values.bridge.port }}"
+        {{- end }}
+        {{- if not .Values.watchCluster }}
+        - name: WATCH_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        {{- end }}
+        {{- if .Values.extraEnv }}
+        {{- toYaml .Values.extraEnv | nindent 8 }}
+        {{- end }}
+        - name: GITLAB_MANAGER_SERVICE_ACCOUNT
+          value: {{ include "manager.serviceAccount.name" . }}
+        - name: GITLAB_APP_NONROOT_SERVICE_ACCOUNT
+          value: {{ include "app.serviceAccount.name" . }}-nonroot
+        - name: NGINX_SERVICE_ACCOUNT
+          value: {{ include "nginx-ingress.serviceAccount.name" . }}
+        - name: PROMETHEUS_SERVICE_ACCOUNT
+          value: {{ include "prometheus.serviceAccount.server.name" . }}
+        livenessProbe:
+          httpGet:
+            path: /liveness
+            port: health-port
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readiness
+            port: health-port
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources: {{- toYaml .Values.resources | nindent 10 }}
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+        {{- if .Values.bridge.enabled }}
+        - mountPath: /tmp/gitlab-operator-charts
+          name: dynamic-chart-cache
+        {{- end }}
+      serviceAccountName: {{ include "manager.serviceAccount.name" . }}
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          secretName: webhook-server-cert
+      {{- if .Values.bridge.enabled }}
+      # The v2alpha1 GitLabCore reconciler's dynamic chart pull (see
+      # controllers/settings.DynamicChartCacheDirectory) caches a pulled chart
+      # under /tmp/gitlab-operator-charts by default. Without a volume of its
+      # own there, a manager whose containerSecurityContext sets
+      # readOnlyRootFilesystem: true cannot create that directory, and every
+      # pull fails. An emptyDir mount fixes that regardless of the security
+      # context, at the cost of nothing when dynamic pulling never runs. A
+      # DYNAMIC_CHART_CACHE_DIRECTORY override needs a writable mount of its
+      # own to match.
+      - name: dynamic-chart-cache
+        emptyDir: {}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector: {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations: {{- toYaml . | nindent 8 }}
+      {{- end }}

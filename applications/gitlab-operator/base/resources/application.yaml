@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: gitlab-operator
-    repoURL: https://charts.gitlab.io
-    targetRevision: 3.*
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/gitlab-operator/charts/gitlab-operator
     helm:
       releaseName: gitlab-operator
       valuesObject: {}

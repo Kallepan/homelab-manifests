@@ -1,0 +1,119 @@
+watchCluster: true
+
+image:
+  registry: registry.gitlab.com
+  repository: gitlab-org/cloud-native
+  name: gitlab-operator
+  # tag: latest
+  # digest:
+  # pullPolicy: IfNotPresent
+  # pullSecrets: []
+  prepend: "false"
+
+nameOverride: "gitlab"
+fullnameOverride: ""
+
+extraEnvs: []
+
+# bridge is the backend-for-frontend HTTP server that exposes a CRUD API and
+# an embedded SPA for configuring GitLab instances. It is disabled by default.
+bridge:
+  enabled: false
+  # port the bridge server listens on inside the container.
+  port: 8090
+
+podAnnotations:
+  kubectl.kubernetes.io/default-container: manager
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 500Mi
+  requests:
+    cpu: 200m
+    memory: 250Mi
+
+affinity: {}
+nodeSelector: {}
+tolerations: []
+
+manager:
+  # 'debug' controls development mode in the logger.
+  # ref: https://sdk.operatorframework.io/docs/building-operators/golang/references/logging
+  debug:
+    enabled: false
+  log:
+    # 'level' can be one of:
+    #   'debug', 'info', 'error',
+    #   or any integer value > 0 which corresponds to custom debug levels of increasing verbosity.
+    # ref: https://sdk.operatorframework.io/docs/building-operators/golang/references/logging
+    level: info
+    # 'timeEncoding' can be one of:
+    #   'epoch', 'millis', 'nano', 'iso8601', 'rfc3339' or 'rfc3339nano'
+    timeEncoding: epoch
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the name template
+    # name:
+  webhook:
+    selfSignedCert:
+      # Specifies whether CertManager Issuer and Certificate should be created
+      # to generate a self-signed certificate for the Manager's webhook.
+      create: true
+
+  ## Controller containers' Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  containerSecurityContext: {}
+    # Switch to allow priviledge escalation on the Controller container
+    # allowPrivilegeEscalation: 
+    # capabilities
+    #   Linux Kernel capabilities that should be dropped
+    #   drop:
+    #   Linux Kernel capabilities that should be added
+    #   add:
+    # Set container's Security Context runAsNonRoot
+    # runAsNonRoot:
+app:
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the name template
+    # name:
+
+nginx-ingress:
+  create: true
+  geo:
+    ingressClass:
+      enabled: false
+  serviceAccount:
+    # Specifies whether a service account should be created
+    create: true
+    # Annotations to add to the service account
+    annotations: {}
+    # The name of the service account to use.
+    # If not set and create is true, a name is generated using the name template
+    # name:
+
+prometheus:
+  serviceAccount:
+    server:
+      # Specifies whether a service account should be created
+      create: true
+      # Annotations to add to the service account
+      annotations: {}
+      # The name of the service account to use.
+      # If not set and create is true, a name is generated using the name template
+      # name:
+
+scc: {}
+#  apiVersion: ""
+
+cert-manager:
+  install: false

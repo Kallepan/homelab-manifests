@@ -1,0 +1,17 @@
+{{- if .Values.app.serviceAccount.create -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: {{ if .Values.watchCluster }}ClusterRoleBinding{{ else }}RoleBinding{{ end }}
+metadata:
+  name: {{ include "app.serviceAccount.name" . }}-rolebinding-nonroot
+  {{- if not .Values.watchCluster }}
+  namespace: {{ .Release.Namespace }}
+  {{- end }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "app.serviceAccount.name" . }}-role-nonroot
+subjects:
+- kind: ServiceAccount
+  name: {{ include "app.serviceAccount.name" . }}-nonroot
+  namespace: {{ .Release.Namespace }}
+{{- end }}

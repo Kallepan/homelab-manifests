@@ -16,6 +16,7 @@
     "scripts": {
       "test": [
         "just check-apps",
+        "just check-helm-charts",
         "prek run --all-files"
       ]
     }

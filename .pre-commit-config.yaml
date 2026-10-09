@@ -3,10 +3,16 @@ repos:
     rev: v6.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: ^applications/.*/charts/
       - id: end-of-file-fixer
+        exclude: ^applications/.*/charts/
+      # Helm template files aren't plain YAML.
       - id: check-yaml
         args: [--allow-multiple-documents]
+        exclude: ^applications/.*/charts/
+      # Vendored CRDs can exceed this hook's default file-size limit.
       - id: check-added-large-files
+        exclude: ^applications/.*/charts/
       - id: check-merge-conflict
 
   - repo: local
@@ -17,8 +23,8 @@ repos:
         language: system
         types: [yaml]
         require_serial: true
-        # This generated Gateway API CRD bundle uses nonstandard indentation.
-        exclude: ^applications/networking/base/resources/gateway-api\.yaml$
+        # Helm templates aren't plain YAML; this Gateway API bundle has nonstandard indentation.
+        exclude: '^(applications/.*/charts/|applications/networking/base/resources/gateway-api\.yaml$)'
 
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.1

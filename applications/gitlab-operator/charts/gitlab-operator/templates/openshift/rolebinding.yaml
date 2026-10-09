@@ -1,0 +1,15 @@
+{{- if eq (include "isOpenShift" .) "true" -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Namespace }}:openshift:scc:nginx-ingress-scc
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name:  {{ .Release.Namespace }}:openshift:scc:nginx-ingress-scc
+subjects:
+- kind: ServiceAccount
+  name: {{ include "nginx-ingress.serviceAccount.name" . }}
+  namespace: {{ .Release.Namespace }}
+{{- end }}
