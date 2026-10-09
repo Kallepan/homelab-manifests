@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: opensearch
-    repoURL: https://opensearch-project.github.io/helm-charts
-    targetRevision: 3.*
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/observability/charts/opensearch
     helm:
       releaseName: opensearch
       valuesObject:

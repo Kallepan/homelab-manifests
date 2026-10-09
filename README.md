@@ -7,6 +7,7 @@ This repository contains Kubernetes manifests and Argo CD `Application` resource
 ```text
 applications/
   <app>/
+    charts/<chart>/          # Vendored upstream Helm chart, when applicable
     base/
       kustomization.yaml
       resources/             # Kubernetes resources and/or Argo CD Applications
@@ -19,6 +20,36 @@ The active overlay in this repository is generally `service`. `_deprecated/` con
 
 Each `applications/<app>/base/resources/application.yaml` (where present) defines an Argo CD `Application` for the release. Some apps instead contain resources directly. The `argocd` application manages the Argo CD Helm release itself.
 
+### Vendored Helm charts
+
+Argo CD Helm releases are vendored below the owning application in
+`applications/<app>/charts/<chart>/`. The chart's `Chart.yaml` records its exact
+version and upstream repository; templates, defaults, CRDs, and packaged
+dependencies are tracked alongside it. Applications render these checked-in
+chart directories from this Git repository rather than resolving versions from
+an upstream Helm repository.
+
+Renovate monitors the upstream versions recorded in each vendored chart and
+refreshes the complete chart directory in its update branch, including
+templates, defaults, CRDs, and packaged dependencies. The refresh task runs
+with Helm from the full Renovate image and is allowlisted in the Renovate
+workflow.
+
+To refresh a chart manually, pull the desired version into its existing
+directory. `VERSION` can be an exact version or a Helm semver constraint; for
+OCI charts, pass the registry URL with the `oci://` prefix. Quote wildcard
+constraints to prevent shell expansion:
+
+```sh
+devbox run -- just vendor-helm-chart \
+  https://charts.jetstack.io cert-manager v1.21.2 \
+  applications/cert-manager/charts/cert-manager
+```
+
+The GitLab chart is an exception: it is fetched and rendered by the GitLab
+Operator from the version in `applications/gitlab/base/resources/gitlab.yaml`,
+rather than by an Argo CD Helm source.
+
 ### Bootstrap and application discovery
 
 There is no `ApplicationSet`, `cluster-config/`, or root app-of-apps manifest in this repository. Argo CD therefore needs an existing bootstrap/root `Application` (configured outside this repository) that discovers the desired `applications/*/overlays/<cluster>` directories. Check that bootstrap source before expecting newly added overlays to deploy. Keep overlay directory names aligned with the cluster names used by that source.
@@ -29,10 +60,11 @@ Tools are pinned in `devbox.json`; run them through Devbox:
 
 ```sh
 devbox run -- just check-apps
+devbox run -- just check-helm-charts
 devbox run -- prek run --all-files
 ```
 
-`just check-apps` renders each discovered Kustomize directory under `applications/`. Some Kustomizations use pinned upstream Git sources and need network access. `devbox run -- test` runs both the render checks and YAML pre-commit hooks.
+`just check-apps` renders each discovered Kustomize directory under `applications/`; `just check-helm-charts` renders every vendored chart with Helm. Some Kustomizations use pinned upstream Git sources and need network access. `devbox run -- test` runs both render checks and the pre-commit hooks.
 
 To render one overlay:
 

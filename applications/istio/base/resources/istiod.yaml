@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: istiod
-    repoURL: https://istio-release.storage.googleapis.com/charts
-    targetRevision: 1.*.*
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/istio/charts/istiod
     helm:
       releaseName: istio
       valuesObject:

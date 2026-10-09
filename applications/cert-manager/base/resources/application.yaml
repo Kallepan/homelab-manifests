@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: cert-manager
-    repoURL: https://charts.jetstack.io
-    targetRevision: 1.*.*
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/cert-manager/charts/cert-manager
     helm:
       releaseName: cert-manager
       valuesObject:

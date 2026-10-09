@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: gitlab-runner
-    repoURL: https://charts.gitlab.io
-    targetRevision: 0.*.*
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/gitlab-runner/charts/gitlab-runner
     helm:
       releaseName: gitlab-runner
       valuesObject:

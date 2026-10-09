@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: mattermost-operator
-    repoURL: https://helm.mattermost.com
-    targetRevision: "1.*.*"
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/mattermost-operator/charts/mattermost-operator
     helm:
       releaseName: mattermost-operator
       valuesObject: {}

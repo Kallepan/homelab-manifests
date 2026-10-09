@@ -6,6 +6,38 @@
   "customManagers": [
     {
       "customType": "regex",
+      "description": "Update vendored charts from HTTP Helm repositories",
+      "managerFilePatterns": [
+        "/^applications\\/[^/]+\\/charts\\/[^/]+\\/Chart\\.yaml$/"
+      ],
+      "matchStringsStrategy": "recursive",
+      "matchStrings": [
+        "(?m)^# Vendored from (?<registryUrl>https?:\\/\\/[^\\r\\n]+)[\\s\\S]*$",
+        "(?m)^name:[ \\t]*[\"']?(?<depName>[A-Za-z0-9._-]+)[\"']?[ \\t]*(?:#.*)?[\\s\\S]*$",
+        "(?m)^version:[ \\t]*[\"']?(?<currentValue>[^ \\t\\r\\n\"'#]+)[\"']?[ \\t]*(?:#.*)?$"
+      ],
+      "datasourceTemplate": "helm",
+      "versioningTemplate": "helm"
+    },
+    {
+      "customType": "regex",
+      "description": "Update vendored charts from OCI registries",
+      "managerFilePatterns": [
+        "/^applications\\/[^/]+\\/charts\\/[^/]+\\/Chart\\.yaml$/"
+      ],
+      "matchStringsStrategy": "recursive",
+      "matchStrings": [
+        "(?m)^# Vendored from oci:\\/\\/(?<registryHost>[^/]+)\\/(?<repositoryPath>[^\\r\\n]+)[\\s\\S]*$",
+        "(?m)^name:[ \\t]*[\"']?(?<depName>[A-Za-z0-9._-]+)[\"']?[ \\t]*(?:#.*)?[\\s\\S]*$",
+        "(?m)^version:[ \\t]*[\"']?(?<currentValue>[^ \\t\\r\\n\"'#]+)[\"']?[ \\t]*(?:#.*)?$"
+      ],
+      "depNameTemplate": "{{depName}}",
+      "packageNameTemplate": "{{registryHost}}/{{repositoryPath}}/{{depName}}",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "helm"
+    },
+    {
+      "customType": "regex",
       "description": "Update GitHub raw content URLs in Kustomize manifests",
       "managerFilePatterns": [
         "/(^|/)kustomization\\.ya?ml$/"
@@ -78,7 +110,7 @@
     },
     {
       "customType": "regex",
-      "description": "Update the Renovate CLI version used to validate the configuration",
+      "description": "Update the Renovate CLI version used for config validation",
       "managerFilePatterns": [
         "/^\\.github/workflows/renovate\\.yml$/"
       ],
@@ -103,13 +135,6 @@
       "versioningTemplate": "semver"
     }
   ],
-  "argocd": {
-    "managerFilePatterns": [
-      "applications/**/*.yaml",
-      "applications/**/*.yml",
-      "!applications/networking/base/resources/gateway-api.yaml"
-    ]
-  },
   "kubernetes": {
     "managerFilePatterns": [
       "applications/**/*.yaml",
@@ -124,10 +149,39 @@
     ]
   },
   "helmv3": {
-    "managerFilePatterns": [
-      "/(^|/)Chart\\.ya?ml$/"
-    ]
+    "enabled": false
   },
+  "packageRules": [
+    {
+      "description": "Avoid partial Kubernetes and Helm values updates inside vendored charts",
+      "matchManagers": [
+        "kubernetes",
+        "helm-values"
+      ],
+      "matchFileNames": [
+        "applications/*/charts/**"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Refresh the complete vendored chart when its upstream version changes",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchFileNames": [
+        "applications/*/charts/*/Chart.yaml"
+      ],
+      "postUpgradeTasks": {
+        "commands": [
+          "bash scripts/refresh-vendored-helm-charts.sh"
+        ],
+        "fileFilters": [
+          "applications/*/charts/*/**"
+        ],
+        "executionMode": "branch"
+      }
+    }
+  ],
   "ignorePaths": [
     "_deprecated/**"
   ],

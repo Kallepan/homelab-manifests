@@ -50,6 +50,8 @@ jobs:
         uses: renovatebot/github-action@v46.3.7
         with:
           configurationFile: .github/renovate.json
+          renovate-version: 44.138.0-full
           token: ${{ secrets.RENOVATE_TOKEN }}
         env:
           RENOVATE_REPOSITORIES: ${{ github.repository }}
+          RENOVATE_ALLOWED_COMMANDS: '["^bash scripts/refresh-vendored-helm-charts\\.sh$"]'

@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: opentelemetry-operator
-    repoURL: https://open-telemetry.github.io/opentelemetry-helm-charts
-    targetRevision: 0.*.*
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/opentelemetry-operator/charts/opentelemetry-operator
     helm:
       releaseName: opentelemetry-operator
       valuesObject:

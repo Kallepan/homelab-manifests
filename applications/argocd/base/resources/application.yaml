@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    chart: argocd
-    repoURL: oci://ghcr.io/argoproj/argo-helm/argo-cd
-    targetRevision: 10.*.*
+    repoURL: https://github.com/Kallepan/homelab-manifests.git
+    targetRevision: main
+    path: applications/argocd/charts/argo-cd
     helm:
       releaseName: argocd
       valuesObject:
