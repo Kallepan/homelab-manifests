@@ -6,4 +6,5 @@ namespace: kube-system
 resources:
   - ./resources/cilium-l2-announcement-policy.yaml
   - ./resources/cilium-load-balancer-ip-pool.yaml
-  - ./resources/gateway-api.yaml
+  # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api versioning=semver
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.3/experimental-install.yaml
