@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kallepan/homelab-manifests.git
-    targetRevision: main
-    path: applications/grafana-operator/charts/grafana-operator
+    repoURL: ghcr.io/grafana/helm-charts
+    chart: grafana-operator
+    targetRevision: 5.*.*
     helm:
       releaseName: grafana-operator
       valuesObject:
