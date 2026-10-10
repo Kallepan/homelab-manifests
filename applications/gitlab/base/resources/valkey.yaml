@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kallepan/homelab-manifests.git
-    targetRevision: main
-    path: applications/gitlab/charts/valkey
+    chart: valkey
+    repoURL: https://valkey.io/valkey-helm/
+    targetRevision: 0.*
     helm:
       releaseName: valkey
       valuesObject:

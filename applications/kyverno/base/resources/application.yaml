@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kallepan/homelab-manifests.git
-    targetRevision: main
-    path: applications/kyverno/charts/kyverno
+    chart: kyverno
+    repoURL: https://kyverno.github.io/kyverno/
+    targetRevision: "3.*.*"
     helm:
       releaseName: kyverno
       valuesObject:
@@ -76,9 +76,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kallepan/homelab-manifests.git
-    targetRevision: main
-    path: applications/kyverno/charts/kyverno-policies
+    chart: kyverno-policies
+    repoURL: https://kyverno.github.io/kyverno/
+    targetRevision: "3.*.*"
     helm:
       releaseName: kyverno-policies
       valuesObject:

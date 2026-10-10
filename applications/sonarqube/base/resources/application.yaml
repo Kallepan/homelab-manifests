@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kallepan/homelab-manifests.git
-    targetRevision: main
-    path: applications/sonarqube/charts/sonarqube
+    chart: sonarqube
+    repoURL: https://SonarSource.github.io/helm-chart-sonarqube
+    targetRevision: "2026.5.1001"
     helm:
       releaseName: sonarqube
       valuesObject:
