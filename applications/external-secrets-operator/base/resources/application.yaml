@@ -10,9 +10,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kallepan/homelab-manifests.git
-    targetRevision: main
-    path: applications/external-secrets-operator/charts/external-secrets
+    chart: external-secrets
+    repoURL: https://charts.external-secrets.io
+    targetRevision: "2.*"
     helm:
       valuesObject:
         installCRDs: true
