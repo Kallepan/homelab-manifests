@@ -5,6 +5,9 @@ resources:
   - ./resources/application-events.yaml
   - ./resources/application-workflows.yaml
   - ./resources/certificate.yaml
+  - ./resources/cluster.yaml
+  - ./resources/external-secret.yaml
   - ./resources/http-route.yaml
   - ./resources/namespace.yaml
   - ./resources/rbac.yaml
+  - ./resources/scheduled-backup.yaml

@@ -42,15 +42,15 @@ spec:
           persistence:
             archive: true
             postgresql:
-              host: psql.storage.home.arpa
+              host: argo-workflows-postgresql-rw.argo-workflows.svc.cluster.local
               port: 5432
               database: argo_workflows_db
               tableName: workflows
               userNameSecret:
-                name: argo-workflows-postgres-credentials
+                name: argo-workflows-postgresql-app
                 key: username
               passwordSecret:
-                name: argo-workflows-postgres-credentials
+                name: argo-workflows-postgresql-app
                 key: password
           workflowNamespaces:
             - workflows
