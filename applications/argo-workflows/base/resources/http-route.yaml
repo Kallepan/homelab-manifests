@@ -23,3 +23,4 @@ spec:
           kind: Service
           name: argo-workflows-server
           port: 2746
+          weight: 1
