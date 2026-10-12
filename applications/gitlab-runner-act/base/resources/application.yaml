@@ -1,0 +1,126 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gitlab-runner-act
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "3"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: gitlab-runner
+    repoURL: https://charts.gitlab.io
+    targetRevision: 0.*.*
+    helm:
+      releaseName: gitlab-runner-act
+      valuesObject:
+        concurrent: 3
+        extraEnv:
+          # Ensure CA certificate is used by the runner cache.
+          AWS_CA_BUNDLE: /home/gitlab-runner/.gitlab-runner/certs/ca.crt
+        service:
+          enabled: true
+        metrics:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+            labels:
+              release: kube-prometheus-stack
+        gitlabUrl: https://gitlab.svc.home.arpa
+        certsSecretName: homelab-ca
+        rbac:
+          create: true
+        runners:
+          jobNamespace: gitlab-runner-act
+          tags: act
+          runUntagged: false
+          cache:
+            secretName: gitlab-runner-act-s3-access
+          secret: gitlab-runner-act-token-secret
+          config: |-
+            [[runners]]
+              limit = 3
+              request_concurrency = 2
+              name = "kubernetes-act-runner"
+              environment = [
+                "SSL_CERT_FILE=/tmp/custom-ca-bundle.crt",
+                "GIT_SSL_CAINFO=/tmp/custom-ca-bundle.crt",
+                "CURL_CA_BUNDLE=/tmp/custom-ca-bundle.crt",
+                "REQUESTS_CA_BUNDLE=/tmp/custom-ca-bundle.crt",
+                "NODE_EXTRA_CA_CERTS=/tmp/custom-ca-bundle.crt",
+                "BUILDKIT_HOST=tcp://buildkitd.buildkitd.svc.cluster.local:1234",
+                "BUILDKIT_TLS_CACERT=/etc/buildkit/ca/ca.crt"
+              ]
+
+              pre_get_sources_script = """
+              echo "Assembling CA certificates into shared /tmp volume..."
+
+              mkdir -p /tmp
+
+              if [ -f /etc/ssl/certs/ca-certificates.crt ]; then
+                cp /etc/ssl/certs/ca-certificates.crt /tmp/custom-ca-bundle.crt
+              elif [ -f /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem ]; then
+                cp /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem /tmp/custom-ca-bundle.crt
+              else
+                touch /tmp/custom-ca-bundle.crt
+              fi
+
+              for cert in /usr/local/share/ca-certificates/*; do
+                if [ -f "$cert" ]; then
+                  echo "Appending $cert"
+                  echo "" >> /tmp/custom-ca-bundle.crt
+                  cat "$cert" >> /tmp/custom-ca-bundle.crt
+                fi
+              done
+
+              chmod 644 /tmp/custom-ca-bundle.crt
+              """
+
+              [runners.kubernetes]
+                privileged = true
+                image = "alpine:3.24.2"
+                allowed_pull_policies = ["always", "if-not-present"]
+                pull_policy = "if-not-present"
+
+                cpu_request = "500m"
+                cpu_limit = "2"
+                memory_request = "1Gi"
+                memory_limit = "4Gi"
+
+              [[runners.kubernetes.volumes.empty_dir]]
+                name = "shared-tmp"
+                mount_path = "/tmp"
+                medium = "Memory"
+
+              [[runners.kubernetes.volumes.secret]]
+                name = "homelab-ca"
+                mount_path = "/usr/local/share/ca-certificates"
+                read_only = true
+
+              [[runners.kubernetes.volumes.config_map]]
+                name = "buildkitd-ca-trust"
+                mount_path = "/etc/buildkit/ca"
+                read_only = true
+                [runners.kubernetes.volumes.config_map.items]
+                  "ca.crt" = "ca.crt"
+
+              [runners.cache]
+                Type = "s3"
+                Shared = true
+                Path = "runner"
+                [runners.cache.s3]
+                  ServerAddress = "s3.storage.home.arpa"
+                  BucketName = "gitlab-runner"
+                  BucketLocation = "eu-west-1"
+                  AuthenticationType = "access-key"
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: gitlab-runner-act
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true

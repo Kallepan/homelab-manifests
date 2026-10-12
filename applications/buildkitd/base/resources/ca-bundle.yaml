@@ -13,5 +13,9 @@ spec:
     configMap:
       key: ca.crt
     namespaceSelector:
-      matchLabels:
-        kubernetes.io/metadata.name: gitlab-runner
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            - gitlab-runner
+            - gitlab-runner-act
