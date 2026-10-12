@@ -6,7 +6,9 @@ metadata:
   namespace: argo-workflows
 spec:
   parentRefs:
-    - name: istio-gateway
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
       namespace: istio-system
       sectionName: https-argo-workflows
   hostnames:
@@ -17,5 +19,7 @@ spec:
             type: PathPrefix
             value: /
       backendRefs:
-        - name: argo-workflows-server
+        - group: ''
+          kind: Service
+          name: argo-workflows-server
           port: 2746
