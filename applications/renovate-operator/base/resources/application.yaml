@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: renovate-operator
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    chart: renovate-operator
+    repoURL: https://helm.mogenius.com/public
+    targetRevision: 6.*.*
+    helm:
+      releaseName: renovate-operator
+      valuesObject: {}
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: renovate-operator
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - ServerSideApply=true
