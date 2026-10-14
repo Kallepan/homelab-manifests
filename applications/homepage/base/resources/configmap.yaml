@@ -58,6 +58,10 @@ data:
           description: Internal tools for development and DevOps.
           href: https://it-tools.svc.home.arpa/
           icon: it-tools.png
+      - Renovate:
+          description: Automated dependency update operator and UI.
+          href: https://renovate.svc.home.arpa/
+          icon: renovate.png
     - Observability:
       - Monitoring:
           description: Monitoring instance.
