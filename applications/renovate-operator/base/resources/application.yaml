@@ -15,7 +15,8 @@ spec:
     targetRevision: 6.*.*
     helm:
       releaseName: renovate-operator
-      valuesObject: {}
+      valuesObject:
+        fullnameOverride: renovate-operator
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: renovate-operator

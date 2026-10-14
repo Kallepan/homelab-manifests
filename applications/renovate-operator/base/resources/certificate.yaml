@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: renovate-tls
+  namespace: istio-system
+spec:
+  secretName: renovate-tls
+  issuerRef:
+    name: cluster-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - renovate.svc.home.arpa
