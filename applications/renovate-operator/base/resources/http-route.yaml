@@ -1,0 +1,26 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httproute-renovate-operator
+  namespace: renovate-operator
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: istio-gateway
+      namespace: istio-system
+      sectionName: https-renovate
+  hostnames:
+    - renovate.svc.home.arpa
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - group: ''
+          kind: Service
+          name: renovate-operator
+          namespace: renovate-operator
+          port: 8081
+          weight: 1
