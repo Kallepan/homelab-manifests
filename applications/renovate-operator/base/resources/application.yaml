@@ -17,6 +17,19 @@ spec:
       releaseName: renovate-operator
       valuesObject:
         fullnameOverride: renovate-operator
+        auth:
+          oidc:
+            enabled: true
+            issuerUrl: https://sso.svc.home.arpa/realms/homelab
+            clientId: renovate
+            existingSecret: renovate-credentials
+            secretKey: client-secret
+            redirectUrl: https://renovate.svc.home.arpa/auth/callback
+            additionalScopes:
+              - groups
+            caCert:
+              existingSecret: homelab-ca
+              key: homelab-ca.crt
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: renovate-operator
