@@ -28,7 +28,7 @@ data:
         {
           description: 'Update devbox.json without updating lockfile',
           matchManagers: ['devbox'],
-          "managerFilePatterns": ['/(^|/)devbox\\.json$/'],
+          matchFileNames: ['devbox.json', '**/devbox.json'],
           lockFileMaintenance: {
             enabled: false,
           },
