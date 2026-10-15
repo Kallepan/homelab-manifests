@@ -12,9 +12,9 @@ spec:
   secretRef: renovate-github-credentials
   access:
     adminGroups:
-      - renovate-admin
+      - renovate-admins
     readerGroups:
-      - renovate-reader
+      - renovate-readers
   provider:
     name: github
   discoveryFilters:

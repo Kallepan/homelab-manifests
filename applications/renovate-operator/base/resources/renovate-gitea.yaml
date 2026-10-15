@@ -12,9 +12,9 @@ spec:
   secretRef: renovate-gitea-credentials
   access:
     adminGroups:
-      - renovate-admin
+      - renovate-admins
     readerGroups:
-      - renovate-reader
+      - renovate-readers
   provider:
     name: gitea
     endpoint: https://git.infra.home.arpa/api/v1

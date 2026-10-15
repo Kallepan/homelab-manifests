@@ -12,9 +12,9 @@ spec:
   secretRef: renovate-gitlab-credentials
   access:
     adminGroups:
-      - renovate-admin
+      - renovate-admins
     readerGroups:
-      - renovate-reader
+      - renovate-readers
   provider:
     name: gitlab
     endpoint: https://gitlab.svc.home.arpa/api/v4
