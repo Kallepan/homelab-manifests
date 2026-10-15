@@ -7,9 +7,14 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   schedule: "0 2 * * *"
-  image: ghcr.io/renovatebot/renovate:44.161.1
-  parallelism: 1
+  image: ghcr.io/renovatebot/renovate:latest
+  parallelism: 3
   secretRef: renovate-gitea-credentials
+  access:
+    adminGroups:
+      - renovate-admin
+    readerGroups:
+      - renovate-reader
   provider:
     name: gitea
     endpoint: https://git.infra.home.arpa/api/v1

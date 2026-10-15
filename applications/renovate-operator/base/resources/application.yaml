@@ -30,6 +30,12 @@ spec:
             caCert:
               existingSecret: homelab-ca
               key: homelab-ca.crt
+        authorization:
+          defaults:
+            adminGroups:
+              - renovate-admin
+            readerGroups:
+              - renovate-reader
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: renovate-operator
