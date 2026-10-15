@@ -27,6 +27,7 @@ spec:
             redirectUrl: https://renovate.svc.home.arpa/auth/callback
             additionalScopes:
               - groups
+            fetchUserInfoGroups: true
             caCert:
               existingSecret: homelab-ca
               key: homelab-ca.crt
