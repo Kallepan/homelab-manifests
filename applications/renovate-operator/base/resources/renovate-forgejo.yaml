@@ -36,10 +36,6 @@ spec:
         secretKeyRef:
           name: renovate-forgejo-credentials
           key: GITHUB_COM_TOKEN
-    - name: RENOVATE_LOG_LEVEL
-      value: debug
-    - name: LOG_LEVEL
-      value: debug
     - name: NODE_EXTRA_CA_CERTS
       value: /etc/ssl/certs/homelab-ca.crt
     - name: GIT_CONFIG_COUNT
