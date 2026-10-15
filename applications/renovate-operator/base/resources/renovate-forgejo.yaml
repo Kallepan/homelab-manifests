@@ -31,6 +31,11 @@ spec:
       subPath: homelab-ca.crt
       readOnly: true
   extraEnv:
+    - name: GITHUB_COM_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: renovate-forgejo-credentials
+          key: GITHUB_COM_TOKEN
     - name: RENOVATE_LOG_LEVEL
       value: debug
     - name: LOG_LEVEL
