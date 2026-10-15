@@ -1,0 +1,14 @@
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: renovate-github
+  namespace: renovate-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  schedule: "0 2 * * *"
+  image: ghcr.io/renovatebot/renovate:44.161.1
+  parallelism: 1
+  secretRef: renovate-github-credentials
+  provider:
+    name: github
