@@ -7,6 +7,6 @@ resources:
   - ./resources/external-secret.yaml
   - ./resources/http-route.yaml
   - ./resources/namespace.yaml
-  - ./resources/renovate-gitea.yaml
+  - ./resources/renovate-forgejo.yaml
   - ./resources/renovate-github.yaml
   - ./resources/renovate-gitlab.yaml

@@ -1,7 +1,7 @@
 apiVersion: renovate-operator.mogenius.com/v1alpha1
 kind: RenovateJob
 metadata:
-  name: renovate-gitea
+  name: renovate-forgejo
   namespace: renovate-operator
   annotations:
     argocd.argoproj.io/sync-wave: "2"
@@ -9,14 +9,14 @@ spec:
   schedule: "0 2 * * *"
   image: ghcr.io/renovatebot/renovate:latest
   parallelism: 3
-  secretRef: renovate-gitea-credentials
+  secretRef: renovate-forgejo-credentials
   access:
     adminGroups:
       - renovate-admins
     readerGroups:
       - renovate-readers
   provider:
-    name: gitea
+    name: forgejo
     endpoint: https://git.infra.home.arpa/api/v1
   extraVolumes:
     - name: homelab-ca
