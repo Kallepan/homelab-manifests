@@ -1,0 +1,134 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-gitlab-config
+  namespace: renovate-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  config.js: |
+    module.exports = {
+      gitAuthor: 'Renovate Bot <bot@example.com>',
+
+      repositoryCache: 'enabled',
+      optimizeForDisabled: true,
+
+      prConcurrentLimit: 10,
+      prHourlyLimit: 5,
+
+      onboardingConfig: {
+        $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+        extends: ['config:recommended'],
+        assignees: ['@kajkandeepan'],
+        labels: ['renovate', 'dependencies'],
+        rebaseWhen: 'behind-base-branch',
+      },
+
+      packageRules: [
+        {
+          description: 'Update devbox.json without updating lockfile',
+          matchManagers: ['devbox'],
+          fileMatch: ['(^|/)devbox\\.json$'],
+          lockFileMaintenance: {
+            enabled: false,
+          },
+          postUpdateOptions: [],
+        },
+        {
+          description: 'Group all non-major dependencies',
+          matchUpdateTypes: ['minor', 'patch', 'digest'],
+          groupName: 'non-major dependencies',
+          groupSlug: 'all-non-major',
+        },
+        {
+          description: 'Weekly lock file maintenance',
+          matchUpdateTypes: ['lockFileMaintenance'],
+          schedule: ['before 6:00am on monday'],
+        },
+      ],
+
+      hostRules: [
+        ...(process.env.DOCKER_USERNAME && process.env.DOCKER_PASSWORD
+          ? [
+              {
+                matchHost: 'docker.io',
+                hostType: 'docker',
+                username: process.env.DOCKER_USERNAME,
+                password: process.env.DOCKER_PASSWORD,
+              },
+            ]
+          : []),
+        ...(process.env.GITHUB_COM_TOKEN
+          ? [
+              {
+                matchHost: 'github.com',
+                token: process.env.GITHUB_COM_TOKEN,
+              },
+            ]
+          : []),
+      ],
+    };
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-github-config
+  namespace: renovate-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  config.js: |
+    module.exports = {
+      hostRules: [
+        ...(process.env.DOCKER_USERNAME && process.env.DOCKER_PASSWORD
+          ? [
+              {
+                matchHost: 'docker.io',
+                hostType: 'docker',
+                username: process.env.DOCKER_USERNAME,
+                password: process.env.DOCKER_PASSWORD,
+              },
+            ]
+          : []),
+        ...(process.env.GITHUB_COM_TOKEN
+          ? [
+              {
+                matchHost: 'github.com',
+                token: process.env.GITHUB_COM_TOKEN,
+              },
+            ]
+          : []),
+      ],
+    };
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-forgejo-config
+  namespace: renovate-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  config.js: |
+    module.exports = {
+      hostRules: [
+        ...(process.env.DOCKER_USERNAME && process.env.DOCKER_PASSWORD
+          ? [
+              {
+                matchHost: 'docker.io',
+                hostType: 'docker',
+                username: process.env.DOCKER_USERNAME,
+                password: process.env.DOCKER_PASSWORD,
+              },
+            ]
+          : []),
+        ...(process.env.GITHUB_COM_TOKEN
+          ? [
+              {
+                matchHost: 'github.com',
+                token: process.env.GITHUB_COM_TOKEN,
+              },
+            ]
+          : []),
+      ],
+    };

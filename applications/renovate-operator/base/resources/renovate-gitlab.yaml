@@ -18,6 +18,15 @@ spec:
   provider:
     name: gitlab
     endpoint: https://gitlab.svc.home.arpa/api/v4
+  discoveryFilters:
+    - "catalog/**"
+    - "infrastructure/**"
+    - "homelab/**"
+    - "!administration/**"
+  renovateConfig:
+    configMapRef:
+      name: renovate-gitlab-config
+      key: config.js
   extraVolumes:
     - name: homelab-ca
       secret:
@@ -36,6 +45,16 @@ spec:
         secretKeyRef:
           name: renovate-gitlab-credentials
           key: GITHUB_COM_TOKEN
+    - name: DOCKER_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: renovate-gitlab-credentials
+          key: DOCKER_USERNAME
+    - name: DOCKER_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: renovate-gitlab-credentials
+          key: DOCKER_PASSWORD
     - name: RENOVATE_LOG_LEVEL
       value: debug
     - name: LOG_LEVEL

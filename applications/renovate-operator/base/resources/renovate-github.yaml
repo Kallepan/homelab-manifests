@@ -19,9 +19,23 @@ spec:
     name: github
   discoveryFilters:
     - "Kallepan/homelab-manifests"
+  renovateConfig:
+    configMapRef:
+      name: renovate-github-config
+      key: config.js
   extraEnv:
     - name: GITHUB_COM_TOKEN
       valueFrom:
         secretKeyRef:
           name: renovate-github-credentials
           key: GITHUB_COM_TOKEN
+    - name: DOCKER_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: renovate-github-credentials
+          key: DOCKER_USERNAME
+    - name: DOCKER_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: renovate-github-credentials
+          key: DOCKER_PASSWORD
