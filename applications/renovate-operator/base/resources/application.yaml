@@ -33,9 +33,9 @@ spec:
         authorization:
           defaults:
             adminGroups:
-              - renovate-admin
+              - renovate-admins
             readerGroups:
-              - renovate-reader
+              - renovate-readers
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: renovate-operator
