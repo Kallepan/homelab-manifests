@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: kafka-external-tls
+  namespace: kafka
+spec:
+  secretName: kafka-external-tls
+  privateKey:
+    encoding: PKCS8
+  issuerRef:
+    name: cluster-issuer
+    kind: ClusterIssuer
+  dnsNames:
+    - kafka.svc.home.arpa
+    - kafka-broker-0.svc.home.arpa
