@@ -148,6 +148,21 @@ spec:
           selector:
             matchLabels:
               kubernetes.io/metadata.name: gitlab
+    - name: kafka
+      protocol: TLS
+      port: 9094
+      hostname: "*.svc.home.arpa"
+      tls:
+        mode: Passthrough
+      allowedRoutes:
+        kinds:
+          - group: gateway.networking.k8s.io
+            kind: TLSRoute
+        namespaces:
+          from: Selector
+          selector:
+            matchLabels:
+              kubernetes.io/metadata.name: kafka
     - name: https-grafana
       protocol: HTTPS
       port: 443
