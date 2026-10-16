@@ -7,7 +7,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "2"
 spec:
   schedule: "0 2 * * *"
-  image: ghcr.io/renovatebot/renovate:latest
+  image: ghcr.io/renovatebot/renovate:44.164.7
   parallelism: 3
   secretRef: renovate-gitlab-credentials
   access:
@@ -56,9 +56,7 @@ spec:
           name: renovate-gitlab-credentials
           key: DOCKER_PASSWORD
     - name: RENOVATE_LOG_LEVEL
-      value: debug
-    - name: LOG_LEVEL
-      value: debug
+      value: info
     - name: NODE_EXTRA_CA_CERTS
       value: /etc/ssl/certs/homelab-ca.crt
     - name: GIT_CONFIG_COUNT

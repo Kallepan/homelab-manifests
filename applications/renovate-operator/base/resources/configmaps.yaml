@@ -8,13 +8,18 @@ metadata:
 data:
   config.js: |
     module.exports = {
-      gitAuthor: 'Renovate Bot <bot@example.com>',
+      gitAuthor: 'Renovate Bot <bot@home.arpa>',
 
       repositoryCache: 'enabled',
       optimizeForDisabled: true,
 
       prConcurrentLimit: 10,
       prHourlyLimit: 5,
+      minimumReleaseAge: '3 days',
+      semanticCommits: 'enabled',
+      commitMessagePrefix: 'chore(deps):',
+      prCreation: 'immediate',
+      rebaseWhen: 'behind-base-branch',
 
       onboardingConfig: {
         $schema: 'https://docs.renovatebot.com/renovate-schema.json',
@@ -79,6 +84,50 @@ metadata:
 data:
   config.js: |
     module.exports = {
+      gitAuthor: 'Renovate Bot <bot@kallelab.org>',
+
+      repositoryCache: 'enabled',
+      optimizeForDisabled: true,
+
+      prConcurrentLimit: 10,
+      prHourlyLimit: 5,
+      minimumReleaseAge: '3 days',
+      semanticCommits: 'enabled',
+      commitMessagePrefix: 'chore(deps):',
+      prCreation: 'immediate',
+      rebaseWhen: 'behind-base-branch',
+
+      onboardingConfig: {
+        $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+        extends: ['config:recommended'],
+        assignees: ['Kallepan'],
+        labels: ['renovate', 'dependencies'],
+        rebaseWhen: 'behind-base-branch',
+      },
+
+      packageRules: [
+        {
+          description: 'Update devbox.json without updating lockfile',
+          matchManagers: ['devbox'],
+          matchFileNames: ['devbox.json', '**/devbox.json'],
+          lockFileMaintenance: {
+            enabled: false,
+          },
+          postUpdateOptions: [],
+        },
+        {
+          description: 'Group all non-major dependencies',
+          matchUpdateTypes: ['minor', 'patch', 'digest'],
+          groupName: 'non-major dependencies',
+          groupSlug: 'all-non-major',
+        },
+        {
+          description: 'Weekly lock file maintenance',
+          matchUpdateTypes: ['lockFileMaintenance'],
+          schedule: ['before 6:00am on monday'],
+        },
+      ],
+
       hostRules: [
         ...(process.env.DOCKER_USERNAME && process.env.DOCKER_PASSWORD
           ? [
@@ -111,6 +160,49 @@ metadata:
 data:
   config.js: |
     module.exports = {
+      gitAuthor: 'Renovate Bot <bot@home.arpa>',
+
+      repositoryCache: 'enabled',
+      optimizeForDisabled: true,
+
+      prConcurrentLimit: 10,
+      prHourlyLimit: 5,
+      minimumReleaseAge: '3 days',
+      semanticCommits: 'enabled',
+      commitMessagePrefix: 'chore(deps):',
+      prCreation: 'immediate',
+      rebaseWhen: 'behind-base-branch',
+
+      onboardingConfig: {
+        $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+        extends: ['config:recommended'],
+        labels: ['renovate', 'dependencies'],
+        rebaseWhen: 'behind-base-branch',
+      },
+
+      packageRules: [
+        {
+          description: 'Update devbox.json without updating lockfile',
+          matchManagers: ['devbox'],
+          matchFileNames: ['devbox.json', '**/devbox.json'],
+          lockFileMaintenance: {
+            enabled: false,
+          },
+          postUpdateOptions: [],
+        },
+        {
+          description: 'Group all non-major dependencies',
+          matchUpdateTypes: ['minor', 'patch', 'digest'],
+          groupName: 'non-major dependencies',
+          groupSlug: 'all-non-major',
+        },
+        {
+          description: 'Weekly lock file maintenance',
+          matchUpdateTypes: ['lockFileMaintenance'],
+          schedule: ['before 6:00am on monday'],
+        },
+      ],
+
       hostRules: [
         ...(process.env.DOCKER_USERNAME && process.env.DOCKER_PASSWORD
           ? [
