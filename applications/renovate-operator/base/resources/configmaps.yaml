@@ -17,7 +17,6 @@ data:
       prHourlyLimit: 5,
       minimumReleaseAge: '3 days',
       semanticCommits: 'enabled',
-      commitMessagePrefix: 'chore(deps):',
       prCreation: 'immediate',
       rebaseWhen: 'behind-base-branch',
 
@@ -25,25 +24,20 @@ data:
       automergeStrategy: 'auto',
       platformAutomerge: true,
       gitLabIgnoreApprovals: true,
-      internalChecksAsSuccess: true,
 
       onboardingConfig: {
         $schema: 'https://docs.renovatebot.com/renovate-schema.json',
         extends: ['config:recommended'],
-        assignees: ['@kajkandeepan'],
+        assignees: ['kajkandeepan'],
         labels: ['renovate', 'dependencies'],
         rebaseWhen: 'behind-base-branch',
       },
 
       packageRules: [
         {
-          description: 'Update devbox.json without updating lockfile',
+          description: 'Update devbox.json',
           matchManagers: ['devbox'],
           matchFileNames: ['devbox.json', '**/devbox.json'],
-          lockFileMaintenance: {
-            enabled: false,
-          },
-          postUpdateOptions: [],
         },
         {
           description: 'Group all non-major dependencies',
@@ -101,14 +95,12 @@ data:
       prHourlyLimit: 5,
       minimumReleaseAge: '3 days',
       semanticCommits: 'enabled',
-      commitMessagePrefix: 'chore(deps):',
       prCreation: 'immediate',
       rebaseWhen: 'behind-base-branch',
 
       automergeType: 'pr',
       automergeStrategy: 'auto',
       platformAutomerge: true,
-      internalChecksAsSuccess: true,
 
       onboardingConfig: {
         $schema: 'https://docs.renovatebot.com/renovate-schema.json',
@@ -120,13 +112,9 @@ data:
 
       packageRules: [
         {
-          description: 'Update devbox.json without updating lockfile',
+          description: 'Update devbox.json',
           matchManagers: ['devbox'],
           matchFileNames: ['devbox.json', '**/devbox.json'],
-          lockFileMaintenance: {
-            enabled: false,
-          },
-          postUpdateOptions: [],
         },
         {
           description: 'Group all non-major dependencies',
@@ -184,14 +172,12 @@ data:
       prHourlyLimit: 5,
       minimumReleaseAge: '3 days',
       semanticCommits: 'enabled',
-      commitMessagePrefix: 'chore(deps):',
       prCreation: 'immediate',
       rebaseWhen: 'behind-base-branch',
 
       automergeType: 'pr',
       automergeStrategy: 'auto',
       platformAutomerge: true,
-      internalChecksAsSuccess: true,
 
       onboardingConfig: {
         $schema: 'https://docs.renovatebot.com/renovate-schema.json',
@@ -202,13 +188,9 @@ data:
 
       packageRules: [
         {
-          description: 'Update devbox.json without updating lockfile',
+          description: 'Update devbox.json',
           matchManagers: ['devbox'],
           matchFileNames: ['devbox.json', '**/devbox.json'],
-          lockFileMaintenance: {
-            enabled: false,
-          },
-          postUpdateOptions: [],
         },
         {
           description: 'Group all non-major dependencies',
