@@ -21,6 +21,12 @@ data:
       prCreation: 'immediate',
       rebaseWhen: 'behind-base-branch',
 
+      automergeType: 'pr',
+      automergeStrategy: 'auto',
+      platformAutomerge: true,
+      gitLabIgnoreApprovals: true,
+      internalChecksAsSuccess: true,
+
       onboardingConfig: {
         $schema: 'https://docs.renovatebot.com/renovate-schema.json',
         extends: ['config:recommended'],
@@ -44,11 +50,13 @@ data:
           matchUpdateTypes: ['minor', 'patch', 'digest'],
           groupName: 'non-major dependencies',
           groupSlug: 'all-non-major',
+          automerge: true,
         },
         {
           description: 'Weekly lock file maintenance',
           matchUpdateTypes: ['lockFileMaintenance'],
           schedule: ['before 6:00am on monday'],
+          automerge: true,
         },
       ],
 
@@ -97,6 +105,11 @@ data:
       prCreation: 'immediate',
       rebaseWhen: 'behind-base-branch',
 
+      automergeType: 'pr',
+      automergeStrategy: 'auto',
+      platformAutomerge: true,
+      internalChecksAsSuccess: true,
+
       onboardingConfig: {
         $schema: 'https://docs.renovatebot.com/renovate-schema.json',
         extends: ['config:recommended'],
@@ -120,11 +133,13 @@ data:
           matchUpdateTypes: ['minor', 'patch', 'digest'],
           groupName: 'non-major dependencies',
           groupSlug: 'all-non-major',
+          automerge: true,
         },
         {
           description: 'Weekly lock file maintenance',
           matchUpdateTypes: ['lockFileMaintenance'],
           schedule: ['before 6:00am on monday'],
+          automerge: true,
         },
       ],
 
@@ -173,6 +188,11 @@ data:
       prCreation: 'immediate',
       rebaseWhen: 'behind-base-branch',
 
+      automergeType: 'pr',
+      automergeStrategy: 'auto',
+      platformAutomerge: true,
+      internalChecksAsSuccess: true,
+
       onboardingConfig: {
         $schema: 'https://docs.renovatebot.com/renovate-schema.json',
         extends: ['config:recommended'],
@@ -195,11 +215,13 @@ data:
           matchUpdateTypes: ['minor', 'patch', 'digest'],
           groupName: 'non-major dependencies',
           groupSlug: 'all-non-major',
+          automerge: true,
         },
         {
           description: 'Weekly lock file maintenance',
           matchUpdateTypes: ['lockFileMaintenance'],
           schedule: ['before 6:00am on monday'],
+          automerge: true,
         },
       ],
 
