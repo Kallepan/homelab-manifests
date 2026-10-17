@@ -28,6 +28,9 @@ spec:
       name: renovate-gitlab-config
       key: config.js
   extraVolumes:
+    - name: base-config
+      configMap:
+        name: renovate-base-config
     - name: homelab-ca
       secret:
         secretName: homelab-ca
@@ -35,6 +38,9 @@ spec:
           - key: homelab-ca.crt
             path: homelab-ca.crt
   extraVolumeMounts:
+    - name: base-config
+      mountPath: /opt/renovate/base.js
+      subPath: base.js
     - name: homelab-ca
       mountPath: /etc/ssl/certs/homelab-ca.crt
       subPath: homelab-ca.crt

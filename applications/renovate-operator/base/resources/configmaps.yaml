@@ -1,15 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: renovate-gitlab-config
+  name: renovate-base-config
   namespace: renovate-operator
   annotations:
     argocd.argoproj.io/sync-wave: "1"
 data:
-  config.js: |
+  base.js: |
     module.exports = {
-      gitAuthor: 'Renovate Bot <bot@home.arpa>',
-
       repositoryCache: 'enabled',
       optimizeForDisabled: true,
 
@@ -17,38 +15,38 @@ data:
       prHourlyLimit: 5,
       minimumReleaseAge: '3 days',
       semanticCommits: 'enabled',
-      commitMessagePrefix: 'chore(deps):',
       prCreation: 'immediate',
       rebaseWhen: 'behind-base-branch',
+
+      automergeType: 'pr',
+      automergeStrategy: 'auto',
+      platformAutomerge: true,
 
       onboardingConfig: {
         $schema: 'https://docs.renovatebot.com/renovate-schema.json',
         extends: ['config:recommended'],
-        assignees: ['@kajkandeepan'],
         labels: ['renovate', 'dependencies'],
         rebaseWhen: 'behind-base-branch',
       },
 
       packageRules: [
         {
-          description: 'Update devbox.json without updating lockfile',
+          description: 'Update devbox.json',
           matchManagers: ['devbox'],
           matchFileNames: ['devbox.json', '**/devbox.json'],
-          lockFileMaintenance: {
-            enabled: false,
-          },
-          postUpdateOptions: [],
         },
         {
           description: 'Group all non-major dependencies',
           matchUpdateTypes: ['minor', 'patch', 'digest'],
           groupName: 'non-major dependencies',
           groupSlug: 'all-non-major',
+          automerge: true,
         },
         {
           description: 'Weekly lock file maintenance',
           matchUpdateTypes: ['lockFileMaintenance'],
           schedule: ['before 6:00am on monday'],
+          automerge: true,
         },
       ],
 
@@ -72,6 +70,27 @@ data:
             ]
           : []),
       ],
+    };
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: renovate-gitlab-config
+  namespace: renovate-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
+data:
+  config.js: |
+    const base = require('/opt/renovate/base.js');
+
+    module.exports = {
+      ...base,
+      gitAuthor: 'Renovate Bot <bot@home.arpa>',
+      gitLabIgnoreApprovals: true,
+      onboardingConfig: {
+        ...base.onboardingConfig,
+        assignees: ['kajkandeepan'],
+      },
     };
 ---
 apiVersion: v1
@@ -83,71 +102,15 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 data:
   config.js: |
+    const base = require('/opt/renovate/base.js');
+
     module.exports = {
+      ...base,
       gitAuthor: 'Renovate Bot <bot@kallelab.org>',
-
-      repositoryCache: 'enabled',
-      optimizeForDisabled: true,
-
-      prConcurrentLimit: 10,
-      prHourlyLimit: 5,
-      minimumReleaseAge: '3 days',
-      semanticCommits: 'enabled',
-      commitMessagePrefix: 'chore(deps):',
-      prCreation: 'immediate',
-      rebaseWhen: 'behind-base-branch',
-
       onboardingConfig: {
-        $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-        extends: ['config:recommended'],
+        ...base.onboardingConfig,
         assignees: ['Kallepan'],
-        labels: ['renovate', 'dependencies'],
-        rebaseWhen: 'behind-base-branch',
       },
-
-      packageRules: [
-        {
-          description: 'Update devbox.json without updating lockfile',
-          matchManagers: ['devbox'],
-          matchFileNames: ['devbox.json', '**/devbox.json'],
-          lockFileMaintenance: {
-            enabled: false,
-          },
-          postUpdateOptions: [],
-        },
-        {
-          description: 'Group all non-major dependencies',
-          matchUpdateTypes: ['minor', 'patch', 'digest'],
-          groupName: 'non-major dependencies',
-          groupSlug: 'all-non-major',
-        },
-        {
-          description: 'Weekly lock file maintenance',
-          matchUpdateTypes: ['lockFileMaintenance'],
-          schedule: ['before 6:00am on monday'],
-        },
-      ],
-
-      hostRules: [
-        ...(process.env.DOCKER_USERNAME && process.env.DOCKER_PASSWORD
-          ? [
-              {
-                matchHost: 'docker.io',
-                hostType: 'docker',
-                username: process.env.DOCKER_USERNAME,
-                password: process.env.DOCKER_PASSWORD,
-              },
-            ]
-          : []),
-        ...(process.env.GITHUB_COM_TOKEN
-          ? [
-              {
-                matchHost: 'github.com',
-                token: process.env.GITHUB_COM_TOKEN,
-              },
-            ]
-          : []),
-      ],
     };
 ---
 apiVersion: v1
@@ -159,68 +122,9 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
 data:
   config.js: |
+    const base = require('/opt/renovate/base.js');
+
     module.exports = {
+      ...base,
       gitAuthor: 'Renovate Bot <bot@home.arpa>',
-
-      repositoryCache: 'enabled',
-      optimizeForDisabled: true,
-
-      prConcurrentLimit: 10,
-      prHourlyLimit: 5,
-      minimumReleaseAge: '3 days',
-      semanticCommits: 'enabled',
-      commitMessagePrefix: 'chore(deps):',
-      prCreation: 'immediate',
-      rebaseWhen: 'behind-base-branch',
-
-      onboardingConfig: {
-        $schema: 'https://docs.renovatebot.com/renovate-schema.json',
-        extends: ['config:recommended'],
-        labels: ['renovate', 'dependencies'],
-        rebaseWhen: 'behind-base-branch',
-      },
-
-      packageRules: [
-        {
-          description: 'Update devbox.json without updating lockfile',
-          matchManagers: ['devbox'],
-          matchFileNames: ['devbox.json', '**/devbox.json'],
-          lockFileMaintenance: {
-            enabled: false,
-          },
-          postUpdateOptions: [],
-        },
-        {
-          description: 'Group all non-major dependencies',
-          matchUpdateTypes: ['minor', 'patch', 'digest'],
-          groupName: 'non-major dependencies',
-          groupSlug: 'all-non-major',
-        },
-        {
-          description: 'Weekly lock file maintenance',
-          matchUpdateTypes: ['lockFileMaintenance'],
-          schedule: ['before 6:00am on monday'],
-        },
-      ],
-
-      hostRules: [
-        ...(process.env.DOCKER_USERNAME && process.env.DOCKER_PASSWORD
-          ? [
-              {
-                matchHost: 'docker.io',
-                hostType: 'docker',
-                username: process.env.DOCKER_USERNAME,
-                password: process.env.DOCKER_PASSWORD,
-              },
-            ]
-          : []),
-        ...(process.env.GITHUB_COM_TOKEN
-          ? [
-              {
-                matchHost: 'github.com',
-                token: process.env.GITHUB_COM_TOKEN,
-              },
-            ]
-          : []),
-      ],
     };
