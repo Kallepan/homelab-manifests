@@ -23,6 +23,14 @@ spec:
     configMapRef:
       name: renovate-github-config
       key: config.js
+  extraVolumes:
+    - name: base-config
+      configMap:
+        name: renovate-base-config
+  extraVolumeMounts:
+    - name: base-config
+      mountPath: /opt/renovate/base.js
+      subPath: base.js
   extraEnv:
     - name: GITHUB_COM_TOKEN
       valueFrom:
