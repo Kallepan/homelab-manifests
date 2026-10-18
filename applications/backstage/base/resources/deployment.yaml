@@ -55,6 +55,10 @@ spec:
               mountPath: /app/config/app-config-production.yaml
               subPath: app-config-production.yaml
               readOnly: true
+            - name: homelab-ca
+              mountPath: /usr/local/share/ca-certificates/self-signed-ca.crt
+              subPath: self-signed-ca.crt
+              readOnly: true
           ports:
             - name: http
               containerPort: 7007
@@ -88,3 +92,6 @@ spec:
         - name: backstage-config
           configMap:
             name: backstage-config
+        - name: homelab-ca
+          secret:
+            secretName: homelab-ca
