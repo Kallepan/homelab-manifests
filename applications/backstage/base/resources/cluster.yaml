@@ -44,6 +44,8 @@ spec:
     roles:
       - name: backstage
         ensure: present
+        connectionLimit: -1
         login: true
         superuser: true
         createdb: true
+        inherit: true
