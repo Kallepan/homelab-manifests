@@ -12,8 +12,12 @@ spec:
   ingress:
     - from:
         - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: gitlab-runner
+            matchExpressions:
+              - key: kubernetes.io/metadata.name
+                operator: In
+                values:
+                  - gitlab-runner
+                  - gitlab-runner-act
       ports:
         - protocol: TCP
           port: 1234

@@ -42,6 +42,8 @@ devbox run -- kustomize build applications/<app>/overlays/service
 
 ## Adding an application
 
+Generate a scaffold with `just template <app-name> <cluster-name> [external-secret] [postgres]` (the cluster defaults to `service`, and both optional features default to `false`). For example, `just template my-app service true true` creates an application, its `service` overlay, an application ExternalSecret, and a CNPG cluster with a scheduled backup. The generated Helm chart source is a placeholder; update it before deployment.
+
 1. Add the app's shared resources beneath `applications/<app>/base/resources/` and list them in `base/kustomization.yaml`.
 2. If Argo CD should manage a Helm release, add an `argoproj.io/v1alpha1` `Application` resource using the conventions of nearby apps. For plain Kubernetes resources, include them directly.
 3. Add an overlay for each target cluster, starting with a reference to `../../base`; put cluster-specific patches in that overlay.

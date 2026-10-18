@@ -4,7 +4,7 @@ metadata:
   name: jaeger
   namespace: observability
 spec:
-  image: jaegertracing/jaeger:2.21.0
+  image: jaegertracing/jaeger:2.22.0
   ports:
     - name: jaeger-query
       port: 16686

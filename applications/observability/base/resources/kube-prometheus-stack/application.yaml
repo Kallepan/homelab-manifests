@@ -201,6 +201,20 @@ spec:
                       ]
                     action: keep
                     regex: istiod;http-monitoring
+              - job_name: rook-ceph-mgr
+                kubernetes_sd_configs:
+                  - role: endpoints
+                    namespaces:
+                      names:
+                        - rook-ceph
+                relabel_configs:
+                  - source_labels:
+                      [
+                        __meta_kubernetes_service_name,
+                        __meta_kubernetes_endpoint_port_name,
+                      ]
+                    action: keep
+                    regex: rook-ceph-mgr;http-metrics
               - job_name: "envoy-stats"
                 metrics_path: /stats/prometheus
                 kubernetes_sd_configs:

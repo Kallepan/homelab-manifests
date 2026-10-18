@@ -1,0 +1,73 @@
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: renovate-gitlab
+  namespace: renovate-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  schedule: "0 2 * * *"
+  image: ghcr.io/renovatebot/renovate:44.164.7
+  parallelism: 3
+  secretRef: renovate-gitlab-credentials
+  access:
+    adminGroups:
+      - renovate-admins
+    readerGroups:
+      - renovate-readers
+  provider:
+    name: gitlab
+    endpoint: https://gitlab.svc.home.arpa/api/v4
+  discoveryFilters:
+    - "catalog/**"
+    - "infrastructure/**"
+    - "homelab/**"
+    - "!administration/**"
+  renovateConfig:
+    configMapRef:
+      name: renovate-gitlab-config
+      key: config.js
+  extraVolumes:
+    - name: base-config
+      configMap:
+        name: renovate-base-config
+    - name: homelab-ca
+      secret:
+        secretName: homelab-ca
+        items:
+          - key: homelab-ca.crt
+            path: homelab-ca.crt
+  extraVolumeMounts:
+    - name: base-config
+      mountPath: /opt/renovate/base.js
+      subPath: base.js
+    - name: homelab-ca
+      mountPath: /etc/ssl/certs/homelab-ca.crt
+      subPath: homelab-ca.crt
+      readOnly: true
+  extraEnv:
+    - name: GITHUB_COM_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: renovate-gitlab-credentials
+          key: GITHUB_COM_TOKEN
+    - name: DOCKER_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: renovate-gitlab-credentials
+          key: DOCKER_USERNAME
+    - name: DOCKER_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: renovate-gitlab-credentials
+          key: DOCKER_PASSWORD
+    - name: RENOVATE_LOG_LEVEL
+      value: info
+    - name: NODE_EXTRA_CA_CERTS
+      value: /etc/ssl/certs/homelab-ca.crt
+    - name: GIT_CONFIG_COUNT
+      value: "1"
+    - name: GIT_CONFIG_KEY_0
+      value: http.https://gitlab.svc.home.arpa/.sslCAInfo
+    - name: GIT_CONFIG_VALUE_0
+      value: /etc/ssl/certs/homelab-ca.crt

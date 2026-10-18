@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./resources/application.yaml
+  - ./resources/certificate.yaml
+  - ./resources/configmaps.yaml
+  - ./resources/external-secret.yaml
+  - ./resources/http-route.yaml
+  - ./resources/namespace.yaml
+  - ./resources/renovate-forgejo.yaml
+  - ./resources/renovate-github.yaml
+  - ./resources/renovate-gitlab.yaml

@@ -1,0 +1,49 @@
+apiVersion: renovate-operator.mogenius.com/v1alpha1
+kind: RenovateJob
+metadata:
+  name: renovate-github
+  namespace: renovate-operator
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+spec:
+  schedule: "0 2 * * *"
+  image: ghcr.io/renovatebot/renovate:44.164.7
+  parallelism: 3
+  secretRef: renovate-github-credentials
+  access:
+    adminGroups:
+      - renovate-admins
+    readerGroups:
+      - renovate-readers
+  provider:
+    name: github
+  discoveryFilters:
+    - "Kallepan/homelab-manifests"
+  renovateConfig:
+    configMapRef:
+      name: renovate-github-config
+      key: config.js
+  extraVolumes:
+    - name: base-config
+      configMap:
+        name: renovate-base-config
+  extraVolumeMounts:
+    - name: base-config
+      mountPath: /opt/renovate/base.js
+      subPath: base.js
+  extraEnv:
+    - name: GITHUB_COM_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: renovate-github-credentials
+          key: GITHUB_COM_TOKEN
+    - name: DOCKER_USERNAME
+      valueFrom:
+        secretKeyRef:
+          name: renovate-github-credentials
+          key: DOCKER_USERNAME
+    - name: DOCKER_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: renovate-github-credentials
+          key: DOCKER_PASSWORD
