@@ -43,8 +43,6 @@ spec:
             - secretRef:
                 name: backstage-database-credentials
             - secretRef:
-                name: backstage-gitlab-credentials
-            - secretRef:
                 name: backstage-oidc-credentials
             - secretRef:
                 name: backstage-argocd-credentials
