@@ -36,3 +36,14 @@ spec:
     initdb:
       database: backstage_db
       owner: backstage
+      postInitApplicationSQL:
+        - "GRANT ALL ON SCHEMA public TO backstage"
+        - "ALTER USER backstage SUPERUSER CREATEDB"
+
+  managed:
+    roles:
+      - name: backstage
+        ensure: present
+        login: true
+        superuser: true
+        createdb: true
