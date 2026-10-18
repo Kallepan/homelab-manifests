@@ -97,6 +97,10 @@ data:
           description: Internal mkdocs documentation, hosted on backstage.
           href: https://backstage.svc.home.arpa/docs/default/component/homelab-documentation
           icon: mkdocs.png
+      - Backstage:
+          description: Internal developer portal for HomeLab.
+          href: https://backstage.svc.home.arpa/
+          icon: backstage.png
     - Data & Storage:
       - Garage:
           description: S3 Object Storage.
