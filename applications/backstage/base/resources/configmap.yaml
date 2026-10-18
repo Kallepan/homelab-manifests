@@ -21,8 +21,6 @@ data:
       # config options: https://node-postgres.com/apis/client
       database:
         client: pg
-        ensureExists: false
-        pluginDivisionMode: schema
         connection:
           host: ${POSTGRES_HOST}
           port: ${POSTGRES_PORT}
@@ -141,8 +139,6 @@ data:
       # The production database configuration is stored in app-config.production.yaml
       database:
         client: pg
-        ensureExists: false
-        pluginDivisionMode: schema
         connection:
           host: ${POSTGRES_HOST}
           port: ${POSTGRES_PORT}
