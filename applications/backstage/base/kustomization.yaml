@@ -12,3 +12,4 @@ resources:
   - ./resources/deployment.yaml
   - ./resources/service.yaml
   - ./resources/http-route.yaml
+  - ./resources/external-secret.yaml

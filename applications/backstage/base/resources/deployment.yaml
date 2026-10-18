@@ -22,11 +22,21 @@ spec:
           type: RuntimeDefault
       containers:
         - name: backstage
-          image: registry.svc.home.arpa/organizations/homelab/backstage/main
+          image: registry.svc.home.arpa/homelab/backstage/main:0.0.1
           imagePullPolicy: Always
           env:
             - name: NODE_EXTRA_CA_CERTS
               value: /usr/local/share/ca-certificates/self-signed-ca.crt
+            - name: ARGOCD_SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: backstage-config
+                  key: ARGOCD_SERVER_URL
+            - name: AUTH_OIDC_METADATA_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: backstage-config
+                  key: AUTH_OIDC_METADATA_URL
           envFrom:
             - secretRef:
                 name: backstage-application-credentials

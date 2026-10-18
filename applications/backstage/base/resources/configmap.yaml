@@ -4,27 +4,19 @@ metadata:
   name: backstage-config
   namespace: backstage
 data:
+  ARGOCD_SERVER_URL: https://argocd.svc.home.arpa
+  AUTH_OIDC_METADATA_URL: https://sso.svc.home.arpa/realms/homelab/.well-known/openid-configuration
   app-config-production.yaml: |
     app:
-      # Should be the same as backend.baseUrl when using the `app-backend` plugin.
       baseUrl: https://backstage.svc.home.arpa
 
     backend:
-      # Note that the baseUrl should be the URL that the browser and other clients
-      # should use when communicating with the backend, i.e. it needs to be
-      # reachable not just from within the backend host, but from all of your
-      # callers. When its value is "http://localhost:7007", it's strictly private
-      # and can't be reached by others.
       baseUrl: https://backstage.svc.home.arpa
+      cors:
+        origin: https://backstage.svc.home.arpa
       # The listener can also be expressed as a single <host>:<port> string. In this case we bind to
       # all interfaces, the most permissive setting. The right value depends on your specific deployment.
       listen: ':7007'
-
-      cors:
-        # The CORS settings are used to allow the frontend to communicate with the backend.
-        origin: ['https://backstage.svc.home.arpa']
-        methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
-        credentials: true
 
       # config options: https://node-postgres.com/apis/client
       database:
@@ -42,52 +34,44 @@ data:
           #   ca: # if you have a CA file and want to verify it you can uncomment this section
           #     $file: <file-path>/ca/server.crt
 
-    integrations:
-      # GitLab integration configuration
-      # See https://backstage.io/docs/integrations/gitlab/locations
-      gitlab:
-        - host: ${GITLAB_HOST}
-          apiBaseUrl: https://${GITLAB_HOST}/api/v4
-          token: ${GITLAB_TOKEN}
-
-    argocd:
-      baseUrl: https://${ARGOCD_SERVER}
-      appLocatorMethods:
-        - type: config
-          instances:
-            - name: default
-              url: https://${ARGOCD_SERVER}
-              token: ${ARGOCD_TOKEN}
-
     auth:
+      environment: production
       session:
         secret: ${AUTH_SESSION_SECRET}
-      environment: production
       providers:
         oidc:
           production:
-            clientId: ${KEYCLOAK_CLIENT_ID}
-            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
-            metadataUrl: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration
+            metadataUrl: ${AUTH_OIDC_METADATA_URL}
+            clientId: ${AUTH_OIDC_CLIENT_ID}
+            clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
             prompt: auto
             signIn:
               resolvers:
                 - resolver: emailMatchingUserEntityProfileEmail
 
-    catalog:
-      # Overrides the default list locations from app-config.yaml as these contain example data.
-      # See https://backstage.io/docs/features/software-catalog/#adding-components-to-the-catalog for more details
-      # on how to get entities into the catalog.
-      rules:
-        - allow: [Component, System, API, Resource, Location, User, Group]
-      locations:
-        - type: url
-          target: https://gitlab.svc.home.arpa/documentation/homelab-backstage-catalog/blob/main/catalog/entities.yaml
-          rules:
-            - allow: [Component, System, API, Resource, Location]
+    proxy:
+      endpoints:
+        '/argocd/api':
+          target: '${ARGOCD_SERVER_URL}/api/v1/'
+          changeOrigin: true
+          secure: true
+          headers:
+            Cookie: ${ARGOCD_AUTH_TOKEN}
 
-        - type: url
-          target: https://gitlab.svc.home.arpa/documentation/homelab-backstage-catalog/blob/main/catalog/org.yaml
+    argocd:
+      baseUrl: ${ARGOCD_SERVER_URL}
+
+    catalog:
+      # Production catalog sources should be explicitly configured here.
+      locations:
+        - type: file
+          target: ./catalog-info.yaml
+        - type: file
+          target: ./catalog/homelab.yaml
+        - type: file
+          target: ./catalog/argocd.yaml
+        - type: file
+          target: ./catalog/admins.yaml
           rules:
             - allow: [User, Group]
 
@@ -178,13 +162,13 @@ data:
           token: ${GITLAB_TOKEN}
 
     argocd:
-      baseUrl: https://${ARGOCD_SERVER}
+      baseUrl: ${ARGOCD_SERVER_URL}
       appLocatorMethods:
         - type: config
           instances:
             - name: default
-              url: https://${ARGOCD_SERVER}
-              token: ${ARGOCD_TOKEN}
+              url: ${ARGOCD_SERVER_URL}
+              token: ${ARGOCD_AUTH_TOKEN}
 
     proxy:
       ### Example for how to add a proxy endpoint for the frontend.
@@ -215,9 +199,9 @@ data:
         # Keycloak authentication provider
         oidc:
           development:
-            clientId: ${KEYCLOAK_CLIENT_ID}
-            clientSecret: ${KEYCLOAK_CLIENT_SECRET}
-            metadataUrl: ${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/.well-known/openid-configuration
+            clientId: ${AUTH_OIDC_CLIENT_ID}
+            clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
+            metadataUrl: ${AUTH_OIDC_METADATA_URL}
             prompt: auto
             signIn:
               resolvers:
