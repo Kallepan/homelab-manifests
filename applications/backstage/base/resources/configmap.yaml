@@ -116,7 +116,7 @@ data:
               title: Tech Radar
 
     techRadar:
-      url: https://gitlab.svc.home.arpa/documentation/homelab-tech-radar/-/blob/main/techradar.json
+      url: https://gitlab.svc.home.arpa/homelab/techradar/-/blob/main/techradar.json
 
 
     organization:
