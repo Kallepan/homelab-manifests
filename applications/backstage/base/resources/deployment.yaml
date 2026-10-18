@@ -37,6 +37,11 @@ spec:
                 configMapKeyRef:
                   name: backstage-config
                   key: AUTH_OIDC_METADATA_URL
+            - name: GITLAB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: backstage-config
+                  key: GITLAB_HOST
           envFrom:
             - secretRef:
                 name: backstage-application-credentials
@@ -46,6 +51,8 @@ spec:
                 name: backstage-oidc-credentials
             - secretRef:
                 name: backstage-argocd-credentials
+            - secretRef:
+                name: backstage-gitlab-credentials
           volumeMounts:
             - name: backstage-config
               mountPath: /app/app-config.yaml

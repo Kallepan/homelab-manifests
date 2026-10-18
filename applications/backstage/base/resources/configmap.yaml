@@ -6,6 +6,7 @@ metadata:
 data:
   ARGOCD_SERVER_URL: https://argocd.svc.home.arpa
   AUTH_OIDC_METADATA_URL: https://sso.svc.home.arpa/realms/homelab/.well-known/openid-configuration
+  GITLAB_HOST: gitlab.svc.home.arpa
   app-config-production.yaml: |
     app:
       baseUrl: https://backstage.svc.home.arpa
@@ -48,6 +49,12 @@ data:
             signIn:
               resolvers:
                 - resolver: emailMatchingUserEntityProfileEmail
+
+    integrations:
+      gitlab:
+        - host: ${GITLAB_HOST}
+          apiBaseUrl: https://${GITLAB_HOST}/api/v4
+          token: ${GITLAB_TOKEN}
 
     proxy:
       endpoints:
