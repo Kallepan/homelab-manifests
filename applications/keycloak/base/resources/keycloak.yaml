@@ -24,4 +24,6 @@ spec:
   proxy:
     headers: xforwarded # double check your reverse proxy sets and overwrites the X-Forwarded-* headers
 
-  # image: "registry.svc.home.arpa/releases/container-images/keycloak/main:26.6.2"
+  image: registry.svc.home.arpa/homelab/keycloakify/main:26.8.1
+  imagePullSecrets:
+    - name: keycloak-registry-credentials
