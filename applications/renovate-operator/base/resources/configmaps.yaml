@@ -11,6 +11,9 @@ data:
       repositoryCache: 'enabled',
       optimizeForDisabled: true,
 
+      allowCustomCrateRegistries: true,
+      allowScripts: true,
+
       prConcurrentLimit: 10,
       prHourlyLimit: 5,
       minimumReleaseAge: '3 days',
