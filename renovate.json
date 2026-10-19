@@ -129,6 +129,15 @@
       "/(^|/)Chart\\.ya?ml$/"
     ]
   },
+  "packageRules": [
+    {
+      "description": "Ignore internal registry images",
+      "matchPackagePrefixes": [
+        "registry.svc.home.arpa/"
+      ],
+      "enabled": false
+    }
+  ],
   "ignorePaths": [
     "_deprecated/**"
   ],
