@@ -132,10 +132,10 @@
   "packageRules": [
     {
       "description": "Ignore internal registry images",
-      "matchPackagePrefixes": [
-        "registry.svc.home.arpa/"
-      ],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": [
+        "registry.svc.home.arpa/{/,}**"
+      ]
     }
   ],
   "ignorePaths": [
