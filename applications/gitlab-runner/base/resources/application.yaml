@@ -78,7 +78,7 @@ spec:
 
               [runners.kubernetes]
                 privileged = false
-                image = "alpine:3.24.2"
+                image = "alpine:3.24.3"
                 allowed_pull_policies = ["always", "if-not-present"]
                 pull_policy = "if-not-present"
 
