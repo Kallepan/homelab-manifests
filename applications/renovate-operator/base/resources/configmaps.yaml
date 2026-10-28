@@ -11,7 +11,7 @@ data:
       repositoryCache: 'enabled',
       optimizeForDisabled: true,
 
-      allowCustomCrateRegistries: true,
+      allowCustomCrateGitRegistries: true,
       allowScripts: true,
 
       prConcurrentLimit: 10,
