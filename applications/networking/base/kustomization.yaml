@@ -7,4 +7,4 @@ resources:
   - ./resources/cilium-l2-announcement-policy.yaml
   - ./resources/cilium-load-balancer-ip-pool.yaml
   # renovate: datasource=github-releases depName=kubernetes-sigs/gateway-api versioning=semver
-  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.3/experimental-install.yaml
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.7.0/experimental-install.yaml
