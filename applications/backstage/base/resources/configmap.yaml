@@ -78,6 +78,8 @@ data:
         - type: file
           target: ./catalog/argocd.yaml
         - type: file
+          target: ./catalog/services.yaml
+        - type: file
           target: ./catalog/admins.yaml
           rules:
             - allow: [User, Group]
