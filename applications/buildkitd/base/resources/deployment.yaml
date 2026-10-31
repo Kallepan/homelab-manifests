@@ -61,16 +61,15 @@ spec:
             periodSeconds: 30
           securityContext:
             seccompProfile:
-              type: Unconfined
+              type: RuntimeDefault
             appArmorProfile:
-              type: Unconfined
+              type: RuntimeDefault
             runAsUser: 1000
             runAsGroup: 1000
             runAsNonRoot: true
             allowPrivilegeEscalation: true
             capabilities:
               add:
-                - SYS_ADMIN
                 - SETUID
                 - SETGID
                 - CHOWN
