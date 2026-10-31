@@ -60,6 +60,8 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 30
           securityContext:
+            seccompProfile:
+              type: Unconfined
             runAsUser: 1000
             runAsGroup: 1000
             runAsNonRoot: true
