@@ -74,15 +74,16 @@ data:
         - type: file
           target: ./catalog-info.yaml
         - type: url
-          target: https://gitlab.svc.home.arpa/homelab/backstage/-/raw/main/catalog/homelab.yaml
+          target: https://gitlab.svc.home.arpa/homelab/backstage/-/blob/main/catalog/homelab.yaml
         - type: url
-          target: https://gitlab.svc.home.arpa/homelab/backstage/-/raw/main/catalog/argocd.yaml
+          target: https://gitlab.svc.home.arpa/homelab/backstage/-/blob/main/catalog/argocd.yaml
         - type: url
-          target: https://gitlab.svc.home.arpa/homelab/backstage/-/raw/main/catalog/services.yaml
+          target: https://gitlab.svc.home.arpa/homelab/backstage/-/blob/main/catalog/services.yaml
         - type: url
-          target: https://gitlab.svc.home.arpa/homelab/backstage/-/raw/main/catalog/organization.yaml
+          target: https://gitlab.svc.home.arpa/homelab/backstage/-/blob/main/catalog/organization.yaml
           rules:
             - allow: [User, Group]
+
 
     kubernetes:
       serviceLocatorMethod:
