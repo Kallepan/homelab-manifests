@@ -7,107 +7,6 @@ data:
   ARGOCD_SERVER_URL: https://argocd.svc.home.arpa
   AUTH_OIDC_METADATA_URL: https://sso.svc.home.arpa/realms/homelab/.well-known/openid-configuration
   GITLAB_HOST: gitlab.svc.home.arpa
-  app-config-production.yaml: |
-    app:
-      baseUrl: https://backstage.svc.home.arpa
-
-    backend:
-      baseUrl: https://backstage.svc.home.arpa
-      cors:
-        origin: https://backstage.svc.home.arpa
-      # The listener can also be expressed as a single <host>:<port> string. In this case we bind to
-      # all interfaces, the most permissive setting. The right value depends on your specific deployment.
-      listen: ':7007'
-
-      # config options: https://node-postgres.com/apis/client
-      database:
-        client: pg
-        connection:
-          host: ${POSTGRES_HOST}
-          port: ${POSTGRES_PORT}
-          user: ${POSTGRES_USER}
-          password: ${POSTGRES_PASSWORD}
-          database: ${POSTGRES_DB}
-          # https://node-postgres.com/features/ssl
-          # you can set the sslmode configuration option via the `PGSSLMODE` environment variable
-          # see https://www.postgresql.org/docs/current/libpq-ssl.html Table 33.1. SSL Mode Descriptions (e.g. require)
-          # ssl:
-          #   ca: # if you have a CA file and want to verify it you can uncomment this section
-          #     $file: <file-path>/ca/server.crt
-
-    auth:
-      environment: production
-      session:
-        secret: ${AUTH_SESSION_SECRET}
-      providers:
-        oidc:
-          production:
-            metadataUrl: ${AUTH_OIDC_METADATA_URL}
-            clientId: ${AUTH_OIDC_CLIENT_ID}
-            clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
-            prompt: auto
-            signIn:
-              resolvers:
-                - resolver: emailMatchingUserEntityProfileEmail
-
-    integrations:
-      gitlab:
-        - host: ${GITLAB_HOST}
-          apiBaseUrl: https://${GITLAB_HOST}/api/v4
-          token: ${GITLAB_TOKEN}
-
-    proxy:
-      endpoints:
-        '/argocd/api':
-          target: '${ARGOCD_SERVER_URL}/api/v1/'
-          changeOrigin: true
-          secure: true
-          headers:
-            Cookie: ${ARGOCD_AUTH_TOKEN}
-
-    argocd:
-      baseUrl: ${ARGOCD_SERVER_URL}
-
-    catalog:
-      # Production catalog sources should be explicitly configured here.
-      locations:
-        - type: file
-          target: ./catalog-info.yaml
-        - type: url
-          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/homelab.yaml
-        - type: url
-          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/argocd.yaml
-        - type: url
-          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/services.yaml
-        - type: url
-          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/organization.yaml
-          rules:
-            - allow: [User, Group]
-
-    kubernetes:
-      serviceLocatorMethod:
-        type: singleTenant
-      clusterLocatorMethods:
-        - type: config
-          clusters:
-            - name: homelab
-              url: https://kubernetes.default.svc
-              authProvider: serviceAccount
-              caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-              skipTLSVerify: false
-              skipMetricsLookup: true
-      objectTypes:
-        - pods
-        - services
-        - deployments
-        - replicasets
-        - horizontalpodautoscalers
-        - jobs
-        - cronjobs
-        - ingresses
-        - statefulsets
-        - daemonsets
-
   app-config.yaml: |
     app:
       title: HomeLab Backstage
@@ -149,27 +48,12 @@ data:
       name: HomeLab
 
     backend:
-      # Used for enabling authentication, secret is shared by all backend plugins
-      # See https://backstage.io/docs/auth/service-to-service-auth for
-      # information on the format
-      # auth:
-      #   keys:
-      #     - secret: ${BACKEND_SECRET}
       baseUrl: https://backstage.svc.home.arpa
-      listen:
-        port: 7007
-        # Uncomment the following host directive to bind to specific interfaces
-        # host: 127.0.0.1
+      listen: ':7007'
       csp:
         connect-src: ["'self'", 'http:', 'https:']
-        # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
-        # Default Helmet Content-Security-Policy values can be removed by setting the key to false
       cors:
-        origin: ['https://backstage.svc.home.arpa']
-        methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
-        credentials: true
-      # This is for local development only, it is not recommended to use this in production
-      # The production database configuration is stored in app-config.production.yaml
+        origin: https://backstage.svc.home.arpa
       database:
         client: pg
         connection:
@@ -184,7 +68,6 @@ data:
           - auth
           - catalog
           - scaffolder
-      # workingDirectory: /tmp # Use this to configure a working directory for the scaffolder, defaults to the OS temp-dir
 
     integrations:
       # GitLab integration configuration
@@ -204,12 +87,13 @@ data:
               token: ${ARGOCD_AUTH_TOKEN}
 
     proxy:
-      ### Example for how to add a proxy endpoint for the frontend.
-      ### A typical reason to do this is to handle HTTPS and CORS for internal services.
-      # endpoints:
-      #   '/test':
-      #     target: 'https://example.com'
-      #     changeOrigin: true
+      endpoints:
+        '/argocd/api':
+          target: '${ARGOCD_SERVER_URL}/api/v1/'
+          changeOrigin: true
+          secure: true
+          headers:
+            Cookie: ${ARGOCD_AUTH_TOKEN}
 
     # Reference documentation http://backstage.io/docs/features/techdocs/configuration
     # Note: After experimenting with basic setup, use CI/CD to generate docs
@@ -225,13 +109,11 @@ data:
     auth:
       session:
         secret: ${AUTH_SESSION_SECRET}
-      environment: development
+      environment: production
 
-      # see https://backstage.io/docs/auth/ to learn about auth providers
       providers:
-        # Keycloak authentication provider
         oidc:
-          development:
+          production:
             clientId: ${AUTH_OIDC_CLIENT_ID}
             clientSecret: ${AUTH_OIDC_CLIENT_SECRET}
             metadataUrl: ${AUTH_OIDC_METADATA_URL}
@@ -240,47 +122,47 @@ data:
               resolvers:
                 - resolver: emailMatchingUserEntityProfileEmail
 
-        # See https://backstage.io/docs/auth/guest/provider
-        guest: {}
-
-      # see https://backstage.io/docs/ai/mcp-actions#client-id-metadata-documents
-      # to learn more about client id metadata documents
-      experimentalClientIdMetadataDocuments:
-        enabled: false
-        # Optional: restrict which `client_id` URLs are allowed (defaults to ['*'])
-        # allowedClientIdPatterns:
-        #   - 'https://example.com/*'
-        #   - 'https://*.trusted-domain.com/*'
-        # Optional: restrict which redirect URIs are allowed (defaults to ['*'])
-        # allowedRedirectUriPatterns:
-        #   - 'http://localhost:*'
-        #   - 'https://*.example.com/*'
-
     scaffolder:
       # see https://backstage.io/docs/features/software-templates/configuration for software template options
 
     catalog:
-      import:
-        entityFilename: catalog-info.yaml
-        pullRequestBranchName: backstage-integrations
-      rules:
-        - allow: [Component, System, API, Resource, Location, User, Group]
       locations:
+        - type: file
+          target: ./catalog-info.yaml
         - type: url
-          target: https://gitlab.svc.home.arpa/documentation/homelab-backstage-catalog/blob/main/catalog/entities.yaml
-          rules:
-            - allow: [Component, System, API, Resource, Location]
-
+          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/homelab.yaml
         - type: url
-          target: https://gitlab.svc.home.arpa/documentation/homelab-backstage-catalog/blob/main/catalog/org.yaml
+          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/argocd.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/services.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/organization.yaml
           rules:
             - allow: [User, Group]
 
     kubernetes:
-      # Local Backstage runs outside Kubernetes. Production configures the in-cluster API.
       serviceLocatorMethod:
         type: singleTenant
-      clusterLocatorMethods: []
+      clusterLocatorMethods:
+        - type: config
+          clusters:
+            - name: homelab
+              url: https://kubernetes.default.svc
+              authProvider: serviceAccount
+              caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              skipTLSVerify: false
+              skipMetricsLookup: true
+      objectTypes:
+        - pods
+        - services
+        - deployments
+        - replicasets
+        - horizontalpodautoscalers
+        - jobs
+        - cronjobs
+        - ingresses
+        - statefulsets
+        - daemonsets
 
     # see https://backstage.io/docs/permissions/getting-started for more on the permission framework
     permission:

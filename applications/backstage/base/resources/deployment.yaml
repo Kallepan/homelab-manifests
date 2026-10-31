@@ -59,10 +59,6 @@ spec:
               mountPath: /app/app-config.yaml
               subPath: app-config.yaml
               readOnly: true
-            - name: backstage-config
-              mountPath: /app/config/app-config-production.yaml
-              subPath: app-config-production.yaml
-              readOnly: true
             - name: homelab-ca
               mountPath: /usr/local/share/ca-certificates/self-signed-ca.crt
               subPath: self-signed-ca.crt
