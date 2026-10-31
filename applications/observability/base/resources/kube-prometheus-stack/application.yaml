@@ -131,6 +131,26 @@ spec:
               label: grafana_dashboard
               labelValue: "1"
               searchNamespace: observability
+              folderAnnotation: grafana_folder
+              provider:
+                foldersFromFilesStructure: true
+          dashboardProviders:
+            dashboardproviders.yaml:
+              apiVersion: 1
+              providers:
+                - name: custom
+                  orgId: 1
+                  folder: Custom
+                  type: file
+                  disableDeletion: false
+                  editable: true
+                  options:
+                    path: /var/lib/grafana/dashboards/custom
+          dashboards:
+            custom:
+              cloudnativepg:
+                gnetId: 20417
+                datasource: Prometheus
           envValueFrom:
             GF_AUTH_GENERIC_OAUTH_CLIENT_ID:
               secretKeyRef:

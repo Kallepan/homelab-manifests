@@ -20,6 +20,6 @@ spec:
       backendRefs:
         - group: ''
           kind: Service
-          name: grafana-service
+          name: kube-prometheus-stack-grafana
           port: 3000
           weight: 1

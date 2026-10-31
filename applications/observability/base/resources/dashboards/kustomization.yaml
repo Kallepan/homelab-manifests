@@ -5,9 +5,6 @@ namespace: observability
 generatorOptions:
   disableNameSuffixHash: true
 
-resources:
-  - grafana-dashboards.yaml
-
 configMapGenerator:
   - name: argocd-dashboard
     files:
@@ -16,7 +13,7 @@ configMapGenerator:
       labels:
         grafana_dashboard: "1"
       annotations:
-        grafana_folder: "Apps"
+        grafana_folder: "Custom"
 
   - name: ceph-dashboard
     files:
@@ -34,7 +31,7 @@ configMapGenerator:
       labels:
         grafana_dashboard: "1"
       annotations:
-        grafana_folder: "Apps"
+        grafana_folder: "Custom"
 
   - name: docker-dashboard
     files:
@@ -52,7 +49,7 @@ configMapGenerator:
       labels:
         grafana_dashboard: "1"
       annotations:
-        grafana_folder: "Apps"
+        grafana_folder: "Custom"
 
   - name: gitlab-dashboard
     files:
@@ -61,7 +58,7 @@ configMapGenerator:
       labels:
         grafana_dashboard: "1"
       annotations:
-        grafana_folder: "Apps"
+        grafana_folder: "Custom"
 
   - name: istio-performance-dashboard
     files:
@@ -72,7 +69,7 @@ configMapGenerator:
       labels:
         grafana_dashboard: "1"
       annotations:
-        grafana_folder: "istio"
+        grafana_folder: "Custom"
 
   - name: istio-services-dashboard
     files:
@@ -82,7 +79,7 @@ configMapGenerator:
       labels:
         grafana_dashboard: "1"
       annotations:
-        grafana_folder: "istio"
+        grafana_folder: "Custom"
 
   - name: kube-metrics
     files:
@@ -100,7 +97,7 @@ configMapGenerator:
       labels:
         grafana_dashboard: "1"
       annotations:
-        grafana_folder: "Apps"
+        grafana_folder: "Custom"
 
   - name: loki-logs
     files:
@@ -108,3 +105,5 @@ configMapGenerator:
     options:
       labels:
         grafana_dashboard: "1"
+      annotations:
+        grafana_folder: "Custom"
