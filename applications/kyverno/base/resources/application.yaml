@@ -18,8 +18,8 @@ spec:
       valuesObject:
         crds:
           install: true
-        migration:
-          enabled: false
+          migration:
+            enabled: false
         config:
           enableDefaultRegistryMutation: false
         admissionController:
