@@ -73,14 +73,41 @@ data:
       locations:
         - type: file
           target: ./catalog-info.yaml
-        - type: file
-          target: ./catalog/homelab.yaml
-        - type: file
-          target: ./catalog/argocd.yaml
-        - type: file
-          target: ./catalog/admins.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/homelab/backstage/-/blob/main/catalog/homelab.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/homelab/backstage/-/blob/main/catalog/argocd.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/homelab/backstage/-/blob/main/catalog/services.yaml
+        - type: url
+          target: https://gitlab.svc.home.arpa/homelab/backstage/-/blob/main/catalog/organization.yaml
           rules:
             - allow: [User, Group]
+
+
+    kubernetes:
+      serviceLocatorMethod:
+        type: singleTenant
+      clusterLocatorMethods:
+        - type: config
+          clusters:
+            - name: homelab
+              url: https://kubernetes.default.svc
+              authProvider: serviceAccount
+              caFile: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+              skipTLSVerify: false
+              skipMetricsLookup: true
+      objectTypes:
+        - pods
+        - services
+        - deployments
+        - replicasets
+        - horizontalpodautoscalers
+        - jobs
+        - cronjobs
+        - ingresses
+        - statefulsets
+        - daemonsets
 
   app-config.yaml: |
     app:
@@ -251,7 +278,10 @@ data:
             - allow: [User, Group]
 
     kubernetes:
-      # see https://backstage.io/docs/features/kubernetes/configuration for kubernetes configuration options
+      # Local Backstage runs outside Kubernetes. Production configures the in-cluster API.
+      serviceLocatorMethod:
+        type: singleTenant
+      clusterLocatorMethods: []
 
     # see https://backstage.io/docs/permissions/getting-started for more on the permission framework
     permission:

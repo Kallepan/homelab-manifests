@@ -3,7 +3,7 @@ kind: Kustomization
 
 images:
   - name: registry.svc.home.arpa/homelab/backstage/main
-    newTag: 0.0.4
+    newTag: 0.0.17
 
 resources:
   - ./resources/namespace.yaml
@@ -14,6 +14,7 @@ resources:
   - ./resources/scheduled-backup.yaml
   - ./resources/external-secret.yaml
   - ./resources/database-secret.yaml
+  - ./resources/kubernetes-rbac.yaml
   - ./resources/deployment.yaml
   - ./resources/service.yaml
   - ./resources/http-route.yaml
