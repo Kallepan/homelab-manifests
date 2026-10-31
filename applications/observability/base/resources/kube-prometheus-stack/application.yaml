@@ -113,8 +113,107 @@ spec:
           create: true
           rules:
             kubeProxy: false # Disabled due to cilium
+        defaultDashboardsEnabled: true
         grafana:
-          enabled: false
+          enabled: true
+          persistence:
+            enabled: true
+            type: pvc
+            storageClassName: ceph-block
+            accessModes:
+              - ReadWriteOnce
+            size: 1Gi
+          service:
+            port: 3000
+          sidecar:
+            dashboards:
+              enabled: true
+              label: grafana_dashboard
+              labelValue: "1"
+              searchNamespace: observability
+          envValueFrom:
+            GF_AUTH_GENERIC_OAUTH_CLIENT_ID:
+              secretKeyRef:
+                name: grafana-oauth-credentials
+                key: client_id
+            GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+              secretKeyRef:
+                name: grafana-oauth-credentials
+                key: client_secret
+            GF_ALERTING_MATTERMOST_WEBHOOK_URL:
+              secretKeyRef:
+                name: alertmanager-mattermost-webhook-url
+                key: mattermost-webhook-url
+          extraSecretMounts:
+            - name: homelab-ca
+              secretName: homelab-ca
+              mountPath: /etc/ssl/certs/homelab-ca.crt
+              subPath: homelab-ca.crt
+              readOnly: true
+          grafana.ini:
+            server:
+              root_url: https://grafana.svc.home.arpa
+            auth:
+              disable_login_form: false
+            auth.basic:
+              enabled: true
+            auth.anonymous:
+              enabled: true
+            auth.generic_oauth:
+              enabled: true
+              name: Keycloak-OAuth
+              allow_sign_up: true
+              allow_assign_grafana_admin: true
+              auto_login: false
+              tls_skip_verify_insecure: true
+              client_id: $__env{GF_AUTH_GENERIC_OAUTH_CLIENT_ID}
+              client_secret: $__env{GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET}
+              scopes: openid email profile offline_access roles
+              email_attribute_path: email
+              login_attribute_path: preferred_username
+              name_attribute_path: name
+              role_attribute_path: contains(resource_access.grafana.roles[*], 'admin') && 'Admin' || contains(resource_access.grafana.roles[*], 'editor') && 'Editor' || 'Viewer'
+              auth_url: https://sso.svc.home.arpa/realms/homelab/protocol/openid-connect/auth
+              token_url: https://sso.svc.home.arpa/realms/homelab/protocol/openid-connect/token
+              api_url: https://sso.svc.home.arpa/realms/homelab/protocol/openid-connect/userinfo
+              skip_org_role_sync: false
+          additionalDataSources:
+            - name: Loki
+              type: loki
+              access: proxy
+              url: http://loki-query-frontend.observability.svc.cluster.local:3100
+              isDefault: false
+              editable: true
+              uid: loki
+            - name: Jaeger
+              type: jaeger
+              access: proxy
+              url: http://jaeger-collector.observability.svc.cluster.local:16686
+              isDefault: false
+              editable: true
+              uid: jaeger
+          alerting:
+            contactpoints.yaml:
+              apiVersion: 1
+              contactPoints:
+                - orgId: 1
+                  name: mattermost
+                  receivers:
+                    - uid: mattermost
+                      type: slack
+                      settings:
+                        title: Grafana Alert
+                        url: $__env{GF_ALERTING_MATTERMOST_WEBHOOK_URL}
+            policies.yaml:
+              apiVersion: 1
+              policies:
+                - orgId: 1
+                  receiver: mattermost
+                  group_by:
+                    - alertname
+                  group_wait: 30s
+                  group_interval: 5m
+                  repeat_interval: 12h
         prometheus:
           prometheusSpec:
             additionalArgs:
