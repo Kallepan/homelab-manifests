@@ -62,8 +62,6 @@ spec:
           securityContext:
             seccompProfile:
               type: RuntimeDefault
-            appArmorProfile:
-              type: RuntimeDefault
             runAsUser: 1000
             runAsGroup: 1000
             runAsNonRoot: true
