@@ -279,6 +279,7 @@ spec:
                       - https://bao.infra.home.arpa
                       - https://sso.svc.home.arpa
                       - https://mattermost.svc.home.arpa
+                      - https://backstage.svc.home.arpa
                 relabel_configs:
                   - source_labels: [__address__]
                     target_label: __param_target
