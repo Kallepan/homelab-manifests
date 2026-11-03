@@ -54,6 +54,8 @@ spec:
                 name: backstage-argocd-credentials
             - secretRef:
                 name: backstage-gitlab-credentials
+            - secretRef:
+                name: backstage-github-credentials
           volumeMounts:
             - name: backstage-config
               mountPath: /app/app-config.yaml

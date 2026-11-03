@@ -76,6 +76,9 @@ data:
         - host: ${GITLAB_HOST}
           apiBaseUrl: https://${GITLAB_HOST}/api/v4
           token: ${GITLAB_TOKEN}
+      github:
+        - host: github.com
+          token: ${GITHUB_TOKEN}
 
     argocd:
       baseUrl: ${ARGOCD_SERVER_URL}
@@ -127,7 +130,7 @@ data:
 
     catalog:
       rules:
-        - allow: [Component, System, API, Resource, Location, User, Group]
+        - allow: [Component, System, API, Resource, Location, User, Group, Template]
       locations:
         - type: file
           target: ./catalog-info.yaml
@@ -141,6 +144,10 @@ data:
           target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/catalog/organization.yaml
           rules:
             - allow: [User, Group]
+        - type: url
+          target: https://gitlab.svc.home.arpa/homelab/backstage-catalog/-/blob/main/templates/new-homelab-service/template.yaml
+          rules:
+            - allow: [Template]
 
     kubernetes:
       serviceLocatorMethod:
