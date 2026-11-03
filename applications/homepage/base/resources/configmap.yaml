@@ -25,10 +25,13 @@ data:
     mode: cluster
   services.yaml: |
     - Core Infrastructure:
-      - Proxmox:
+      - Proxmox Virtual Environment:
           description: Proxmox Virtual Environment (PVE) for HomeLab.
           href: https://192.168.0.2:8006/
           icon: proxmox.png
+      - Proxmox Backup Server:
+          description: Proxmox Backup Server (PBS) for HomeLab.
+          href: https://192.168.0.40:8007/#pbsDashboard
       - Portainer:
           description: Management UI for Docker.
           href: https://portainer.infra.home.arpa/
