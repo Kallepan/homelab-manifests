@@ -2568,7 +2568,11 @@
   "preload": false,
   "refresh": "",
   "schemaVersion": 41,
-  "tags": [],
+  "tags": [
+    "gitlab",
+    "ci",
+    "runner"
+  ],
   "templating": {
     "list": [
       {

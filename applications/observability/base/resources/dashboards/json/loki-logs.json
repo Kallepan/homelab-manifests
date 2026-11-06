@@ -14,7 +14,11 @@
         "target": {
           "limit": 100,
           "matchAny": false,
-          "tags": [],
+          "tags": [
+            "kubernetes",
+            "logs",
+            "loki"
+          ],
           "type": "dashboard"
         },
         "type": "dashboard"

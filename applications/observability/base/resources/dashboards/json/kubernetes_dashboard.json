@@ -2713,7 +2713,8 @@
   "refresh": "1m",
   "schemaVersion": 42,
   "tags": [
-    "production"
+    "kubernetes",
+    "metrics"
   ],
   "templating": {
     "list": [

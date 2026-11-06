@@ -5439,7 +5439,8 @@
   "refresh": "1m",
   "schemaVersion": 41,
   "tags": [
-    "ceph-mixin"
+    "ceph",
+    "storage"
   ],
   "templating": {
     "list": [

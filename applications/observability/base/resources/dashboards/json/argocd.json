@@ -3720,7 +3720,10 @@
   "refresh": false,
   "schemaVersion": 30,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "argocd",
+    "kubernetes"
+  ],
   "templating": {
     "list": [
       {

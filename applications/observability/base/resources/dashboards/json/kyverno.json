@@ -14,7 +14,11 @@
         "target": {
           "limit": 100,
           "matchAny": false,
-          "tags": [],
+          "tags": [
+            "kubernetes",
+            "kyverno",
+            "policy"
+          ],
           "type": "dashboard"
         },
         "type": "dashboard"

@@ -713,6 +713,10 @@
     "from": "now-30m",
     "to": "now"
   },
+  "tags": [
+    "istio",
+    "mesh"
+  ],
   "timezone": "utc",
   "title": "Istio Mesh Dashboard",
   "uid": "1a9a8ea49444aae205c7737573e894f9"

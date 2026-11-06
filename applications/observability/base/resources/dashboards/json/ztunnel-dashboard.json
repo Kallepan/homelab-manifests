@@ -633,6 +633,10 @@
     "from": "now-30m",
     "to": "now"
   },
+  "tags": [
+    "istio",
+    "ztunnel"
+  ],
   "timezone": "utc",
   "title": "Istio Ztunnel Dashboard",
   "uid": "12c58766acc81a1c835dd5059eaf2741"

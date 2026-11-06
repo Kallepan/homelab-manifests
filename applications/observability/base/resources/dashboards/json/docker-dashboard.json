@@ -694,7 +694,10 @@
   "preload": false,
   "refresh": "1m",
   "schemaVersion": 41,
-  "tags": [],
+  "tags": [
+    "docker",
+    "containers"
+  ],
   "templating": {
     "list": [
       {

@@ -679,7 +679,10 @@
   "preload": false,
   "refresh": "5s",
   "schemaVersion": 41,
-  "tags": [],
+  "tags": [
+    "gitlab",
+    "ci"
+  ],
   "templating": {
     "list": []
   },
