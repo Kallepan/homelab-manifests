@@ -16,12 +16,6 @@ spec:
     helm:
       releaseName: argocd
       valuesObject:
-        controller:
-          metrics:
-            serviceMonitor:
-              enabled: true
-              additionalLabels:
-                release: kube-prometheus-stack
         global:
           domain: argocd.svc.home.arpa
         configs:
@@ -156,6 +150,29 @@ spec:
               p, role:backstage, projects, get, *, allow
               g, backstage, role:backstage
         server:
+          metrics:
+            serviceMonitor:
+              enabled: true
+              additionalLabels:
+                release: kube-prometheus-stack
+        controller:
+          metrics:
+            serviceMonitor:
+              enabled: true
+              additionalLabels:
+                release: kube-prometheus-stack
+        applicationSet:
+          metrics:
+            serviceMonitor:
+              enabled: true
+              additionalLabels:
+                release: kube-prometheus-stack
+        repoServer:
+          metrics:
+            serviceMonitor:
+              enabled: true
+              additionalLabels:
+                release: kube-prometheus-stack
           ingress:
             enabled: false
   destination:
