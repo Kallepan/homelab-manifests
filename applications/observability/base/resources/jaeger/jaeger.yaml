@@ -10,7 +10,7 @@ spec:
       port: 16686
       protocol: TCP
       targetPort: 0
-    - name: otlp-grpc
+    - name: grpc-otlp
       port: 4317
       protocol: TCP
       targetPort: 0
