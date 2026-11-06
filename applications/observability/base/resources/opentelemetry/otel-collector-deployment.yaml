@@ -56,7 +56,7 @@ spec:
           - key: k8s_cluster
             value: "infrastructure"
             action: upsert
-          - key: service_name
+          - key: service.name
             value: "kube-events"
             action: upsert
 
