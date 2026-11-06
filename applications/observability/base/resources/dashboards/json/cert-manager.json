@@ -260,7 +260,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
-      "description": "Time before the certificates expire. Only shows certificates expiring within 45 days",
+      "description": "Time before the certificates expire. Only shows certificates expiring within 90 days",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -327,7 +327,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(certmanager_certificate_expiration_timestamp_seconds{exported_namespace=~\"$namespace\"} - time()) < 45 * (24*3600)",
+          "expr": "sort(certmanager_certificate_expiration_timestamp_seconds{exported_namespace=~\"$namespace\"} - time()) < 90 * (24*3600)",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -336,7 +336,7 @@
           "refId": "A"
         }
       ],
-      "title": "Time to Expiration (<45 days)",
+      "title": "Time to Expiration (<90 days)",
       "type": "bargauge"
     },
     {
@@ -400,7 +400,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sort(certmanager_certificate_renewal_timestamp_seconds{exported_namespace=~\"$namespace\"} - time()) < 45 * (24*3600)",
+          "expr": "sort(certmanager_certificate_renewal_timestamp_seconds{exported_namespace=~\"$namespace\"} - time()) < 90 * (24*3600)",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -409,7 +409,7 @@
           "refId": "A"
         }
       ],
-      "title": "Time to Automatic Renewal (<45 days)",
+      "title": "Time to Automatic Renewal (<90 days)",
       "type": "bargauge"
     },
     {
@@ -795,7 +795,7 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Cert-manager-Kubernetes",
+  "title": "Cert Manager Kubernetes",
   "uid": "cdhrcds8aosg0c",
   "version": 2,
   "weekStart": ""
