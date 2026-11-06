@@ -20,9 +20,9 @@ spec:
           enabled: true
         prometheus:
           enabled: true
-          serviceMonitor:
+          servicemonitor:
             enabled: true
-            additionalLabels:
+            labels:
               release: kube-prometheus-stack
   destination:
     server: 'https://kubernetes.default.svc'
