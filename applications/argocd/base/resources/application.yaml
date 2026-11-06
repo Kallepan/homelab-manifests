@@ -16,6 +16,12 @@ spec:
     helm:
       releaseName: argocd
       valuesObject:
+        controller:
+          metrics:
+            serviceMonitor:
+              enabled: true
+              additionalLabels:
+                release: kube-prometheus-stack
         global:
           domain: argocd.svc.home.arpa
         configs:
