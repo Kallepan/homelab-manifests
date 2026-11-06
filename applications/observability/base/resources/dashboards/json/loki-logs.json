@@ -181,7 +181,11 @@
   "preload": false,
   "refresh": "30s",
   "schemaVersion": 42,
-  "tags": [],
+  "tags": [
+    "kubernetes",
+    "logs",
+    "loki"
+  ],
   "templating": {
     "list": [
       {
