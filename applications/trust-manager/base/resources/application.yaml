@@ -21,6 +21,12 @@ spec:
         app:
           trust:
             namespace: buildkitd
+          metrics:
+            service:
+              serviceMonitor:
+                enabled: true
+                labels:
+                  release: kube-prometheus-stack
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: trust-manager
