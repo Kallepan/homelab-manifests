@@ -18,6 +18,12 @@ spec:
       valuesObject:
         crds:
           enabled: true
+        prometheus:
+          enabled: true
+          serviceMonitor:
+            enabled: true
+            additionalLabels:
+              release: kube-prometheus-stack
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: cert-manager
