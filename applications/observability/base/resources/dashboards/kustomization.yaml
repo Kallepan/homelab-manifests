@@ -42,6 +42,15 @@ configMapGenerator:
       annotations:
         grafana_folder: "Custom"
 
+  - name: external-secrets-dashboard
+    files:
+      - external-secrets.json=json/external-secrets.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+      annotations:
+        grafana_folder: "Custom"
+
   - name: gitlab-runner-dashboard
     files:
       - gitlab-runner.json=json/gitlab-runner.json
