@@ -1,0 +1,120 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Look up and inspect a Jaeger trace by its trace ID.",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "text",
+        "uid": "-- Dashboard --"
+      },
+      "description": "Find a trace in Jaeger, then paste its trace ID into the dashboard variable above.",
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "code": {
+          "language": "plaintext",
+          "showLineNumbers": false,
+          "showMiniMap": false
+        },
+        "content": "Search for traces in [Jaeger](https://jaeger.svc.home.arpa/search), copy a trace ID, and enter it in the Trace ID field above. This dashboard retrieves that trace through the Jaeger datasource.",
+        "mode": "markdown"
+      },
+      "title": "Find a trace",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "jaeger",
+        "uid": "jaeger"
+      },
+      "description": "Enter a trace ID in the dashboard variable to inspect its spans and timing.",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 2,
+      "options": {},
+      "targets": [
+        {
+          "datasource": {
+            "type": "jaeger",
+            "uid": "jaeger"
+          },
+          "query": "$trace_id",
+          "refId": "A"
+        }
+      ],
+      "title": "Trace details",
+      "type": "traces"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 42,
+  "tags": [
+    "jaeger",
+    "tracing"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "text": "",
+          "value": ""
+        },
+        "description": "Trace ID to retrieve from Jaeger",
+        "hide": 0,
+        "label": "Trace ID",
+        "name": "trace_id",
+        "query": "",
+        "type": "textbox"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Jaeger Traces",
+  "uid": "jaeger-traces",
+  "version": 1,
+  "weekStart": ""
+}

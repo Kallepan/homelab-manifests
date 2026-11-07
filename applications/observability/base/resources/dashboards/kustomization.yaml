@@ -90,6 +90,15 @@ configMapGenerator:
       annotations:
         grafana_folder: "Custom"
 
+  - name: jaeger-traces-dashboard
+    files:
+      - jaeger-traces.json=json/jaeger-traces.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+      annotations:
+        grafana_folder: "Custom"
+
   - name: kube-metrics
     files:
       - kubernetes_dashboard.json=json/kubernetes_dashboard.json
