@@ -64,15 +64,27 @@
           "custom": {
             "align": "auto",
             "filterable": true
-          },
-          "links": [
-            {
-              "title": "View trace",
-              "url": "/d/jaeger-traces/jaeger-traces?var-trace_id=${__value.raw}&from=${__from}&to=${__to}"
-            }
-          ]
+          }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trace ID"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "View trace",
+                    "url": "/d/jaeger-traces/jaeger-traces?var-trace_id=${__value.raw}&from=${__from}&to=${__to}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -91,12 +103,42 @@
               "selector": "traceId",
               "text": "Trace ID",
               "type": "string"
+            },
+            {
+              "selector": "service",
+              "text": "Service",
+              "type": "string"
+            },
+            {
+              "selector": "operation",
+              "text": "Operation",
+              "type": "string"
+            },
+            {
+              "selector": "startTime",
+              "text": "Start time",
+              "type": "timestamp_epoch"
+            },
+            {
+              "selector": "durationMs",
+              "text": "Duration (ms)",
+              "type": "number"
+            },
+            {
+              "selector": "spanCount",
+              "text": "Span count",
+              "type": "number"
+            },
+            {
+              "selector": "error",
+              "text": "Error",
+              "type": "boolean"
             }
           ],
           "format": "table",
           "parser": "backend",
           "refId": "A",
-          "root_selector": "$map($distinct($.result.resourceSpans.scopeSpans.spans.traceId), function($id) {{\"traceId\": $id}})",
+          "root_selector": "$map($.result.resourceSpans.scopeSpans.spans[$not(parentSpanId)], function($root) {{\"traceId\": $root.traceId, \"service\": $.result.resourceSpans[scopeSpans.spans[traceId=$root.traceId and $not(parentSpanId)]].resource.attributes[key=\"service.name\"].value.stringValue, \"operation\": $root.name, \"startTime\": $number($root.startTimeUnixNano) / 1000000, \"durationMs\": ($max($map($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId], function($s) { $number($s.endTimeUnixNano) })) - $min($map($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId], function($s) { $number($s.startTimeUnixNano) }))) / 1000000, \"spanCount\": $count($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId]), \"error\": $count($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId and (status.code=2 or $number(attributes[key=\"http.status_code\"].value.stringValue) >= 500)]) > 0}})",
           "source": "url",
           "type": "json",
           "url": "/api/v3/traces",
