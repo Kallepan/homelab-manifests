@@ -130,15 +130,15 @@
               "type": "number"
             },
             {
-              "selector": "error",
-              "text": "Error",
-              "type": "boolean"
+              "selector": "statusCode",
+              "text": "Status code",
+              "type": "number"
             }
           ],
           "format": "table",
           "parser": "backend",
           "refId": "A",
-          "root_selector": "$map($.result.resourceSpans.scopeSpans.spans[$not(parentSpanId)], function($root) {{\"traceId\": $root.traceId, \"service\": $.result.resourceSpans[scopeSpans.spans[traceId=$root.traceId and $not(parentSpanId)]].resource.attributes[key=\"service.name\"].value.stringValue, \"operation\": $root.name, \"startTime\": $number($root.startTimeUnixNano) / 1000000, \"durationMs\": ($max($map($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId], function($s) { $number($s.endTimeUnixNano) })) - $min($map($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId], function($s) { $number($s.startTimeUnixNano) }))) / 1000000, \"spanCount\": $count($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId]), \"error\": $count($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId and (status.code=2 or $number(attributes[key=\"http.status_code\"].value.stringValue) >= 500)]) > 0}})",
+          "root_selector": "$map($.result.resourceSpans.scopeSpans.spans[$not(parentSpanId)], function($root) {{\"traceId\": $root.traceId, \"service\": $.result.resourceSpans[scopeSpans.spans[traceId=$root.traceId and $not(parentSpanId)]].resource.attributes[key=\"service.name\"].value.stringValue, \"operation\": $root.name, \"startTime\": $number($root.startTimeUnixNano) / 1000000, \"durationMs\": ($max($map($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId], function($s) { $number($s.endTimeUnixNano) })) - $min($map($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId], function($s) { $number($s.startTimeUnixNano) }))) / 1000000, \"spanCount\": $count($.result.resourceSpans.scopeSpans.spans[traceId=$root.traceId]), \"statusCode\": $number($root.attributes[key=\"http.status_code\"].value.stringValue)}})",
           "source": "url",
           "type": "json",
           "url": "/api/v3/traces",
