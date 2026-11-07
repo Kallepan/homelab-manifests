@@ -96,7 +96,7 @@
           "format": "table",
           "parser": "backend",
           "refId": "A",
-          "root_selector": "$distinct($.result.resourceSpans.scopeSpans.spans.traceId).{\"traceId\": $}",
+          "root_selector": "$map($distinct($.result.resourceSpans.scopeSpans.spans.traceId), function($id) {{\"traceId\": $id}})",
           "source": "url",
           "type": "json",
           "url": "/api/v3/traces",
