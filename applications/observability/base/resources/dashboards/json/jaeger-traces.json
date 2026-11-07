@@ -127,7 +127,7 @@
         "type": "jaeger",
         "uid": "jaeger"
       },
-      "description": "Enter a trace ID in the dashboard variable to inspect its spans and timing.",
+      "description": "Inspect the spans and timing for the trace selected from the table above.",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
