@@ -21,7 +21,7 @@
       }
     ]
   },
-  "description": "Look up and inspect a Jaeger trace by its trace ID.",
+  "description": "Browse traces in the selected time range and inspect a trace by selecting its ID.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
@@ -33,9 +33,9 @@
         "type": "text",
         "uid": "-- Dashboard --"
       },
-      "description": "Find a trace in Jaeger, then paste its trace ID into the dashboard variable above.",
+      "description": "Select a trace ID to open that trace in the panel below. Results follow the dashboard time range.",
       "gridPos": {
-        "h": 4,
+        "h": 3,
         "w": 24,
         "x": 0,
         "y": 0
@@ -47,11 +47,80 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "Search for traces in [Jaeger](https://jaeger.svc.home.arpa/search), copy a trace ID, and enter it in the Trace ID field above. This dashboard retrieves that trace through the Jaeger datasource.",
+        "content": "Choose a trace ID from the table below to load its spans. Adjust the dashboard time range to browse other traces.",
         "mode": "markdown"
       },
-      "title": "Find a trace",
+      "title": "How to use",
       "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "yesoreyeram-infinity-datasource",
+        "uid": "jaeger-api"
+      },
+      "description": "Traces returned by Jaeger's v3 search API for the selected dashboard time range.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": true
+          },
+          "links": [
+            {
+              "title": "View trace",
+              "url": "/d/jaeger-traces/jaeger-traces?var-trace_id=${__value.raw}&from=${__from}&to=${__to}"
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 3
+      },
+      "id": 3,
+      "options": {
+        "showHeader": true
+      },
+      "targets": [
+        {
+          "columns": [
+            {
+              "selector": "traceId",
+              "text": "Trace ID",
+              "type": "string"
+            }
+          ],
+          "format": "table",
+          "parser": "backend",
+          "refId": "A",
+          "root_selector": "$distinct($.result.resourceSpans.scopeSpans.spans.traceId).{\"traceId\": $}",
+          "source": "url",
+          "type": "json",
+          "url": "/api/v3/traces",
+          "url_options": {
+            "method": "GET",
+            "params": [
+              {
+                "key": "query.start_time_min",
+                "value": "${__timeFrom:date:iso}"
+              },
+              {
+                "key": "query.start_time_max",
+                "value": "${__timeTo:date:iso}"
+              },
+              {
+                "key": "query.search_depth",
+                "value": "100"
+              }
+            ]
+          }
+        }
+      ],
+      "title": "Traces in time range",
+      "type": "table"
     },
     {
       "datasource": {
@@ -67,7 +136,7 @@
         "h": 16,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 11
       },
       "id": 2,
       "options": {},

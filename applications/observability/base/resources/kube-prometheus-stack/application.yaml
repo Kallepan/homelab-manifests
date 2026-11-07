@@ -116,6 +116,8 @@ spec:
         defaultDashboardsEnabled: true
         grafana:
           enabled: true
+          plugins:
+            - yesoreyeram-infinity-datasource
           persistence:
             enabled: false
           service:
@@ -209,6 +211,13 @@ spec:
               isDefault: false
               editable: true
               uid: jaeger
+            - name: Jaeger API
+              type: yesoreyeram-infinity-datasource
+              access: proxy
+              url: http://jaeger-collector.observability.svc.cluster.local:16686
+              isDefault: false
+              editable: true
+              uid: jaeger-api
           alerting:
             contactpoints.yaml:
               apiVersion: 1
