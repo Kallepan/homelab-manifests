@@ -218,6 +218,9 @@ spec:
               isDefault: false
               editable: true
               uid: jaeger-api
+              jsonData:
+                allowedHosts:
+                  - http://jaeger-collector.observability.svc.cluster.local:16686
           alerting:
             contactpoints.yaml:
               apiVersion: 1

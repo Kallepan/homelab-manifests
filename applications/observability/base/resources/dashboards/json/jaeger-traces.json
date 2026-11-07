@@ -155,6 +155,7 @@
     }
   ],
   "preload": false,
+  "refresh": "30s",
   "schemaVersion": 42,
   "tags": [
     "jaeger",
@@ -168,7 +169,7 @@
           "value": ""
         },
         "description": "Trace ID to retrieve from Jaeger",
-        "hide": 0,
+        "hide": 2,
         "label": "Trace ID",
         "name": "trace_id",
         "query": "",
