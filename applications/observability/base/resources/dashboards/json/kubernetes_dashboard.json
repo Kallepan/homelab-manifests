@@ -2798,7 +2798,7 @@
         "multi": true,
         "name": "k8s_cluster",
         "options": [],
-        "query": "infrastructure,service",
+        "query": "service",
         "skipUrlSync": false,
         "type": "custom",
         "valuesFormat": "csv"
