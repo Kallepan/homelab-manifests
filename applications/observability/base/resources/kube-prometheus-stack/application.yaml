@@ -372,9 +372,6 @@ spec:
                   storageClassName: ceph-block
             secrets:
               - homelab-ca
-            scrapeInterval: 30s
-            evaluationInterval: 30s
-            scrapeTimeout: 30s
             retention: 15d
             retentionSize: 20GB
   destination:
