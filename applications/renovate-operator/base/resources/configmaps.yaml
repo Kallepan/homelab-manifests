@@ -47,7 +47,7 @@ data:
         {
           description: 'Weekly lock file maintenance',
           matchUpdateTypes: ['lockFileMaintenance'],
-          schedule: ['before 6:00am on monday'],
+          schedule: ['before 10:00pm on monday'],
           automerge: true,
         },
       ],

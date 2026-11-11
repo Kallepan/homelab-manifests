@@ -6,7 +6,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "2"
 spec:
-  schedule: "0 2 * * *"
+  schedule: "0 22 * * *"
   image: ghcr.io/renovatebot/renovate:44.234.1
   parallelism: 3
   secretRef: renovate-github-credentials
