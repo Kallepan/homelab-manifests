@@ -16,7 +16,6 @@ data:
 
       prConcurrentLimit: 10,
       prHourlyLimit: 5,
-      minimumReleaseAge: '3 days',
       semanticCommits: 'enabled',
       prCreation: 'immediate',
       rebaseWhen: 'behind-base-branch',
