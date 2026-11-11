@@ -592,7 +592,7 @@
           "overflow": "ellipsis",
           "placement": "bottom",
           "showLegend": true,
-          "sortBy": "Name",
+          "sortBy": "Last *",
           "sortDesc": true
         },
         "tooltip": {
