@@ -16,7 +16,7 @@ spec:
     helm:
       releaseName: gitlab-runner
       valuesObject:
-        concurrent: 3
+        concurrent: 2
         extraEnv:
           # Ensure CA certificate is used by the runner cache.
           AWS_CA_BUNDLE: /home/gitlab-runner/.gitlab-runner/certs/ca.crt
@@ -39,8 +39,8 @@ spec:
           secret: gitlab-runner-token-secret
           config: |-
             [[runners]]
-              limit = 3
-              request_concurrency = 2
+              limit = 2
+              request_concurrency = 1
               name = "kubernetes-runner"
               environment = [
                 "SSL_CERT_FILE=/tmp/custom-ca-bundle.crt",
@@ -82,8 +82,8 @@ spec:
                 allowed_pull_policies = ["always", "if-not-present"]
                 pull_policy = "if-not-present"
 
-                cpu_request = "500m"
-                cpu_limit = "2"
+                cpu_request = "750m"
+                cpu_limit = "4"
                 memory_request = "1Gi"
                 memory_limit = "4Gi"
 
