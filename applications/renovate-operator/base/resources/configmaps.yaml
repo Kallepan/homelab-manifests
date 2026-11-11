@@ -129,4 +129,8 @@ data:
     module.exports = {
       ...base,
       gitAuthor: 'Renovate Bot <bot@home.arpa>',
+      onboardingConfig: {
+        ...base.onboardingConfig,
+        assignees: ['administrator'],
+      },
     };
