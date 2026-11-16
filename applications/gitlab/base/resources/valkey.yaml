@@ -12,7 +12,7 @@ spec:
   source:
     chart: valkey
     repoURL: https://valkey.io/valkey-helm/
-    targetRevision: 0.*
+    targetRevision: 1.*
     helm:
       releaseName: valkey
       valuesObject:
