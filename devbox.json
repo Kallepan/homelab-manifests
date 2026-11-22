@@ -6,7 +6,7 @@
     "kustomize@5.8.3",
     "just@1.59.0",
     "prek@0.5.10",
-    "yamllint@1.37.1",
+    "yamllint@1.38.0",
     "git@2.56.0"
   ],
   "shell": {
