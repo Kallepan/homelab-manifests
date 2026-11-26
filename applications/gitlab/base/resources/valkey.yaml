@@ -23,12 +23,13 @@ spec:
             default:
               permissions: "~* &* +@all"
               passwordKey: redis_password
+        persistence:
+          enabled: true
+          size: 8Gi
+          storageClass: ceph-block
         replica:
           enabled: true
           replicas: 1
-          persistence:
-            size: 8Gi
-            storageClass: ceph-block
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: gitlab
