@@ -247,6 +247,59 @@ spec:
                   group_wait: 30s
                   group_interval: 5m
                   repeat_interval: 12h
+          extraObjects:
+            - apiVersion: batch/v1
+              kind: Job
+              metadata:
+                name: "{{ .Release.Name }}-grafana-sa-setup"
+                namespace: "{{ .Release.Namespace }}"
+                annotations:
+                  "helm.sh/hook": post-install,post-upgrade
+                  "helm.sh/hook-delete-policy": hook-succeeded,before-hook-creation
+              spec:
+                template:
+                  spec:
+                    restartPolicy: OnFailure
+                    containers:
+                      - name: create-service-account
+                        image: curlimages/curl:latest
+                        env:
+                          - name: GRAFANA_USER
+                            valueFrom:
+                              secretKeyRef:
+                                name: grafana-admin-credentials
+                                key: admin-user
+                          - name: GRAFANA_PASS
+                            valueFrom:
+                              secretKeyRef:
+                                name: grafana-admin-credentials
+                                key: admin-password
+                        command:
+                          - /bin/sh
+                          - -c
+                          - |
+                            echo "Waiting for Grafana to be ready..."
+                            until curl -s -f "http://{{ .Release.Name }}-grafana.{{ .Release.Namespace }}.svc.cluster.local:3000/api/health"; do
+                              sleep 5
+                            done
+
+                            echo "Creating Grafana Service Account..."
+                            # 1. Create the Service Account
+                            SA_RESPONSE=$(curl -s -u "$GRAFANA_USER:$GRAFANA_PASS" \
+                              -X POST "http://{{ .Release.Name }}-grafana.{{ .Release.Namespace }}.svc.cluster.local:3000/api/serviceaccounts" \
+                              -H "Content-Type: application/json" \
+                              -d '{"name":"ci-automation-sa","role":"Editor"}')
+
+                            SA_ID=$(echo "$SA_RESPONSE" | grep -o '"id":[0-9]*' | head -1 | cut -d: -f2)
+
+                            # 2. Generate a Token (if SA was created or already exists)
+                            if [ -n "$SA_ID" ]; then
+                              echo "Creating token for SA ID: $SA_ID"
+                              curl -s -u "$GRAFANA_USER:$GRAFANA_PASS" \
+                                -X POST "http://{{ .Release.Name }}-grafana.{{ .Release.Namespace }}.svc.cluster.local:3000/api/serviceaccounts/$SA_ID/tokens" \
+                                -H "Content-Type: application/json" \
+                                -d '{"name":"ci-token"}'
+                            fi
         prometheus:
           prometheusSpec:
             additionalArgs:
