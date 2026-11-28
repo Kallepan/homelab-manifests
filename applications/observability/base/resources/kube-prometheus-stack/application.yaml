@@ -115,6 +115,10 @@ spec:
             kubeProxy: false # Disabled due to cilium
         defaultDashboardsEnabled: true
         grafana:
+          admin:
+            existingSecret: grafana-admin-credentials
+            userKey: admin-user
+            passwordKey: admin-password
           enabled: true
           plugins:
             - yesoreyeram-infinity-datasource

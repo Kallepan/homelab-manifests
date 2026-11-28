@@ -3,4 +3,5 @@ kind: Kustomization
 
 resources:
   - ./certificate.yaml
+  - ./external-secret.yaml
   - ./http-route.yaml
